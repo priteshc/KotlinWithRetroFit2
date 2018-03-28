@@ -1,0 +1,57 @@
+package com.atishay.online.history;
+
+/**
+ * Created by Atishay on 19-01-2018.
+ */
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+public class ComplainPojo  {
+
+    @SerializedName("strOutMEssage")
+    @Expose
+    private String strOutMEssage;
+    @SerializedName("strRechargeStatus")
+    @Expose
+    private String strRechargeStatus;
+    @SerializedName("transaction_id")
+    @Expose
+    private String transactionId;
+    @SerializedName("iRechargeId")
+    @Expose
+    private String iRechargeId;
+
+    public String getStrOutMEssage() {
+        return strOutMEssage;
+    }
+
+    public void setStrOutMEssage(String strOutMEssage) {
+        this.strOutMEssage = strOutMEssage;
+    }
+
+    public String getStrRechargeStatus() {
+        return strRechargeStatus;
+    }
+
+    public void setStrRechargeStatus(String strRechargeStatus) {
+        this.strRechargeStatus = strRechargeStatus;
+    }
+
+    public String getTransactionId() {
+        return transactionId;
+    }
+
+    public void setTransactionId(String transactionId) {
+        this.transactionId = transactionId;
+    }
+
+    public String getIRechargeId() {
+        return iRechargeId;
+    }
+
+    public void setIRechargeId(String iRechargeId) {
+        this.iRechargeId = iRechargeId;
+    }
+
+}

@@ -1,0 +1,156 @@
+// Generated code from Butter Knife. Do not modify!
+package com.atishay.online.utility;
+
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
+import butterknife.Unbinder;
+import butterknife.internal.DebouncingOnClickListener;
+import butterknife.internal.Finder;
+import com.atishay.online.R;
+import com.atishay.online.utils.Loader;
+import java.lang.IllegalStateException;
+import java.lang.Object;
+import java.lang.Override;
+
+public class UtilityActivity_ViewBinding<T extends UtilityActivity> implements Unbinder {
+  protected T target;
+
+  private View view2131231383;
+
+  private View view2131231393;
+
+  public UtilityActivity_ViewBinding(final T target, Finder finder, Object source) {
+    this.target = target;
+
+    View view;
+    target.mToolbar = finder.findRequiredViewAsType(source, R.id.toolbar, "field 'mToolbar'", Toolbar.class);
+    target.mUtilityView = finder.findRequiredViewAsType(source, R.id.utility_rlMain, "field 'mUtilityView'", RelativeLayout.class);
+    target.mTxtOperator = finder.findRequiredViewAsType(source, R.id.txtOperator, "field 'mTxtOperator'", TextView.class);
+    target.mOperator = finder.findRequiredViewAsType(source, R.id.utility_spOperator, "field 'mOperator'", Spinner.class);
+    target.mSubscribeExtraView = finder.findRequiredViewAsType(source, R.id.subscribe_llExtraView, "field 'mSubscribeExtraView'", LinearLayout.class);
+    target.mTxtSubscribeNumber = finder.findRequiredViewAsType(source, R.id.txtSubscribeNo, "field 'mTxtSubscribeNumber'", TextView.class);
+    target.mSubscribeNumber = finder.findRequiredViewAsType(source, R.id.utility_edtSubscribeNo, "field 'mSubscribeNumber'", EditText.class);
+    target.mServiceExtraView = finder.findRequiredViewAsType(source, R.id.service_llExtraView, "field 'mServiceExtraView'", LinearLayout.class);
+    target.mTxtServiceNo = finder.findRequiredViewAsType(source, R.id.txtServiceNo, "field 'mTxtServiceNo'", TextView.class);
+    target.mServiceNumber = finder.findRequiredViewAsType(source, R.id.utility_edtServiceNo, "field 'mServiceNumber'", EditText.class);
+    target.mBillExtraView = finder.findRequiredViewAsType(source, R.id.bill_llExtraView, "field 'mBillExtraView'", LinearLayout.class);
+    target.mTxtBillNumber = finder.findRequiredViewAsType(source, R.id.txtBillNo, "field 'mTxtBillNumber'", TextView.class);
+    target.mBillNumber = finder.findRequiredViewAsType(source, R.id.utility_edtBillNo, "field 'mBillNumber'", EditText.class);
+    target.mPolicyExtraView = finder.findRequiredViewAsType(source, R.id.policy_llExtraView, "field 'mPolicyExtraView'", LinearLayout.class);
+    target.mTxtPolicyNumber = finder.findRequiredViewAsType(source, R.id.txtPolicyNo, "field 'mTxtPolicyNumber'", TextView.class);
+    target.mPolicyNumber = finder.findRequiredViewAsType(source, R.id.utility_edtPolicyNo, "field 'mPolicyNumber'", EditText.class);
+    target.mConsumerExtraView = finder.findRequiredViewAsType(source, R.id.consumer_llExtraView, "field 'mConsumerExtraView'", LinearLayout.class);
+    target.mTxtConsumerNumber = finder.findRequiredViewAsType(source, R.id.txtConsumerNo, "field 'mTxtConsumerNumber'", TextView.class);
+    target.mConsumerNumber = finder.findRequiredViewAsType(source, R.id.utility_edtConsumerNo, "field 'mConsumerNumber'", EditText.class);
+    target.mDOBExtraView = finder.findRequiredViewAsType(source, R.id.dob_llExtraView, "field 'mDOBExtraView'", LinearLayout.class);
+    target.mTxtDateOfBirth = finder.findRequiredViewAsType(source, R.id.txtDateOfBirth, "field 'mTxtDateOfBirth'", TextView.class);
+    view = finder.findRequiredView(source, R.id.utility_edtDateOfBirth, "field 'mDateOfBirth' and method 'dateOfBirth'");
+    target.mDateOfBirth = finder.castView(view, R.id.utility_edtDateOfBirth, "field 'mDateOfBirth'", EditText.class);
+    view2131231383 = view;
+    view.setOnClickListener(new DebouncingOnClickListener() {
+      @Override
+      public void doClick(View p0) {
+        target.dateOfBirth();
+      }
+    });
+    target.mTxtMobile = finder.findRequiredViewAsType(source, R.id.txtMobile, "field 'mTxtMobile'", TextView.class);
+    target.mMobile = finder.findRequiredViewAsType(source, R.id.utility_edtMobile, "field 'mMobile'", EditText.class);
+    target.mBillUnitExtraView = finder.findRequiredViewAsType(source, R.id.billunit_llExtraView, "field 'mBillUnitExtraView'", LinearLayout.class);
+    target.mTxtBillUnit = finder.findRequiredViewAsType(source, R.id.txtBillUnit, "field 'mTxtBillUnit'", TextView.class);
+    target.mBillUnit = finder.findRequiredViewAsType(source, R.id.utility_edtBillUnit, "field 'mBillUnit'", EditText.class);
+    target.mPCNumberExtraView = finder.findRequiredViewAsType(source, R.id.pcnumber_llExtraView, "field 'mPCNumberExtraView'", LinearLayout.class);
+    target.mTxtPCNumber = finder.findRequiredViewAsType(source, R.id.txtPCNumber, "field 'mTxtPCNumber'", TextView.class);
+    target.mPCNumber = finder.findRequiredViewAsType(source, R.id.utility_edtPCNumber, "field 'mPCNumber'", EditText.class);
+    target.mCNumberExtraView = finder.findRequiredViewAsType(source, R.id.cnumber_llExtraView, "field 'mCNumberExtraView'", LinearLayout.class);
+    target.mTxtCNumber = finder.findRequiredViewAsType(source, R.id.txtCNumber, "field 'mTxtCNumber'", TextView.class);
+    target.mCNumber = finder.findRequiredViewAsType(source, R.id.utility_edtCNumber, "field 'mCNumber'", EditText.class);
+    target.mCityExtraView = finder.findRequiredViewAsType(source, R.id.city_llExtraView, "field 'mCityExtraView'", LinearLayout.class);
+    target.mTxtCity = finder.findRequiredViewAsType(source, R.id.txtCity, "field 'mTxtCity'", TextView.class);
+    target.mCity = finder.findRequiredViewAsType(source, R.id.utility_edtCity, "field 'mCity'", EditText.class);
+    target.mBillGroupExtraView = finder.findRequiredViewAsType(source, R.id.billgroup_llExtraView, "field 'mBillGroupExtraView'", LinearLayout.class);
+    target.mTxtBillGroup = finder.findRequiredViewAsType(source, R.id.txtBillGroup, "field 'mTxtBillGroup'", TextView.class);
+    target.mBillGroup = finder.findRequiredViewAsType(source, R.id.utility_edtBillGroup, "field 'mBillGroup'", EditText.class);
+    target.mTxtAmount = finder.findRequiredViewAsType(source, R.id.txtAmount, "field 'mTxtAmount'", TextView.class);
+    target.mBillAmount = finder.findRequiredViewAsType(source, R.id.utility_edtAmount, "field 'mBillAmount'", EditText.class);
+    target.mTxtTotalAmount = finder.findRequiredViewAsType(source, R.id.money_txtTotalAmunt, "field 'mTxtTotalAmount'", TextView.class);
+    target.mTotalAmount = finder.findRequiredViewAsType(source, R.id.money_edtTotalAmunt, "field 'mTotalAmount'", EditText.class);
+    target.mTxtTransactionCode = finder.findRequiredViewAsType(source, R.id.txtTranCode, "field 'mTxtTransactionCode'", TextView.class);
+    target.mTransactionCode = finder.findRequiredViewAsType(source, R.id.utility_edtTransaction, "field 'mTransactionCode'", EditText.class);
+    view = finder.findRequiredView(source, R.id.utility_txtProceed, "field 'mProccedPay' and method 'doUtilityRechargePay'");
+    target.mProccedPay = finder.castView(view, R.id.utility_txtProceed, "field 'mProccedPay'", TextView.class);
+    view2131231393 = view;
+    view.setOnClickListener(new DebouncingOnClickListener() {
+      @Override
+      public void doClick(View p0) {
+        target.doUtilityRechargePay();
+      }
+    });
+    target.mLoader = finder.findRequiredViewAsType(source, R.id.loader, "field 'mLoader'", Loader.class);
+  }
+
+  @Override
+  public void unbind() {
+    T target = this.target;
+    if (target == null) throw new IllegalStateException("Bindings already cleared.");
+
+    target.mToolbar = null;
+    target.mUtilityView = null;
+    target.mTxtOperator = null;
+    target.mOperator = null;
+    target.mSubscribeExtraView = null;
+    target.mTxtSubscribeNumber = null;
+    target.mSubscribeNumber = null;
+    target.mServiceExtraView = null;
+    target.mTxtServiceNo = null;
+    target.mServiceNumber = null;
+    target.mBillExtraView = null;
+    target.mTxtBillNumber = null;
+    target.mBillNumber = null;
+    target.mPolicyExtraView = null;
+    target.mTxtPolicyNumber = null;
+    target.mPolicyNumber = null;
+    target.mConsumerExtraView = null;
+    target.mTxtConsumerNumber = null;
+    target.mConsumerNumber = null;
+    target.mDOBExtraView = null;
+    target.mTxtDateOfBirth = null;
+    target.mDateOfBirth = null;
+    target.mTxtMobile = null;
+    target.mMobile = null;
+    target.mBillUnitExtraView = null;
+    target.mTxtBillUnit = null;
+    target.mBillUnit = null;
+    target.mPCNumberExtraView = null;
+    target.mTxtPCNumber = null;
+    target.mPCNumber = null;
+    target.mCNumberExtraView = null;
+    target.mTxtCNumber = null;
+    target.mCNumber = null;
+    target.mCityExtraView = null;
+    target.mTxtCity = null;
+    target.mCity = null;
+    target.mBillGroupExtraView = null;
+    target.mTxtBillGroup = null;
+    target.mBillGroup = null;
+    target.mTxtAmount = null;
+    target.mBillAmount = null;
+    target.mTxtTotalAmount = null;
+    target.mTotalAmount = null;
+    target.mTxtTransactionCode = null;
+    target.mTransactionCode = null;
+    target.mProccedPay = null;
+    target.mLoader = null;
+
+    view2131231383.setOnClickListener(null);
+    view2131231383 = null;
+    view2131231393.setOnClickListener(null);
+    view2131231393 = null;
+
+    this.target = null;
+  }
+}

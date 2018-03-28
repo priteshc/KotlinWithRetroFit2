@@ -1,0 +1,47 @@
+package com.atishay.online.postpaid;
+
+/**
+ * Created by Atishay on 09-02-2018.
+ */
+
+import java.util.List;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+public class BIllerInfoPojo {
+
+    @SerializedName("ResponseCode")
+    @Expose
+    private String responseCode;
+    @SerializedName("ResponseMessage")
+    @Expose
+    private String responseMessage;
+    @SerializedName("Response")
+    @Expose
+    private List<BillerResponse> response = null;
+
+    public String getResponseCode() {
+        return responseCode;
+    }
+
+    public void setResponseCode(String responseCode) {
+        this.responseCode = responseCode;
+    }
+
+    public String getResponseMessage() {
+        return responseMessage;
+    }
+
+    public void setResponseMessage(String responseMessage) {
+        this.responseMessage = responseMessage;
+    }
+
+    public List<BillerResponse> getResponse() {
+        return response;
+    }
+
+    public void setResponse(List<BillerResponse> response) {
+        this.response = response;
+    }
+
+}

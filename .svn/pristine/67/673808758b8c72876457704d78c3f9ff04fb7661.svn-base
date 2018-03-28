@@ -1,0 +1,23 @@
+package com.atishay.online.postpaid;
+
+import com.atishay.online.history.UtitlityResponse;
+
+import java.util.List;
+
+/**
+ * Created by Atishay on 13-02-2018.
+ */
+
+public interface FinalBillView {
+
+
+    void showFErrorMeassage(String msg);
+
+    void showUtilitySuccessMsg(String msg);
+
+    void showUtilityfailedMsg(String msg);
+
+    void showprogress();
+
+    void hideprogress();
+}

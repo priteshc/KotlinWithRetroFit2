@@ -1,0 +1,30 @@
+package com.atishay.online.searchifsc;
+
+import com.atishay.online.AtishayOnlineApp;
+import com.atishay.online.utils.network.ApiError;
+import com.atishay.online.utils.network.RestApiCallback;
+
+/**
+ * Created by Vishal Patel on 17,December,2016.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public class SearchIFSCController implements SearchIFSCUseCase {
+    RestApiCallback<Object, ApiError<Object>> mApiCallback;
+
+    public SearchIFSCController(RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+        mApiCallback = aApiCallback;
+    }
+
+    @Override
+    public void getBankListIFSC(String aUsername, String aPassword) {
+        AtishayOnlineApp.getAppInstance().getRestApis().getBankListIFSC(aUsername, aPassword, mApiCallback);
+    }
+
+    @Override
+    public void getSearchIFSC(String aUsername, String aPassword, String aBankName) {
+        AtishayOnlineApp.getAppInstance().getRestApis().getSearchIFSC(aUsername, aPassword, aBankName, mApiCallback);
+    }
+}

@@ -1,0 +1,30 @@
+package com.atishay.online.addbenefiaciary;
+
+import com.atishay.online.AppBaseView;
+import com.atishay.online.benefiaciary.BankIFSCDetailBean;
+
+import java.util.ArrayList;
+
+/**
+ * Created by Vishal Patel on 17,December,2016.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public interface AddBeneficiaryView extends AppBaseView {
+
+    void getMasterIFSC(ArrayList<MasterIFSCBean> aMasterIFSCBeen);
+
+    void doAddBeneficiary(AddBeneficiaryResponse aAddBeneficiaryResponse);
+
+    void doResendOTP(ResendOTPResponse aResendOTPResponse);
+
+    void getIFSCDetials(ArrayList<BankIFSCDetailBean> aBankIFSCDetailBeen);
+
+    void doValidateBeneficiary(ValidateBeneficiaryResponse aValidateBeneficiaryResponse);
+
+    void showDialogLoader(int aResId);
+
+    void hideDialogLoader();
+}

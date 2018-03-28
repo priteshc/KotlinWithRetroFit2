@@ -1,0 +1,1776 @@
+/*
+ * Copyright 2016 GoldenMace IT Solutions
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+package com.atishay.online.utils;
+
+import com.atishay.online.AtishayOnlineApp;
+import com.atishay.online.BaseResponse;
+import com.atishay.online.R;
+import com.atishay.online.WalletBalanceBean;
+import com.atishay.online.WalletBalanceResponse;
+import com.atishay.online.WalletBalanceService;
+import com.atishay.online.aadhaar.AadhaarVerificationResponse;
+import com.atishay.online.addbenefiaciary.AddBeneficiaryResponse;
+import com.atishay.online.addbenefiaciary.MasterIFSCResponse;
+import com.atishay.online.addbenefiaciary.ResendOTPResponse;
+import com.atishay.online.addbenefiaciary.ValidateBeneficiaryResponse;
+import com.atishay.online.benefiaciary.BankIFSCDetailResponse;
+import com.atishay.online.benefiaciary.BeneficiaryListResponse;
+import com.atishay.online.benefiaciary.BeneficiaryValidationResponse;
+import com.atishay.online.benefiaciary.DeactiveBeneficiaryResponse;
+import com.atishay.online.common.CommonBean;
+import com.atishay.online.common.CommonRechargeResponse;
+import com.atishay.online.common.SurchargeResponse;
+import com.atishay.online.dth.DthOperatorResponse;
+import com.atishay.online.history.HistoryResponse;
+import com.atishay.online.login.LoginResponse;
+import com.atishay.online.menu.NotificationResponse;
+import com.atishay.online.mobilerecharge.CircleResponse;
+import com.atishay.online.mobilerecharge.MobileOperatorResponse;
+import com.atishay.online.moneytransfer.CommonRegistrationResponse;
+import com.atishay.online.moneytransfer.FundServiceChargeResponse;
+import com.atishay.online.moneytransfer.FundTransferHistoryResponse;
+import com.atishay.online.moneytransfer.QueryRefundTransactionResponse;
+import com.atishay.online.moneytransfer.RefundTransactionResponse;
+import com.atishay.online.moneytransfer.ServiceResponse;
+import com.atishay.online.myaccountrecharge.AccountRechargeReportResponse;
+import com.atishay.online.myaccountrecharge.BankListResponse;
+import com.atishay.online.myaccountrecharge.TransactionTypeResponse;
+import com.atishay.online.postpaid.PostpaidOperatorResponse;
+import com.atishay.online.searchifsc.BankListIFSCResponse;
+import com.atishay.online.searchifsc.SearchIFSCResponse;
+import com.atishay.online.utility.UtilityOperatorResponse;
+import com.atishay.online.utils.network.ApiError;
+import com.atishay.online.utils.network.RestApiCallback;
+import com.goldenmace.framework.utils.NetworkUtils;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import com.orhanobut.logger.Logger;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+/**
+ * Created by Vishal Patel on 11,November,2016.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public class RestApisImpl {
+    private RestApis mRestApis;
+
+    public RestApisImpl() {
+        mRestApis = RetrofitClientFactory.get();
+    }
+
+    public void doLogin(String username, String password, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+
+        Call<LoginResponse> verificationResponseCall = mRestApis.doLogin(username, password);
+        verificationResponseCall.enqueue(new Callback<LoginResponse>() {
+            @Override
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.LOGIN, response.body());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.LOGIN, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.LOGIN, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
+                aApiCallback.onApiError(Constants.APICODE.LOGIN, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+                //LoginResponse loginResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(Constants.DummyAPI.LOGIN_SUCCESS, LoginResponse.class);
+                //aApiCallback.onSuccess(Constants.APICODE.LOGIN, loginResponse);
+            }
+        });
+    }
+
+    public void doForgotPassword(String username, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+
+        Call<BaseResponse> verificationResponseCall = mRestApis.doForgotPassword(username);
+        verificationResponseCall.enqueue(new Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.FORGOT, response.body());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.FORGOT, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.FORGOT, apiError);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+                //TODO Enable onApiError after response is given
+                aApiCallback.onApiError(Constants.APICODE.FORGOT, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+//                ForgotPasswordResponse forgotResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(Constants.DummyAPI.FORGOT_PASSWORD_SUCCESS, ForgotPasswordResponse.class);
+                //aApiCallback.onSuccess(Constants.APICODE.FORGOT, forgotResponse);
+                Logger.e(t.getMessage());
+            }
+        });
+    }
+
+    public void getMobileOperator(String username, String password, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+
+        Call<MobileOperatorResponse> verificationResponseCall = mRestApis.doMobileOperator(username, password);
+        verificationResponseCall.enqueue(new Callback<MobileOperatorResponse>() {
+            @Override
+            public void onResponse(Call<MobileOperatorResponse> call, Response<MobileOperatorResponse> response) {
+
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.MOBILE_OPERATOR, response.body().getMobileOperatorBean());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.MOBILE_OPERATOR, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.MOBILE_OPERATOR, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MobileOperatorResponse> call, Throwable t) {
+                aApiCallback.onApiError(Constants.APICODE.MOBILE_OPERATOR, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void getDthOperators(String username, String password, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+
+        Call<DthOperatorResponse> verificationResponseCall = mRestApis.getDthOperators(username, password);
+        verificationResponseCall.enqueue(new Callback<DthOperatorResponse>() {
+            @Override
+            public void onResponse(Call<DthOperatorResponse> call, Response<DthOperatorResponse> response) {
+
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.DTH_OPERATOR, response.body().getDthOperatorBean());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.DTH_OPERATOR, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.DTH_OPERATOR, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DthOperatorResponse> call, Throwable t) {
+                aApiCallback.onApiError(Constants.APICODE.DTH_OPERATOR, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void getCircleList(String username, String password, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+
+        Call<CircleResponse> verificationResponseCall = mRestApis.doMobileCircle(username, password);
+        verificationResponseCall.enqueue(new Callback<CircleResponse>() {
+            @Override
+            public void onResponse(Call<CircleResponse> call, Response<CircleResponse> response) {
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.CIRCLE, response.body().getCircleBean());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.CIRCLE, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.CIRCLE, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CircleResponse> call, Throwable t) {
+                aApiCallback.onApiError(Constants.APICODE.CIRCLE, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void getPostOperator(String username, String password, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+
+        Call<PostpaidOperatorResponse> verificationResponseCall = mRestApis.doPostOperator(username, password);
+        verificationResponseCall.enqueue(new Callback<PostpaidOperatorResponse>() {
+            @Override
+            public void onResponse(Call<PostpaidOperatorResponse> call, Response<PostpaidOperatorResponse> response) {
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.POSTPAID_OPERATOR, response.body().getPostResponse());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.POSTPAID_OPERATOR, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.POSTPAID_OPERATOR, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PostpaidOperatorResponse> call, Throwable t) {
+                aApiCallback.onApiError(Constants.APICODE.POSTPAID_OPERATOR, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void getUtilityOperator(String username, String password, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+
+        Call<UtilityOperatorResponse> verificationResponseCall = mRestApis.doUtilityOperator(username, password);
+        verificationResponseCall.enqueue(new Callback<UtilityOperatorResponse>() {
+            @Override
+            public void onResponse(Call<UtilityOperatorResponse> call, Response<UtilityOperatorResponse> response) {
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.UTILITY_OPERATOR, response.body().getUtilityBean());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.UTILITY_OPERATOR, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.UTILITY_OPERATOR, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UtilityOperatorResponse> call, Throwable t) {
+                //TODO : uncomment below line and remove dummy parsing
+                aApiCallback.onApiError(Constants.APICODE.UTILITY_OPERATOR, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void getSurcharge(int telecomid, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+
+        Call<SurchargeResponse> verificationResponseCall = mRestApis.doSurcharge(telecomid);
+        verificationResponseCall.enqueue(new Callback<SurchargeResponse>() {
+            @Override
+            public void onResponse(Call<SurchargeResponse> call, Response<SurchargeResponse> response) {
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.SURCHARGE, response.body().getSurchargeBean());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.SURCHARGE, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.SURCHARGE, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SurchargeResponse> call, Throwable t) {
+                aApiCallback.onApiError(Constants.APICODE.SURCHARGE, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void getMobileRecharge(ArrayList<CommonBean> aCommonBean, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+
+        Map<String, String> data = new HashMap<>();
+        for (int i = 0; i < aCommonBean.size(); i++) {
+            data.put(Constants.ApiKeys.USERNAME, aCommonBean.get(i).getUsername());
+            data.put(Constants.ApiKeys.PASSWORD, aCommonBean.get(i).getPassword());
+            data.put(Constants.ApiKeys.TRANSACTION_PASSWORD, aCommonBean.get(i).getTrancode());
+            data.put(Constants.ApiKeys.CIRCLE_CODE, aCommonBean.get(i).getCirclecode());
+            data.put(Constants.ApiKeys.OPERATOR_ID, aCommonBean.get(i).getObjectid());
+            data.put(Constants.ApiKeys.MOBILE_NO, aCommonBean.get(i).getMobileno());
+            data.put(Constants.ApiKeys.AMOUNT, aCommonBean.get(i).getAmount());
+            data.put(Constants.ApiKeys.PRODUCT, aCommonBean.get(i).getProduct());
+        }
+
+        Call<CommonRechargeResponse> verificationResponseCall = mRestApis.doMobileRecharge(data);
+        verificationResponseCall.enqueue(new Callback<CommonRechargeResponse>() {
+            @Override
+            public void onResponse(Call<CommonRechargeResponse> call, Response<CommonRechargeResponse> response) {
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus()) || Constants.PENDING.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.MOBILERECHARGE, response.body());
+                        WalletBalanceService.startFetchingBalance(AtishayOnlineApp.getAppInstance());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.MOBILERECHARGE, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.MOBILERECHARGE, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CommonRechargeResponse> call, Throwable t) {
+                //TODO : uncomment below line and remove dummy parsing
+                aApiCallback.onApiError(Constants.APICODE.MOBILERECHARGE, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void getDTHRecharge(ArrayList<CommonBean> aCommonBean, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+
+        Map<String, String> data = new HashMap<>();
+        for (int i = 0; i < aCommonBean.size(); i++) {
+            data.put(Constants.ApiKeys.USERNAME, aCommonBean.get(i).getUsername());
+            data.put(Constants.ApiKeys.PASSWORD, aCommonBean.get(i).getPassword());
+            data.put(Constants.ApiKeys.TRANSACTION_PASSWORD, aCommonBean.get(i).getTrancode());
+            data.put(Constants.ApiKeys.CIRCLE_CODE, aCommonBean.get(i).getCirclecode());
+            data.put(Constants.ApiKeys.DTH_CODE, aCommonBean.get(i).getObjectid());
+            data.put(Constants.ApiKeys.SUBSCRIBER_ID, aCommonBean.get(i).getMobileno());
+            data.put(Constants.ApiKeys.AMOUNT, aCommonBean.get(i).getAmount());
+            data.put(Constants.ApiKeys.PRODUCT, aCommonBean.get(i).getProduct());
+        }
+
+        Call<CommonRechargeResponse> verificationResponseCall = mRestApis.doDTHRecharge(data);
+        verificationResponseCall.enqueue(new Callback<CommonRechargeResponse>() {
+            @Override
+            public void onResponse(Call<CommonRechargeResponse> call, Response<CommonRechargeResponse> response) {
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus()) || Constants.PENDING.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.DTHRECHARGE, response.body());
+                        WalletBalanceService.startFetchingBalance(AtishayOnlineApp.getAppInstance());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.DTHRECHARGE, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.DTHRECHARGE, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CommonRechargeResponse> call, Throwable t) {
+                //TODO : uncomment below line and remove dummy parsing
+                aApiCallback.onApiError(Constants.APICODE.DTHRECHARGE, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void getPostpaidRecharge(Map<String, String> aData, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+
+        Call<CommonRechargeResponse> verificationResponseCall = mRestApis.doPostpaidRecharge(aData);
+        verificationResponseCall.enqueue(new Callback<CommonRechargeResponse>() {
+            @Override
+            public void onResponse(Call<CommonRechargeResponse> call, Response<CommonRechargeResponse> response) {
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus()) || Constants.PENDING.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.POSTPAIDRECHARGE, response.body());
+                        WalletBalanceService.startFetchingBalance(AtishayOnlineApp.getAppInstance());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.POSTPAIDRECHARGE, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.POSTPAIDRECHARGE, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CommonRechargeResponse> call, Throwable t) {
+                //TODO : uncomment below line and remove dummy parsing
+                aApiCallback.onApiError(Constants.APICODE.POSTPAIDRECHARGE, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void doUtilityBillPayment(Map<String, String> aData, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+
+        Call<CommonRechargeResponse> verificationResponseCall = mRestApis.doUtilityBillPayment(aData);
+        verificationResponseCall.enqueue(new Callback<CommonRechargeResponse>() {
+            @Override
+            public void onResponse(Call<CommonRechargeResponse> call, Response<CommonRechargeResponse> response) {
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus()) || Constants.PENDING.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.UTILITYRECHARGE, response.body());
+                        WalletBalanceService.startFetchingBalance(AtishayOnlineApp.getAppInstance());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.UTILITYRECHARGE, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.UTILITYRECHARGE, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CommonRechargeResponse> call, Throwable t) {
+                //TODO : uncomment below line and remove dummy parsing
+                aApiCallback.onApiError(Constants.APICODE.UTILITYRECHARGE, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void changePassword(String aUsername, String aOldPassword, String aNewPassword, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+        Call<BaseResponse> verificationResponseCall = mRestApis.changePassword(aUsername, aOldPassword, aNewPassword);
+        verificationResponseCall.enqueue(new Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.CHANGE_PASSWORD, response.body());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.CHANGE_PASSWORD, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.CHANGE_PASSWORD, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+                aApiCallback.onApiError(Constants.APICODE.CHANGE_PASSWORD, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void changeTransactionPassword(String aUsername, String aPassword, String aOldTransactionCode, String aNewTransactionCode, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+        Call<BaseResponse> verificationResponseCall = mRestApis.changeTrancationCode(aUsername, aPassword, aOldTransactionCode, aNewTransactionCode);
+        verificationResponseCall.enqueue(new Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.CHANGE_TRANSACTION_CODE, response.body());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.CHANGE_TRANSACTION_CODE, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.CHANGE_TRANSACTION_CODE, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+                aApiCallback.onApiError(Constants.APICODE.CHANGE_TRANSACTION_CODE, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void getBankList(String username, String password, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+
+        Call<BankListResponse> verificationResponseCall = mRestApis.doBankList(username, password);
+        verificationResponseCall.enqueue(new Callback<BankListResponse>() {
+            @Override
+            public void onResponse(Call<BankListResponse> call, Response<BankListResponse> response) {
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.BANKLIST, response.body().getBankBean());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.BANKLIST, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.BANKLIST, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BankListResponse> call, Throwable t) {
+                aApiCallback.onApiError(Constants.APICODE.BANKLIST, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void getTransactionType(String username, String password, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+
+        Call<TransactionTypeResponse> verificationResponseCall = mRestApis.doTransactionTypeList(username, password);
+        verificationResponseCall.enqueue(new Callback<TransactionTypeResponse>() {
+            @Override
+            public void onResponse(Call<TransactionTypeResponse> call, Response<TransactionTypeResponse> response) {
+                if (response.isSuccessful()) {
+//                    aApiCallback.onSuccess(Constants.APICODE.UTILITY_OPERATOR, response.body());
+                    if (Constants.SUCCESS.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.TRANSACTIONTYPE, response.body().getTransactionTypeBean());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.TRANSACTIONTYPE, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.TRANSACTIONTYPE, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TransactionTypeResponse> call, Throwable t) {
+                aApiCallback.onApiError(Constants.APICODE.TRANSACTIONTYPE, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void getAccountRecharge(Map<String, String> aData, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+
+        Call<BaseResponse> verificationResponseCall = mRestApis.doAccountRecharge(aData);
+        verificationResponseCall.enqueue(new Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.MYACCOUNTRECHARGE, response.body());
+                        WalletBalanceService.startFetchingBalance(AtishayOnlineApp.getAppInstance());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.MYACCOUNTRECHARGE, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.MYACCOUNTRECHARGE, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+                aApiCallback.onApiError(Constants.APICODE.MYACCOUNTRECHARGE, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void loadPrepaidHistory(String aUserName, String aPassword, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+        Call<HistoryResponse> verificationResponseCall = mRestApis.fetchPrepaidHistory(aUserName, aPassword);
+        verificationResponseCall.enqueue(new Callback<HistoryResponse>() {
+            @Override
+            public void onResponse(Call<HistoryResponse> call, Response<HistoryResponse> response) {
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.PREPAID_HISTORY, response.body().getResponse());
+                        WalletBalanceService.startFetchingBalance(AtishayOnlineApp.getAppInstance());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.PREPAID_HISTORY, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.PREPAID_HISTORY, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<HistoryResponse> call, Throwable t) {
+                aApiCallback.onApiError(Constants.APICODE.PREPAID_HISTORY, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void loadPostpaidHistory(String aUserName, String aPassword, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+        Call<HistoryResponse> verificationResponseCall = mRestApis.fetchPostpaidHistory(aUserName, aPassword);
+        verificationResponseCall.enqueue(new Callback<HistoryResponse>() {
+            @Override
+            public void onResponse(Call<HistoryResponse> call, Response<HistoryResponse> response) {
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.POSTPAID_HISTORY, response.body().getResponse());
+                        WalletBalanceService.startFetchingBalance(AtishayOnlineApp.getAppInstance());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.POSTPAID_HISTORY, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.POSTPAID_HISTORY, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<HistoryResponse> call, Throwable t) {
+                aApiCallback.onApiError(Constants.APICODE.POSTPAID_HISTORY, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void loadDTHHistory(String aUserName, String aPassword, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+        Call<HistoryResponse> verificationResponseCall = mRestApis.fetchDTHHistory(aUserName, aPassword);
+        verificationResponseCall.enqueue(new Callback<HistoryResponse>() {
+            @Override
+            public void onResponse(Call<HistoryResponse> call, Response<HistoryResponse> response) {
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.DTH_HISTORY, response.body().getResponse());
+                        WalletBalanceService.startFetchingBalance(AtishayOnlineApp.getAppInstance());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.DTH_HISTORY, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.DTH_HISTORY, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<HistoryResponse> call, Throwable t) {
+                aApiCallback.onApiError(Constants.APICODE.DTH_HISTORY, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void loadMyAccountHistory(String aUserName, String aPassword, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+        Call<AccountRechargeReportResponse> verificationResponseCall = mRestApis.fetchAccountHistory(aUserName, aPassword);
+        verificationResponseCall.enqueue(new Callback<AccountRechargeReportResponse>() {
+            @Override
+            public void onResponse(Call<AccountRechargeReportResponse> call, Response<AccountRechargeReportResponse> response) {
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.ACCOUNRREPORT, response.body().getResponse());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.ACCOUNRREPORT, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.ACCOUNRREPORT, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AccountRechargeReportResponse> call, Throwable t) {
+                aApiCallback.onApiError(Constants.APICODE.ACCOUNRREPORT, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void getWalletBalance(String aUserName, String aPassword, final RestApiCallback<WalletBalanceBean, ApiError<Object>> aApiCallback) {
+        Call<WalletBalanceResponse> verificationResponseCall = mRestApis.getWalletBalance(aUserName, aPassword);
+        verificationResponseCall.enqueue(new Callback<WalletBalanceResponse>() {
+            @Override
+            public void onResponse(Call<WalletBalanceResponse> call, Response<WalletBalanceResponse> response) {
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus()) && response.body().getResponse().size() > 0) {
+                        aApiCallback.onSuccess(Constants.APICODE.WALLET_BALLENCE, response.body().getResponse().get(0));
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.WALLET_BALLENCE, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.WALLET_BALLENCE, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<WalletBalanceResponse> call, Throwable t) {
+                aApiCallback.onApiError(Constants.APICODE.WALLET_BALLENCE, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void getAadhaarVerification(Map<String, String> aData, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+
+        Call<BaseResponse> verificationResponseCall = mRestApis.doAadhaarVerification(aData);
+        verificationResponseCall.enqueue(new Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.AADHAARVERIFICATION, response.body());
+                        WalletBalanceService.startFetchingBalance(AtishayOnlineApp.getAppInstance());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.AADHAARVERIFICATION, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.AADHAARVERIFICATION, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+                aApiCallback.onApiError(Constants.APICODE.AADHAARVERIFICATION, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void loadAadhaarVerificationHistory(String aUserName, String aPassword, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+        Call<AadhaarVerificationResponse> verificationResponseCall = mRestApis.fetchAadhaarHistory(aUserName, aPassword);
+        verificationResponseCall.enqueue(new Callback<AadhaarVerificationResponse>() {
+            @Override
+            public void onResponse(Call<AadhaarVerificationResponse> call, Response<AadhaarVerificationResponse> response) {
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.AADHAARHISTORY, response.body().getResponse());
+                        WalletBalanceService.startFetchingBalance(AtishayOnlineApp.getAppInstance());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.AADHAARHISTORY, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.AADHAARHISTORY, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AadhaarVerificationResponse> call, Throwable t) {
+                aApiCallback.onApiError(Constants.APICODE.AADHAARHISTORY, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void getNotificationDetails(String aUserName, String aPassword, final RestApiCallback<NotificationResponse, ApiError<Object>> aApiCallback) {
+        Call<NotificationResponse> verificationResponseCall = mRestApis.fetchNotificationDetails(aUserName, aPassword);
+        verificationResponseCall.enqueue(new Callback<NotificationResponse>() {
+            @Override
+            public void onResponse(Call<NotificationResponse> call, Response<NotificationResponse> response) {
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.NOTIFICATION, response.body());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.NOTIFICATION, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.NOTIFICATION, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<NotificationResponse> call, Throwable t) {
+                aApiCallback.onApiError(Constants.APICODE.NOTIFICATION, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void getOTP(String username, String password, String mobile, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+
+        Call<CommonRegistrationResponse> verificationResponseCall = mRestApis.getOTP(username, password, mobile);
+        verificationResponseCall.enqueue(new Callback<CommonRegistrationResponse>() {
+            @Override
+            public void onResponse(Call<CommonRegistrationResponse> call, Response<CommonRegistrationResponse> response) {
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.OTP, response.body());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.OTP, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else if (response.code() == 302) {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            CommonRegistrationResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), CommonRegistrationResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.OTP, apiError);
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.OTP, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CommonRegistrationResponse> call, Throwable t) {
+                aApiCallback.onApiError(Constants.APICODE.OTP, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void doQueryRegister(Map<String, String> aData, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+
+        Call<CommonRegistrationResponse> verificationResponseCall = mRestApis.doQueryRegistration(aData);
+        verificationResponseCall.enqueue(new Callback<CommonRegistrationResponse>() {
+            @Override
+            public void onResponse(Call<CommonRegistrationResponse> call, Response<CommonRegistrationResponse> response) {
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.QUERYREGISTER, response.body());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.QUERYREGISTER, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.QUERYREGISTER, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CommonRegistrationResponse> call, Throwable t) {
+                aApiCallback.onApiError(Constants.APICODE.QUERYREGISTER, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void doCustRegister(Map<String, String> aData, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+
+        Call<CommonRegistrationResponse> verificationResponseCall = mRestApis.doCustomRegistration(aData);
+        verificationResponseCall.enqueue(new Callback<CommonRegistrationResponse>() {
+            @Override
+            public void onResponse(Call<CommonRegistrationResponse> call, Response<CommonRegistrationResponse> response) {
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.CUSTREGISTER, response.body());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.CUSTREGISTER, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.CUSTREGISTER, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CommonRegistrationResponse> call, Throwable t) {
+                aApiCallback.onApiError(Constants.APICODE.CUSTREGISTER, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void getBankListIFSC(String username, String password, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+
+        Call<BankListIFSCResponse> verificationResponseCall = mRestApis.getBankListIFSC(username, password);
+        verificationResponseCall.enqueue(new Callback<BankListIFSCResponse>() {
+            @Override
+            public void onResponse(Call<BankListIFSCResponse> call, Response<BankListIFSCResponse> response) {
+
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.BANKLIST_IFSC, response.body().getResponse());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.BANKLIST_IFSC, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.BANKLIST_IFSC, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BankListIFSCResponse> call, Throwable t) {
+                aApiCallback.onApiError(Constants.APICODE.BANKLIST_IFSC, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void getSearchIFSC(String username, String password, String bankname, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+
+        Call<SearchIFSCResponse> verificationResponseCall = mRestApis.getSearchIFSC(username, password, bankname);
+        verificationResponseCall.enqueue(new Callback<SearchIFSCResponse>() {
+            @Override
+            public void onResponse(Call<SearchIFSCResponse> call, Response<SearchIFSCResponse> response) {
+
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.SEARCHIFSC, response.body().getBranchList());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.SEARCHIFSC, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.SEARCHIFSC, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SearchIFSCResponse> call, Throwable t) {
+                aApiCallback.onApiError(Constants.APICODE.SEARCHIFSC, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void getMasterIFSC(String username, String password, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+
+        Call<MasterIFSCResponse> verificationResponseCall = mRestApis.getMasterIFSC(username, password);
+        verificationResponseCall.enqueue(new Callback<MasterIFSCResponse>() {
+            @Override
+            public void onResponse(Call<MasterIFSCResponse> call, Response<MasterIFSCResponse> response) {
+
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.MASTERIFSC, response.body().getMasterIFSCBean());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.MASTERIFSC, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.MASTERIFSC, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MasterIFSCResponse> call, Throwable t) {
+                aApiCallback.onApiError(Constants.APICODE.MASTERIFSC, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void getBeneficiaryList(Map<String, String> aData, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+
+        Call<BeneficiaryListResponse> verificationResponseCall = mRestApis.getBeneficiaryList(aData);
+        verificationResponseCall.enqueue(new Callback<BeneficiaryListResponse>() {
+            @Override
+            public void onResponse(Call<BeneficiaryListResponse> call, Response<BeneficiaryListResponse> response) {
+
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.BENEFICIARYLIST, response.body().getBeneficiaryListBeen());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.BENEFICIARYLIST, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.BENEFICIARYLIST, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BeneficiaryListResponse> call, Throwable t) {
+                aApiCallback.onApiError(Constants.APICODE.BENEFICIARYLIST, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void doAddBeneficiary(Map<String, String> aData, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+
+        Call<AddBeneficiaryResponse> verificationResponseCall = mRestApis.doAddBeneficiary(aData);
+        verificationResponseCall.enqueue(new Callback<AddBeneficiaryResponse>() {
+            @Override
+            public void onResponse(Call<AddBeneficiaryResponse> call, Response<AddBeneficiaryResponse> response) {
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.ADD_BENE, response.body());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.ADD_BENE, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.ADD_BENE, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddBeneficiaryResponse> call, Throwable t) {
+                aApiCallback.onApiError(Constants.APICODE.ADD_BENE, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void doResendOTP(Map<String, String> aData, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+
+        Call<ResendOTPResponse> verificationResponseCall = mRestApis.doResendOTP(aData);
+        verificationResponseCall.enqueue(new Callback<ResendOTPResponse>() {
+            @Override
+            public void onResponse(Call<ResendOTPResponse> call, Response<ResendOTPResponse> response) {
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.RESENDOTP, response.body());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.RESENDOTP, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.RESENDOTP, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResendOTPResponse> call, Throwable t) {
+                aApiCallback.onApiError(Constants.APICODE.RESENDOTP, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void doValidateBeneficiary(Map<String, String> aData, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+
+        Call<ValidateBeneficiaryResponse> verificationResponseCall = mRestApis.doValidateBeneficiary(aData);
+        verificationResponseCall.enqueue(new Callback<ValidateBeneficiaryResponse>() {
+            @Override
+            public void onResponse(Call<ValidateBeneficiaryResponse> call, Response<ValidateBeneficiaryResponse> response) {
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.VALIDATEBENEFICIARY, response.body());
+                        WalletBalanceService.startFetchingBalance(AtishayOnlineApp.getAppInstance());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.VALIDATEBENEFICIARY, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.VALIDATEBENEFICIARY, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ValidateBeneficiaryResponse> call, Throwable t) {
+                aApiCallback.onApiError(Constants.APICODE.VALIDATEBENEFICIARY, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void doDeactiveBeneficiary(Map<String, String> aData, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+
+        Call<DeactiveBeneficiaryResponse> verificationResponseCall = mRestApis.doDeactivateBeneficiary(aData);
+        verificationResponseCall.enqueue(new Callback<DeactiveBeneficiaryResponse>() {
+            @Override
+            public void onResponse(Call<DeactiveBeneficiaryResponse> call, Response<DeactiveBeneficiaryResponse> response) {
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.DEACTIVATEBENEFICIARY, response.body());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.DEACTIVATEBENEFICIARY, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.DEACTIVATEBENEFICIARY, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DeactiveBeneficiaryResponse> call, Throwable t) {
+                aApiCallback.onApiError(Constants.APICODE.DEACTIVATEBENEFICIARY, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void doValidateDeactivateBeneficiary(Map<String, String> aData, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+
+        Call<DeactiveBeneficiaryResponse> verificationResponseCall = mRestApis.doValidateDeactivateBeneficiary(aData);
+        verificationResponseCall.enqueue(new Callback<DeactiveBeneficiaryResponse>() {
+            @Override
+            public void onResponse(Call<DeactiveBeneficiaryResponse> call, Response<DeactiveBeneficiaryResponse> response) {
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.VALIDATEDEACTIVATEBENEFICIARY, response.body());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.VALIDATEDEACTIVATEBENEFICIARY, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.VALIDATEDEACTIVATEBENEFICIARY, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DeactiveBeneficiaryResponse> call, Throwable t) {
+                aApiCallback.onApiError(Constants.APICODE.VALIDATEDEACTIVATEBENEFICIARY, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void getIFSCDetails(String ifsccode, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+
+        Call<BankIFSCDetailResponse> verificationResponseCall = mRestApis.getIFSCDetails(ifsccode);
+        verificationResponseCall.enqueue(new Callback<BankIFSCDetailResponse>() {
+            @Override
+            public void onResponse(Call<BankIFSCDetailResponse> call, Response<BankIFSCDetailResponse> response) {
+
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.IFSCDETAILS, response.body().getBankDetails());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.IFSCDETAILS, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.IFSCDETAILS, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BankIFSCDetailResponse> call, Throwable t) {
+                aApiCallback.onApiError(Constants.APICODE.IFSCDETAILS, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void getAlertConformation(String username, String password, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+
+        Call<BaseResponse> verificationResponseCall = mRestApis.getAlertConformation(username, password);
+        verificationResponseCall.enqueue(new Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.ALERTCONFORMATION, response.body());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.ALERTCONFORMATION, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.ALERTCONFORMATION, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+                aApiCallback.onApiError(Constants.APICODE.ALERTCONFORMATION, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void doBeneficiaryValidation(Map<String, String> aData, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+
+        Call<BeneficiaryValidationResponse> verificationResponseCall = mRestApis.doBeneficiaryValidation(aData);
+        verificationResponseCall.enqueue(new Callback<BeneficiaryValidationResponse>() {
+            @Override
+            public void onResponse(Call<BeneficiaryValidationResponse> call, Response<BeneficiaryValidationResponse> response) {
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.BENEFICIARYVALIDATION, response.body());
+                        WalletBalanceService.startFetchingBalance(AtishayOnlineApp.getAppInstance());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.BENEFICIARYVALIDATION, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.BENEFICIARYVALIDATION, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BeneficiaryValidationResponse> call, Throwable t) {
+                aApiCallback.onApiError(Constants.APICODE.BENEFICIARYVALIDATION, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+                /*BeneficiaryValidationResponse loginResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(Constants.DummyAPI.BENEFICIARYVALIDATION, BeneficiaryValidationResponse.class);
+                aApiCallback.onSuccess(Constants.APICODE.BENEFICIARYVALIDATION, loginResponse);*/
+            }
+        });
+    }
+
+    public void doRemittanceTransaction(Map<String, String> aData, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+
+        Call<ServiceResponse> verificationResponseCall = mRestApis.doRemittanceTransaction(aData);
+        verificationResponseCall.enqueue(new Callback<ServiceResponse>() {
+            @Override
+            public void onResponse(Call<ServiceResponse> call, Response<ServiceResponse> response) {
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.REMITTANCEVALIDATION, response.body());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.REMITTANCEVALIDATION, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.REMITTANCEVALIDATION, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ServiceResponse> call, Throwable t) {
+                aApiCallback.onApiError(Constants.APICODE.REMITTANCEVALIDATION, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void doFundTransaction(Map<String, String> aData, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+
+        Call<FundServiceChargeResponse> verificationResponseCall = mRestApis.doFundTransaction(aData);
+        verificationResponseCall.enqueue(new Callback<FundServiceChargeResponse>() {
+            @Override
+            public void onResponse(Call<FundServiceChargeResponse> call, Response<FundServiceChargeResponse> response) {
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.FUNDTRANSFER, response.body());
+                        WalletBalanceService.startFetchingBalance(AtishayOnlineApp.getAppInstance());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.FUNDTRANSFER, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.FUNDTRANSFER, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<FundServiceChargeResponse> call, Throwable t) {
+                aApiCallback.onApiError(Constants.APICODE.FUNDTRANSFER, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void doFundTransferHistory(Map<String, String> aData, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+
+        Call<FundTransferHistoryResponse> verificationResponseCall = mRestApis.doFundTransferHistory(aData);
+        verificationResponseCall.enqueue(new Callback<FundTransferHistoryResponse>() {
+            @Override
+            public void onResponse(Call<FundTransferHistoryResponse> call, Response<FundTransferHistoryResponse> response) {
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus())) { //response.body().getStatus()
+                        Gson gson = new GsonBuilder().create();
+                        Type mapType = new TypeToken<LinkedHashMap<String, ArrayList<FundTransferHistoryResponse.TransactionHistory>>>() {
+                        }.getType();
+
+                        FundTransferHistoryResponse moneyTransactionHistory = response.body();
+                        if (moneyTransactionHistory.getResponse().getGroupTransaction() != null) {
+                            InputStream stream = new ByteArrayInputStream(moneyTransactionHistory.getResponse().getGroupTransaction().getBytes());
+                            Map<String, ArrayList<FundTransferHistoryResponse.TransactionHistory>> result = gson.fromJson(new InputStreamReader(stream), mapType);
+                            moneyTransactionHistory.getResponse().setGroupTransactions(result);
+                        }
+                        aApiCallback.onSuccess(Constants.APICODE.FUNDTRANSACTIONHISTORY, moneyTransactionHistory);
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.FUNDTRANSACTIONHISTORY, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.FUNDTRANSACTIONHISTORY, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<FundTransferHistoryResponse> call, Throwable t) {
+                aApiCallback.onApiError(Constants.APICODE.FUNDTRANSACTIONHISTORY, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void doQueryRemittanceTransaction(Map<String, String> aData, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+
+        Call<FundServiceChargeResponse> verificationResponseCall = mRestApis.doQueryRemittanceTransaction(aData);
+        verificationResponseCall.enqueue(new Callback<FundServiceChargeResponse>() {
+            @Override
+            public void onResponse(Call<FundServiceChargeResponse> call, Response<FundServiceChargeResponse> response) {
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.QUERYREMITTANCETRANSACTION, response.body());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.QUERYREMITTANCETRANSACTION, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.QUERYREMITTANCETRANSACTION, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<FundServiceChargeResponse> call, Throwable t) {
+                aApiCallback.onApiError(Constants.APICODE.QUERYREMITTANCETRANSACTION, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void doRefundTransaction(Map<String, String> aData, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+
+        Call<RefundTransactionResponse> verificationResponseCall = mRestApis.doRefundTransaction(aData);
+        verificationResponseCall.enqueue(new Callback<RefundTransactionResponse>() {
+            @Override
+            public void onResponse(Call<RefundTransactionResponse> call, Response<RefundTransactionResponse> response) {
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.REFUNDTRANSACTION, response.body());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.REFUNDTRANSACTION, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.REFUNDTRANSACTION, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RefundTransactionResponse> call, Throwable t) {
+                aApiCallback.onApiError(Constants.APICODE.REFUNDTRANSACTION, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+    public void doValidateRefundTransaction(Map<String, String> aData, final RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+
+        Call<QueryRefundTransactionResponse> verificationResponseCall = mRestApis.doValidateRefundTransaction(aData);
+        verificationResponseCall.enqueue(new Callback<QueryRefundTransactionResponse>() {
+            @Override
+            public void onResponse(Call<QueryRefundTransactionResponse> call, Response<QueryRefundTransactionResponse> response) {
+                if (response.isSuccessful()) {
+                    if (Constants.SUCCESS.equals(response.body().getStatus())) {
+                        aApiCallback.onSuccess(Constants.APICODE.VALIDATEREFUNDTRANSACTION, response.body());
+                        WalletBalanceService.startFetchingBalance(AtishayOnlineApp.getAppInstance());
+                    } else {
+                        aApiCallback.onApiError(Constants.APICODE.VALIDATEREFUNDTRANSACTION, new ApiError<Object>(-1, response.body().getMsg()));
+                    }
+                } else {
+                    ApiError apiError;
+                    if (response.errorBody() != null) {
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+                    aApiCallback.onApiError(Constants.APICODE.VALIDATEREFUNDTRANSACTION, apiError);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<QueryRefundTransactionResponse> call, Throwable t) {
+                aApiCallback.onApiError(Constants.APICODE.VALIDATEREFUNDTRANSACTION, new ApiError<Object>(-1, AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error)));
+            }
+        });
+    }
+
+}

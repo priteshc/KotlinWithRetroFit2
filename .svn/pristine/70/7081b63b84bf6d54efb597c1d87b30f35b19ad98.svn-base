@@ -1,0 +1,153 @@
+/*
+ * Copyright 2016 GoldenMace IT Solutions
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+package com.atishay.online.dth;
+
+import com.atishay.online.AtishayOnlineApp;
+import com.atishay.online.R;
+import com.atishay.online.common.CommonBean;
+import com.atishay.online.common.CommonRechargeResponse;
+import com.atishay.online.mobilerecharge.CircleBean;
+import com.atishay.online.utils.Constants;
+import com.atishay.online.utils.network.ApiError;
+import com.atishay.online.utils.network.RestApiCallback;
+import com.goldenmace.framework.mvp.presenters.Presenter;
+import com.goldenmace.framework.utils.NetworkUtils;
+
+import org.greenrobot.eventbus.EventBus;
+
+import java.net.HttpURLConnection;
+import java.util.ArrayList;
+
+/**
+ * Created by Vishal Patel on 11,November,2016.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public class DthPresenter implements Presenter, RestApiCallback<Object, ApiError<Object>> {
+
+    private DthView mDthView;
+    private EventBus mEventBus;
+    private DthController mDthController;
+    private ArrayList<Integer> mApiList;
+
+    public DthPresenter(DthView aDthView) {
+        mDthView = aDthView;
+        mEventBus = new EventBus();
+        mDthController = new DthController(mEventBus, this);
+        mApiList = new ArrayList<>();
+    }
+
+    public void getDthOperators(String username, String password) {
+        if (NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            mDthView.showLoader(R.string.please_wait);
+            mApiList.add(Constants.APICODE.DTH_OPERATOR);
+            mDthController.getDthOperators(username, password);
+        } else {
+            mDthView.noInternetConnection();
+        }
+    }
+
+    public void getCircleList(String username, String password) {
+        if (NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            mDthView.showLoader(R.string.please_wait);
+            mApiList.add(Constants.APICODE.CIRCLE);
+            mDthController.getCircles(username, password);
+        } else {
+            mDthView.noInternetConnection();
+        }
+    }
+
+    public void doDTHRecharge(ArrayList<CommonBean> aBeanArrayList) {
+        if (NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            mDthView.showLoader(R.string.please_wait);
+            mApiList.add(Constants.APICODE.DTHRECHARGE);
+            mDthController.doDTHRecharge(aBeanArrayList);
+        } else {
+            mDthView.hideLoader();
+            mDthView.noInternetConnection();
+        }
+    }
+
+    @Override
+    public void registerBus() {
+        mEventBus.register(this);
+    }
+
+    @Override
+    public void unRegisterBus() {
+        mEventBus.unregister(this);
+    }
+
+    @Override
+    public void clearReferences() {
+        mDthView = null;
+    }
+
+    @Override
+    public void onSuccess(int aApiCode, Object aSuccessResponse) {
+        if (mDthView != null) {
+            mApiList.remove(Integer.valueOf(aApiCode));
+            if (mApiList.size() == 0) {
+                mDthView.hideLoader();
+            }
+            if (aSuccessResponse == null) {
+                AtishayOnlineApp.getAppInstance().getString(R.string.error_network_server_errors);
+            } else {
+                switch (aApiCode) {
+                    case Constants.APICODE.DTH_OPERATOR:
+                        mDthView.onMobileOperatorsFetched((ArrayList<DthOperatorBean>) aSuccessResponse);
+                        break;
+                    case Constants.APICODE.CIRCLE:
+                        mDthView.onCircleListFetched((ArrayList<CircleBean>) aSuccessResponse);
+                        break;
+                    case Constants.APICODE.DTHRECHARGE:
+                        mDthView.onDTHRechargeDetails((CommonRechargeResponse) aSuccessResponse);
+                        break;
+                }
+            }
+        } else {
+
+        }
+    }
+
+    @Override
+    public void onApiError(int aApiCode, ApiError<Object> aFailureResponse) {
+        if (mDthView != null) {
+            mApiList.remove(Integer.valueOf(aApiCode));
+            if (mApiList.size() == 0) {
+                mDthView.hideLoader();
+            }
+            if (aFailureResponse.getApiErrorCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                mDthView.onUserUnAuthorized((String) aFailureResponse.getError());
+                return;
+            }
+            if (aFailureResponse.getApiErrorCode() == -1) {
+                mDthView.apiError(aApiCode, (String) aFailureResponse.getError());
+                return;
+            }
+            if (aFailureResponse.getError() instanceof String) {
+                mDthView.apiError((String) aFailureResponse.getError());
+                return;
+            }
+            mDthView.apiError((String) AtishayOnlineApp.getAppInstance().getString(R.string.error_network_server_errors));
+        } else {
+
+        }
+    }
+}

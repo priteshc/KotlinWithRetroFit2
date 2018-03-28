@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2016 GoldenMace IT Solutions
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:circle="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/menu_rlView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_login"
+    >
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar"/>
+    </android.support.design.widget.AppBarLayout>
+
+    <TextView
+        android:id="@+id/menu_txtNotification"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/appBarLayout"
+        android:layout_margin="@dimen/spacing_standard"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:textColor="@color/red"
+        android:textSize="@dimen/font_normal"
+        tools:text="Atishay Online App"
+        android:visibility="gone"
+        />
+
+    <include layout="@layout/example"
+
+        />
+
+
+    <!--<com.atishay.online.views.widgets.circlemenu.CircleLayout
+        android:id="@+id/circle_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/appBarLayout"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="@dimen/spacing_control"
+        android:layout_marginRight="@dimen/spacing_control"
+        circle:isRotating="false">
+
+        &lt;!&ndash;<include layout="@layout/menu_items"/>&ndash;&gt;
+
+        <com.atishay.online.views.widgets.circlemenu.CircleImageView
+            android:id="@+id/main_mobile"
+            android:layout_width="@dimen/menu_size"
+            android:layout_height="@dimen/menu_size"
+            android:background="@drawable/menu_circle"
+            android:elevation="@dimen/spacing_control_half"
+            android:src="@drawable/ic_mobile"/>
+
+        <com.atishay.online.views.widgets.circlemenu.CircleImageView
+            android:id="@+id/main_dth"
+            android:layout_width="@dimen/menu_size"
+            android:layout_height="@dimen/menu_size"
+            android:background="@drawable/menu_circle"
+            android:elevation="@dimen/spacing_control_half"
+            android:src="@drawable/ic_dth"/>
+
+        <com.atishay.online.views.widgets.circlemenu.CircleImageView
+            android:id="@+id/main_postpaid"
+            android:layout_width="@dimen/menu_size"
+            android:layout_height="@dimen/menu_size"
+            android:background="@drawable/menu_circle"
+            android:elevation="@dimen/spacing_control_half"
+            android:src="@drawable/ic_recharge"/>
+
+        <com.atishay.online.views.widgets.circlemenu.CircleImageView
+            android:id="@+id/main_utility"
+            android:layout_width="@dimen/menu_size"
+            android:layout_height="@dimen/menu_size"
+            android:background="@drawable/menu_circle"
+            android:elevation="@dimen/spacing_control_half"
+            android:src="@drawable/ic_utility"/>
+    </com.atishay.online.views.widgets.circlemenu.CircleLayout>-->
+
+</RelativeLayout>

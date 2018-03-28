@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2016 GoldenMace IT Solutions
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/spacing_standard">
+
+    <TextView
+        android:id="@+id/fundtransfer_history_txtID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:textColor="@color/textColorPrimary"
+        android:textSize="@dimen/font_normal"
+        tools:text="Trans ID:AO-31082016121332060" />
+
+    <TextView
+        android:id="@+id/fundtransfer_history_txtDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/fundtransfer_history_txtID"
+        android:layout_marginBottom="@dimen/spacing_control"
+        tools:text="22 january 2017" />
+
+    <TextView
+        android:id="@+id/fundtransfer_history_txtUniqueTansID"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/fundtransfer_history_txtDate"
+        android:maxLines="2"
+        android:text="@string/unique_transid"
+        android:textColor="@color/textColorPrimary"
+        android:textSize="@dimen/font_normal" />
+
+    <TextView
+        android:id="@+id/fundtransfer_history_txtBeneName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/fundtransfer_history_txtUniqueTansID"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="@string/name"
+        android:textColor="@color/textColorPrimary"
+        android:textSize="@dimen/font_normal" />
+
+    <TextView
+        android:id="@+id/fundtransfer_history_txtBeneCode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/fundtransfer_history_txtBeneName"
+        android:maxLines="1"
+        android:text="@string/ben_code"
+        android:textColor="@color/textColorPrimary"
+        android:textSize="@dimen/font_normal"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/fundtransfer_history_txtBankNo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/fundtransfer_history_txtBeneCode"
+        android:layout_toLeftOf="@+id/arrow"
+        android:layout_toStartOf="@+id/arrow"
+        android:maxLines="1"
+        android:text="@string/a_c_no"
+        android:textColor="@color/textColorPrimary"
+        android:textSize="@dimen/font_normal" />
+
+    <ImageView
+        android:id="@+id/arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/fundtransfer_history_txtBeneCode"
+        android:src="@drawable/ic_keyboard_arrow_right_black_24dp" />
+
+    <TextView
+        android:id="@+id/fundtransfer_history_txtUTR"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/fundtransfer_history_txtBankNo"
+        android:maxLines="2"
+        android:text="@string/utr"
+        android:textColor="@color/textColorPrimary"
+        android:textSize="@dimen/font_normal" />
+
+    <TextView
+        android:id="@+id/fundtransfer_history_txtSenderName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/fundtransfer_history_txtUTR"
+        android:maxLines="2"
+        android:text="@string/sender_name"
+        android:textColor="@color/textColorPrimary"
+        android:textSize="@dimen/font_normal" />
+
+    <TextView
+        android:id="@+id/fundtransfer_history_txtMobile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/fundtransfer_history_txtSenderName"
+        android:maxLines="2"
+        android:text="@string/sender_mobile"
+        android:textColor="@color/textColorPrimary"
+        android:textSize="@dimen/font_normal" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/fundtransfer_history_txtMobile"
+        android:layout_marginTop="@dimen/spacing_control"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/fundtransfer_history_txtTransStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1.9"
+            android:gravity="center_vertical"
+            tools:text="Sucessfully" />
+
+        <TextView
+            android:id="@+id/fundtransfer_history_txtQueryTransaction"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_below="@id/fundtransfer_history_txtMobile"
+            android:layout_toRightOf="@+id/history_txtTransStatus"
+            android:layout_weight="1"
+            android:background="@drawable/fund_btn_border"
+            android:gravity="center"
+            android:padding="@dimen/spacing_standard"
+            android:text="@string/query_transaction"
+            android:textColor="@color/windowBackground"
+            android:textSize="@dimen/font_normal"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/fundtransfer_history_txtRS"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/fundtransfer_history_txtID"
+        android:textColor="@color/textColorPrimary"
+        android:textSize="@dimen/font_normal"
+        android:textStyle="bold"
+        tools:text="10000" />
+
+
+</RelativeLayout>

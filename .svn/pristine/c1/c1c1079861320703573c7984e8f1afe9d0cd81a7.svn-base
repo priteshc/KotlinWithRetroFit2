@@ -1,0 +1,15 @@
+// Generated code from Butter Knife. Do not modify!
+package com.atishay.online.myaccountrecharge;
+
+import butterknife.Unbinder;
+import butterknife.internal.Finder;
+import butterknife.internal.ViewBinder;
+import java.lang.Object;
+import java.lang.Override;
+
+public final class AccountRechargeAdapter$ReportViewHolder_ViewBinder implements ViewBinder<AccountRechargeAdapter.ReportViewHolder> {
+  @Override
+  public Unbinder bind(Finder finder, AccountRechargeAdapter.ReportViewHolder target, Object source) {
+    return new AccountRechargeAdapter$ReportViewHolder_ViewBinding<>(target, finder, source);
+  }
+}

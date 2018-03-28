@@ -1,0 +1,86 @@
+// Generated code from Butter Knife. Do not modify!
+package com.atishay.online.aadhaar;
+
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import butterknife.Unbinder;
+import butterknife.internal.DebouncingOnClickListener;
+import butterknife.internal.Finder;
+import com.atishay.online.R;
+import com.atishay.online.utils.Loader;
+import java.lang.IllegalStateException;
+import java.lang.Object;
+import java.lang.Override;
+
+public class AadhaarVerificationActivity_ViewBinding<T extends AadhaarVerificationActivity> implements Unbinder {
+  protected T target;
+
+  private View view2131230736;
+
+  private View view2131230737;
+
+  public AadhaarVerificationActivity_ViewBinding(final T target, Finder finder, Object source) {
+    this.target = target;
+
+    View view;
+    target.mToolbar = finder.findRequiredViewAsType(source, R.id.toolbar, "field 'mToolbar'", Toolbar.class);
+    target.mAadhaarMainView = finder.findRequiredViewAsType(source, R.id.aadhaar_rlMain, "field 'mAadhaarMainView'", RelativeLayout.class);
+    target.mtxtAadhaarNumber = finder.findRequiredViewAsType(source, R.id.txtAadhaarNumber, "field 'mtxtAadhaarNumber'", TextView.class);
+    target.mtxtAadhaarName = finder.findRequiredViewAsType(source, R.id.txtAadhaarName, "field 'mtxtAadhaarName'", TextView.class);
+    target.mAadhaarNumber = finder.findRequiredViewAsType(source, R.id.aadhaar_edtNumber, "field 'mAadhaarNumber'", EditText.class);
+    target.mAadhaarName = finder.findRequiredViewAsType(source, R.id.aadhaar_edtName, "field 'mAadhaarName'", EditText.class);
+    target.mAadhaarDetailsTerm = finder.findRequiredViewAsType(source, R.id.aadhaar_cbDetails, "field 'mAadhaarDetailsTerm'", CheckBox.class);
+    target.mLoader = finder.findRequiredViewAsType(source, R.id.loader, "field 'mLoader'", Loader.class);
+    view = finder.findRequiredView(source, R.id.aadhaar_txtAuthenticate, "field 'mView' and method 'doAadhaarAuthentication'");
+    target.mView = finder.castView(view, R.id.aadhaar_txtAuthenticate, "field 'mView'", TextView.class);
+    view2131230736 = view;
+    view.setOnClickListener(new DebouncingOnClickListener() {
+      @Override
+      public void doClick(View p0) {
+        target.doAadhaarAuthentication();
+      }
+    });
+    target.otpView = finder.findRequiredViewAsType(source, R.id.layotp, "field 'otpView'", LinearLayout.class);
+    target.fingerView = finder.findRequiredViewAsType(source, R.id.layfinger, "field 'fingerView'", LinearLayout.class);
+    target.mGenerateotp = finder.findRequiredViewAsType(source, R.id.otp_gen, "field 'mGenerateotp'", TextView.class);
+    view = finder.findRequiredView(source, R.id.aadhaar_txtTransactionHistory, "method 'viewAadhaarTransHistory'");
+    view2131230737 = view;
+    view.setOnClickListener(new DebouncingOnClickListener() {
+      @Override
+      public void doClick(View p0) {
+        target.viewAadhaarTransHistory();
+      }
+    });
+  }
+
+  @Override
+  public void unbind() {
+    T target = this.target;
+    if (target == null) throw new IllegalStateException("Bindings already cleared.");
+
+    target.mToolbar = null;
+    target.mAadhaarMainView = null;
+    target.mtxtAadhaarNumber = null;
+    target.mtxtAadhaarName = null;
+    target.mAadhaarNumber = null;
+    target.mAadhaarName = null;
+    target.mAadhaarDetailsTerm = null;
+    target.mLoader = null;
+    target.mView = null;
+    target.otpView = null;
+    target.fingerView = null;
+    target.mGenerateotp = null;
+
+    view2131230736.setOnClickListener(null);
+    view2131230736 = null;
+    view2131230737.setOnClickListener(null);
+    view2131230737 = null;
+
+    this.target = null;
+  }
+}

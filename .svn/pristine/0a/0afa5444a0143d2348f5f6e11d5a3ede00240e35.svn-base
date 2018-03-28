@@ -1,0 +1,174 @@
+package com.atishay.online.myaccountrecharge;
+
+import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.TextView;
+
+import com.atishay.online.AppBaseActivity;
+import com.atishay.online.AtishayOnlineApp;
+import com.atishay.online.BaseResponse;
+import com.atishay.online.R;
+import com.atishay.online.utils.Constants;
+import com.atishay.online.utils.Loader;
+import com.goldenmace.framework.views.widgets.DividerItemDecoration;
+import com.goldenmace.framework.views.widgets.errorview.ErrorView;
+
+import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+/**
+ * Created by Vishal Patel on 25,November,2016.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public class AccountRechargeReportActivity extends AppBaseActivity implements AccountRechargeView {
+
+    @BindView(R.id.report_rlContainer)
+    View mContainer;
+    @BindView(R.id.report_loader)
+    Loader mLoader;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.report_rvReport)
+    RecyclerView mrvHistoryList;
+    @BindView(R.id.report_errorView)
+    ErrorView mErrorView;
+
+    AccountRechargeAdapter mAccountRechargeAdapter;
+    AccountRechargePresenter mAccountRechargePresenter;
+    private ArrayList<AccountRechargeReportBean> mRechargeReportList;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_myac_report);
+        ButterKnife.bind(this);
+        setToolbar(mToolbar);
+        mAccountRechargePresenter = new AccountRechargePresenter(this);
+        mRechargeReportList = new ArrayList<>();
+        /**
+         * Custom Toolbar with amount view
+         */
+        ButterKnife.<TextView>findById(this, R.id.toolbar_txtAmount).setText(getString(R.string.amount, AtishayOnlineApp.getAppInstance().getBalance()));
+        ButterKnife.<TextView>findById(this, R.id.toolbar_txtTitle).setText(R.string.recharge_ac);
+
+
+        mAccountRechargeAdapter = new AccountRechargeAdapter(this, mRechargeReportList);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        mrvHistoryList.setLayoutManager(mLayoutManager);
+        mrvHistoryList.setAdapter(mAccountRechargeAdapter);
+        mrvHistoryList.setNestedScrollingEnabled(false);
+        mrvHistoryList.addItemDecoration(new DividerItemDecoration(this, R.drawable.divider));
+
+        mAccountRechargePresenter.loadAccountReport(mUsername, mPassword);
+        mErrorView.setOnRetryListener(new ErrorView.RetryListener() {
+            @Override
+            public void onRetry() {
+                mErrorView.setVisibility(View.GONE);
+                mAccountRechargePresenter.loadAccountReport(mUsername, mPassword);
+            }
+        });
+    }
+
+    @Override
+    public void showLoader(String aMessage) {
+        if (aMessage != null) {
+            mLoader.setText(aMessage);
+        }
+        mLoader.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showLoader(int aResId) {
+        if (aResId > 0) {
+            mLoader.setText(getString(aResId));
+        }
+        mLoader.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideLoader() {
+        mLoader.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void noInternetConnection() {
+        hideLoader();
+        mErrorView.setVisibility(View.VISIBLE);
+        mErrorView.setImage(R.drawable.ic_wifi_200dp);
+        mErrorView.setTitle(R.string.error_network_no_internet);
+        mErrorView.setSubtitle("Please check your internet settings");
+        mErrorView.setRetryButtonText("Retry");
+        mErrorView.showRetryButton(true);
+    }
+
+    @Override
+    public void apiError(String aError) {
+        hideLoader();
+        Snackbar.make(mContainer, aError, Snackbar.LENGTH_INDEFINITE).setAction(R.string.error_view_retry, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAccountRechargePresenter.loadAccountReport(mUsername, mPassword);
+            }
+        }).show();
+        super.apiError(aError);
+    }
+
+    @Override
+    public void onAccountReportFetched(ArrayList<AccountRechargeReportBean> aSuccessResponse) {
+        mRechargeReportList.clear();
+        mRechargeReportList.addAll(aSuccessResponse);
+        mAccountRechargeAdapter.notifyDataSetChanged();
+        if (aSuccessResponse.size() == 0) {
+            mErrorView.setVisibility(View.VISIBLE);
+            mErrorView.setImage(R.drawable.ic_list_200dp);
+            mErrorView.setTitle(R.string.msg_no_record_found);
+            mErrorView.setSubtitle("Seems like you haven't done any account recharge payment yet.");
+            mErrorView.showRetryButton(false);
+        }
+    }
+
+    @Override
+    public void onBankListFetched(ArrayList<BankListBean> aList) {
+    }
+
+    @Override
+    public void onTransactionTypeListFetched(ArrayList<TransactionTypeBean> aList) {
+    }
+
+    @Override
+    public void doTransactionCompleteDetails(BaseResponse aList) {
+    }
+
+    @Override
+    public void apiError(int aApiCode, String aError) {
+        switch (aApiCode) {
+            case Constants.APICODE.ACCOUNRREPORT:
+                Snackbar.make(mContainer, aError, Snackbar.LENGTH_INDEFINITE).setAction(R.string.error_view_retry, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mAccountRechargePresenter.loadAccountReport(mUsername, mPassword);
+                    }
+                }).show();
+                break;
+            default:
+                Snackbar.make(mContainer, aError, Snackbar.LENGTH_LONG).show();
+                break;
+        }
+        super.apiError(aApiCode, aError);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mAccountRechargePresenter.clearReferences();
+    }
+}

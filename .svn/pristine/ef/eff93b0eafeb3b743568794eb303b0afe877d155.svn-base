@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2016 GoldenMace IT Solutions
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/custom_llService"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentTop="true"
+    android:layout_gravity="center_horizontal"
+    android:background="@android:color/white"
+    android:isScrollContainer="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+    <TextView
+        android:id="@+id/customer_txtService"
+        style="@style/TextStyle"
+        android:text="@string/customer_service"/>
+
+        <TextView
+            android:id="@+id/customer_txtMobile"
+            style="@style/TextStyle"
+            android:layout_width="match_parent"
+            android:text="@string/personal_mobile"
+            android:textStyle="normal"/>
+
+        <EditText
+        android:id="@+id/customer_edtMobile"
+        style="@style/EditStyle"
+        android:hint="@string/hint_mobile_no"
+        android:inputType="number"
+        android:maxLength="10"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/spacing_standard"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/customer_txtReset"
+                style="@style/FormStyle"
+                android:layout_weight="1"
+                android:text="@string/cancel"
+                android:textStyle="normal"/>
+
+            <TextView
+                android:id="@+id/customer_txtSubmit"
+                style="@style/FormStyle"
+                android:layout_weight="1"
+                android:text="@string/submit"
+                android:textStyle="normal"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <include
+        android:id="@+id/dialog_loader"
+        layout="@layout/layout_loader"
+        android:visibility="gone"/>
+</FrameLayout>

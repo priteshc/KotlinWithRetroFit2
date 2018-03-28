@@ -1,0 +1,18 @@
+package com.atishay.online.history;
+
+/**
+ * Created by Atishay on 19-01-2018.
+ */
+
+public interface ComplainView {
+
+
+    void showFErrorMeassage();
+
+    void showFLoginSuccessMsg(String code,String msg);
+
+    void showprogress();
+
+    void hideprogress();
+
+}

@@ -1,0 +1,323 @@
+/*
+ * Copyright 2016 GoldenMace IT Solutions
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+package com.atishay.online.moneytransfer;
+
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
+
+import com.atishay.online.AppBaseActivity;
+import com.atishay.online.AtishayOnlineApp;
+import com.atishay.online.BaseResponse;
+import com.atishay.online.R;
+import com.atishay.online.benefiaciary.BeneficiaryListBean;
+import com.atishay.online.benefiaciary.BeneficiaryPresenter;
+import com.atishay.online.benefiaciary.BeneficiaryValidationResponse;
+import com.atishay.online.benefiaciary.BeneficiaryView;
+import com.atishay.online.benefiaciary.DeactiveBeneficiaryResponse;
+import com.atishay.online.utils.Constants;
+import com.atishay.online.utils.Loader;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+import static com.atishay.online.R.layout.simple_spinner_item;
+
+/**
+ * Created by Vishal Patel on 20,October,2016.
+ * AtishayOnline
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public class CustomerRegistrationActivity extends AppBaseActivity implements BeneficiaryView, AdapterView.OnItemSelectedListener {
+    @BindView(R.id.cust_reg_mainView)
+    RelativeLayout mCustRegView;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.customer_txtMobile)
+    TextView mTxtCustMobile;
+    @BindView(R.id.cust_txtFirst)
+    TextView mTxtCustFirst;
+    @BindView(R.id.cust_txtLast)
+    TextView mTxtCustLast;
+    @BindView(R.id.cust_txtOTP)
+    TextView mTxtCustOTP;
+    @BindView(R.id.customer_edtMobile)
+    EditText mCustMobileNo;
+    @BindView(R.id.cust_edtFirst)
+    EditText mCustFirstName;
+    @BindView(R.id.cust_edtLast)
+    EditText mCustLastName;
+    @BindView(R.id.txtGender)
+    TextView mTxtGender;
+    @BindView(R.id.cust_edtOTP)
+    EditText mCustOTP;
+    @BindView(R.id.cust_spGender)
+    Spinner mGender;
+    @BindView(R.id.loader)
+    Loader mLoader;
+    private BeneficiaryPresenter mBeneficiaryPresenter;
+    private ArrayList<String> mGenderSelection;
+    private ArrayAdapter<String> mGenderAdapter;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.customer_registration);
+
+        ButterKnife.bind(this);
+        setToolbar(mToolbar);
+        mBeneficiaryPresenter = new BeneficiaryPresenter(this);
+        /**
+         * Custom Toolbar with amount view
+         */
+        ButterKnife.<TextView>findById(this, R.id.toolbar_txtAmount).setText(getString(R.string.amount, AtishayOnlineApp.getAppInstance().getBalance()));
+        ButterKnife.<TextView>findById(this, R.id.toolbar_txtTitle).setText(getString(R.string.cust_register));
+
+
+        mTxtCustMobile.setText(Html.fromHtml(getString(R.string.mobile_no)), TextView.BufferType.SPANNABLE);
+        mTxtCustFirst.setText(Html.fromHtml(getString(R.string.cust_first_name)), TextView.BufferType.SPANNABLE);
+        mTxtCustLast.setText(Html.fromHtml(getString(R.string.cust_last_name)), TextView.BufferType.SPANNABLE);
+        mTxtCustOTP.setText(Html.fromHtml(getString(R.string.cust_otpcode)), TextView.BufferType.SPANNABLE);
+        mTxtGender.setText(Html.fromHtml(getString(R.string.gender)), TextView.BufferType.SPANNABLE);
+        mCustMobileNo.setText(mMobileNo);
+        mGender.setOnItemSelectedListener(this);
+
+        mGenderSelection = new ArrayList<String>();
+        mGenderSelection.add("Male");
+        mGenderSelection.add("Female");
+
+        mGenderAdapter = new ArrayAdapter<String>(this, simple_spinner_item, mGenderSelection);
+        mGender.setAdapter(mGenderAdapter);
+    }
+
+    @OnClick(R.id.cust_txtsubmit)
+    public void doSubmitDetails() {
+        hideKeyboard();
+        if (!TextUtils.isEmpty(mMobileNo) && !TextUtils.isEmpty(mCustFirstName.getText().toString())
+                && !TextUtils.isEmpty(mCustLastName.getText().toString()) && !TextUtils.isEmpty(mCustOTP.getText().toString())) {
+            Map<String, String> queryMap = new HashMap<>();
+            queryMap.put(Constants.ApiKeys.USERNAME, mUsername);
+            queryMap.put(Constants.ApiKeys.PASSWORD, mPassword);
+            queryMap.put(Constants.ApiKeys.FIRSTNAME, mCustFirstName.getText().toString());
+            queryMap.put(Constants.ApiKeys.LASTNAME, mCustLastName.getText().toString());
+            queryMap.put(Constants.ApiKeys.AGENTCODE, mAgentCode);
+            queryMap.put(Constants.ApiKeys.MOBILENO, mMobileNo);
+            queryMap.put(Constants.ApiKeys.GENDER, mGenderSelection.get(mGender.getSelectedItemPosition()));
+            queryMap.put(Constants.ApiKeys.DOB, "N/A");
+            queryMap.put(Constants.ApiKeys.PINCODE, "N/A");
+            queryMap.put(Constants.ApiKeys.OTP, mCustOTP.getText().toString());
+            mBeneficiaryPresenter.getCustRegister(queryMap);
+        } else {
+            Snackbar.make(mCustRegView, getResources().getString(R.string.error_field_required), Snackbar.LENGTH_SHORT).show();
+        }
+    }
+
+    @OnClick(R.id.cust_txtreset)
+    public void doResetDetails() {
+        clearData();
+    }
+
+    @OnClick(R.id.cust_txtResendOTP)
+    public void doResendOTP() {
+        if (!TextUtils.isEmpty(mUsername) && !TextUtils.isEmpty(mPassword) && !TextUtils.isEmpty(mMobileNo)) {
+            mBeneficiaryPresenter.getOTP(mUsername, mPassword, mMobileNo);
+        } else {
+            Snackbar.make(mCustRegView, R.string.invalide_data, Snackbar.LENGTH_LONG).show();
+        }
+    }
+
+    private void clearData() {
+        mCustFirstName.setText("");
+        mCustLastName.setText("");
+        mCustOTP.setText("");
+        mGender.setAdapter(null);
+        mGender.setAdapter(mGenderAdapter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        mBeneficiaryPresenter.clearReferences();
+        super.onDestroy();
+    }
+
+    @Override
+    public void showLoader(String aMessage) {
+        if (aMessage != null) {
+            mLoader.setText(aMessage);
+        }
+        mLoader.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showLoader(int aResId) {
+        if (aResId > 0) {
+            mLoader.setText(getString(aResId));
+        }
+        mLoader.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideLoader() {
+        mLoader.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void noInternetConnection() {
+        Snackbar.make(mCustRegView, getString(R.string.error_network_no_internet), Snackbar.LENGTH_SHORT).show();
+        hideLoader();
+    }
+
+    @Override
+    public void apiError(int aApiCode, String aError) {
+        hideLoader();
+        switch (aApiCode) {
+            case Constants.APICODE.OTP:
+                Snackbar.make(mCustRegView, aError, Snackbar.LENGTH_SHORT).show();
+                break;
+            case Constants.APICODE.QUERYREGISTER:
+                Snackbar.make(mCustRegView, aError, Snackbar.LENGTH_INDEFINITE).setAction(R.string.error_view_retry, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Map<String, String> queryMap = new HashMap<>();
+                        queryMap.put(Constants.ApiKeys.USERNAME, mUsername);
+                        queryMap.put(Constants.ApiKeys.PASSWORD, mPassword);
+                        queryMap.put(Constants.ApiKeys.FIRSTNAME, mCustFirstName.getText().toString());
+                        queryMap.put(Constants.ApiKeys.LASTNAME, mCustLastName.getText().toString());
+                        queryMap.put(Constants.ApiKeys.AGENTCODE, mAgentCode);
+                        queryMap.put(Constants.ApiKeys.MOBILENO, mMobileNo);
+                        queryMap.put(Constants.ApiKeys.GENDER, mGenderSelection.get(mGender.getSelectedItemPosition()));
+                        queryMap.put(Constants.ApiKeys.DOB, "N/A");
+                        queryMap.put(Constants.ApiKeys.PINCODE, "N/A");
+                        queryMap.put(Constants.ApiKeys.OTP, mCustOTP.getText().toString());
+                        mBeneficiaryPresenter.getCustRegister(queryMap);
+                    }
+                }).show();
+                break;
+            default:
+                Snackbar.make(mCustRegView, aError, Snackbar.LENGTH_SHORT).show();
+                break;
+        }
+        super.apiError(aApiCode, aError);
+    }
+
+    @Override
+    public void showDialogLoader(int aResId) {
+
+    }
+
+
+    @Override
+    public void hideDialogLoader() {
+
+    }
+
+    @Override
+    public void hideRefresh() {
+
+    }
+
+    @Override
+    public void onOTPSuccess(CommonRegistrationResponse aMoneyTransferResponse) {
+        Snackbar.make(mCustRegView, aMoneyTransferResponse.getMsg(), Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void doQueryRegister(CommonRegistrationResponse aMoneyTransferResponse) {
+
+    }
+
+    @Override
+    public void doCustRegister(CommonRegistrationResponse aMoneyTransferResponse) {
+        Snackbar.make(mCustRegView, aMoneyTransferResponse.getMsg(), Snackbar.LENGTH_INDEFINITE).setAction(R.string.ok, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                clearData();
+            }
+        }).show();
+    }
+
+    @Override
+    public void doDeactivateBeneficiary(DeactiveBeneficiaryResponse aDeactiveBeneficiaryResponse) {
+
+    }
+
+    @Override
+    public void doValidateDeactivateBeneficiary(DeactiveBeneficiaryResponse aDeactiveBeneficiaryResponse) {
+
+    }
+
+    @Override
+    public void invalidMobile(String aMobile) {
+
+    }
+
+    @Override
+    public void doVerifyBeneficiary(int aObject) {
+
+    }
+
+    @Override
+    public void callFundActivity(int position) {
+
+    }
+
+    @Override
+    public void getAlertConformation(BaseResponse aBaseResponse) {
+
+    }
+
+    @Override
+    public void doBeneficiaryValidation(BeneficiaryValidationResponse aBeneficiaryValidationResponse) {
+
+    }
+
+    @Override
+    public void userAlreadyRegistered() {
+
+    }
+
+    @Override
+    public void getBeneficiaryList(ArrayList<BeneficiaryListBean> aBeneficiaryListBeen) {
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+}

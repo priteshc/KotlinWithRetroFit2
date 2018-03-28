@@ -1,0 +1,290 @@
+/*
+ * Copyright 2016 Goldenmace IT Solutions
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+package com.atishay.online.login;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
+import android.support.v4.util.PatternsCompat;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+
+import com.atishay.online.AppBaseActivity;
+import com.atishay.online.AtishayOnlineApp;
+import com.atishay.online.BaseResponse;
+import com.atishay.online.R;
+import com.atishay.online.menu.MenuActivity;
+import com.atishay.online.utils.Constants;
+import com.atishay.online.utils.Loader;
+import com.goldenmace.framework.utils.NetworkUtils;
+import com.goldenmace.framework.utils.SharedPrefUtils;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+/**
+ * Created by Vishal Patel on 10,October,2016.
+ * AtishayOnline
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+public class LoginActivity extends AppBaseActivity implements LoginView {
+
+    // UI references.
+    @BindView(R.id.login_edtUsername)
+    EditText mUsernameView;
+    @BindView(R.id.login_txtUsername)
+    TextInputLayout mTextUsername;
+    @BindView(R.id.login_edtPassword)
+    EditText mPasswordView;
+    @BindView(R.id.login_txtPassword)
+    TextInputLayout mTextPassword;
+    @BindView(R.id.login_cbRememberMe)
+    CheckBox mcbRememberMe;
+    @BindView(R.id.loader)
+    Loader mLoader;
+    @BindView(R.id.login_llMainView)
+    LinearLayout mLoginMainView;
+    @BindView(R.id.login_llMainViewProgress)
+    ProgressBar mLoginHideProgress;
+    String userName, password;
+    boolean isRememberMe;
+    private LoginPresenter mLoginPresenter;
+    private AlertDialog dialogForgotPassword = null;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
+        ButterKnife.bind(LoginActivity.this);
+
+        isRememberMe = SharedPrefUtils.getBool(this, Constants.SharedPref.USER_DETAIL, Constants.SharedPref.KEY_REMEMBER_ME, false);
+        userName = SharedPrefUtils.getString(this, Constants.SharedPref.USER_DETAIL, Constants.SharedPref.USER_NAME, null);
+        password = SharedPrefUtils.getString(this, Constants.SharedPref.USER_DETAIL, Constants.SharedPref.PASSWORD, null);
+
+        mLoginPresenter = new LoginPresenter(this);
+        mTextUsername.setErrorEnabled(true);
+        mTextPassword.setErrorEnabled(true);
+
+        if (!TextUtils.isEmpty(userName) && !TextUtils.isEmpty(password) && isRememberMe) {
+            mLoginMainView.setVisibility(View.GONE);
+            mLoginHideProgress.setVisibility(View.VISIBLE);
+            if (NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+                mLoginPresenter.validateLoginView(userName, password);
+            } else {
+                noInternetConnectionLogin();
+            }
+            initViews();
+        } else {
+            mLoginMainView.setVisibility(View.VISIBLE);
+            mLoginHideProgress.setVisibility(View.GONE);
+        }
+    }
+
+    private void initViews() {
+        mUsernameView.setText(userName);
+        mPasswordView.setText(password);
+        mcbRememberMe.setChecked(isRememberMe);
+    }
+
+    /**
+     * Login Manually
+     * Attempts to sign in or register the account specified by the login form.
+     * If there are form errors (invalid email, missing fields, etc.), the
+     * errors are presented and no actual login attempt is made.
+     */
+    @OnClick(R.id.login_btnLogin)
+    public void doLoginManually() {
+        mTextUsername.setError("");
+        mTextPassword.setError("");
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(mPasswordView.getWindowToken(), 0);
+
+        mLoginPresenter.validateLogin(mUsernameView.getText().toString(), mPasswordView.getText().toString());
+    }
+
+    @OnClick(R.id.forgot_password)
+    public void forgotPassword() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.dialog_forgotpassword, null);
+        dialogBuilder.setView(dialogView);
+        final EditText edt = (EditText) dialogView.findViewById(R.id.dialog_edtEmailForgot);
+        final TextInputLayout textInputLayout = (TextInputLayout) dialogView.findViewById(R.id.dialog_TITEmailForgot);
+        dialogBuilder.setTitle(getResources().getString(R.string.action_forgot_password));
+        dialogBuilder.setPositiveButton("Ok", null);
+        dialogBuilder.setNegativeButton("Cancel", null);
+        dialogForgotPassword = dialogBuilder.create();
+        dialogForgotPassword.show();
+        dialogForgotPassword.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (edt.getText().length() == 0 || !PatternsCompat.EMAIL_ADDRESS.matcher(edt.getText().toString()).matches()) {
+                    ButterKnife.<TextInputLayout>findById(dialogView, R.id.dialog_TITEmailForgot).setError(getString(R.string.error_invalid_email));
+                    return;
+                }
+                textInputLayout.setError("");
+                mLoginPresenter.validateForgotPassword(edt.getText().toString());
+            }
+        });
+        dialogForgotPassword.getButton(DialogInterface.BUTTON_NEGATIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogForgotPassword.dismiss();
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        mLoginPresenter.onDestroy();
+        mLoginPresenter.clearReferences();
+        super.onDestroy();
+    }
+
+    @Override
+    public void showLoader(String aMessage) {
+        if (aMessage != null) {
+            mLoader.setText(aMessage);
+        }
+        mLoader.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showLoader(int aResId) {
+        if (aResId > 0) {
+            mLoader.setText(getString(aResId));
+        }
+        mLoader.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideLoader() {
+        mLoader.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void noInternetConnection() {
+        Snackbar.make(mUsernameView, getString(R.string.error_network_no_internet), Snackbar.LENGTH_SHORT).show();
+        hideLoader();
+    }
+
+    @Override
+    public void apiError(String aError) {
+        hideLoader();
+        mLoginHideProgress.setVisibility(View.GONE);
+        mLoginMainView.setVisibility(View.VISIBLE);
+        Snackbar.make(mUsernameView, aError, Snackbar.LENGTH_INDEFINITE).setAction(R.string.error_view_retry, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mLoginPresenter.validateLogin(mUsernameView.getText().toString(), mPasswordView.getText().toString());
+            }
+        }).show();
+    }
+
+    @Override
+    public void showDialogLoader(int aResId) {
+        if (dialogForgotPassword != null && dialogForgotPassword.isShowing()) {
+            ButterKnife.<ProgressBar>findById(dialogForgotPassword, R.id.dialog_loader).setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void hideDialogLoader() {
+        if (dialogForgotPassword != null && dialogForgotPassword.isShowing()) {
+            ButterKnife.<ProgressBar>findById(dialogForgotPassword, R.id.dialog_loader).setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void noInternetConnectionForDialog() {
+        if (dialogForgotPassword != null && dialogForgotPassword.isShowing()) {
+            ButterKnife.<TextInputLayout>findById(dialogForgotPassword, R.id.dialog_TITEmailForgot).setError(getString(R.string.error_network_no_internet));
+        }
+    }
+
+    @Override
+    public void noInternetConnectionLogin() {
+        Snackbar.make(mUsernameView, getString(R.string.error_network_no_internet), Snackbar.LENGTH_INDEFINITE).setAction(R.string.error_view_retry, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mLoginPresenter.validateLoginView(userName, password);
+            }
+        }).show();
+    }
+
+    @Override
+    public void onLoginSuccess(LoginResponse aLoginResponse) {
+        hideLoader();
+        if (mcbRememberMe.isChecked()) {
+            SharedPrefUtils.setString(this, Constants.SharedPref.USER_DETAIL, Constants.SharedPref.USER_NAME, mUsernameView.getText().toString());
+            SharedPrefUtils.setString(this, Constants.SharedPref.USER_DETAIL, Constants.SharedPref.PASSWORD, mPasswordView.getText().toString());
+            SharedPrefUtils.setBool(this, Constants.SharedPref.USER_DETAIL, Constants.SharedPref.KEY_REMEMBER_ME, true);
+        } else {
+            SharedPrefUtils.remove(this, Constants.SharedPref.USER_DETAIL, Constants.SharedPref.USER_NAME);
+            SharedPrefUtils.remove(this, Constants.SharedPref.USER_DETAIL, Constants.SharedPref.PASSWORD);
+            SharedPrefUtils.remove(this, Constants.SharedPref.USER_DETAIL, Constants.SharedPref.KEY_REMEMBER_ME);
+        }
+        SharedPrefUtils.setBool(this, Constants.SharedPref.USER_DETAIL, Constants.SharedPref.KEY_MONEY_HIDE, aLoginResponse.isTransActive());//
+        SharedPrefUtils.setString(this, Constants.SharedPref.USER_DETAIL, Constants.SharedPref.KEY_USER_NAME, mUsernameView.getText().toString());
+        SharedPrefUtils.setString(this, Constants.SharedPref.USER_DETAIL, Constants.SharedPref.KEY_PASSWORD, mPasswordView.getText().toString());
+        SharedPrefUtils.setString(this, Constants.SharedPref.USER_DETAIL, Constants.SharedPref.KEY_NAME, aLoginResponse.getName());
+        SharedPrefUtils.setString(this, Constants.SharedPref.USER_DETAIL, Constants.SharedPref.KEY_VENDORID, aLoginResponse.getAtishayVendorID());
+        SharedPrefUtils.setString(this, Constants.SharedPref.USER_DETAIL, Constants.SharedPref.KEY_CHANNELPARTNER, aLoginResponse.getChannelPartner());
+        SharedPrefUtils.setString(this, Constants.SharedPref.USER_DETAIL, Constants.SharedPref.KEY_TRANSPASSWORD, aLoginResponse.getTransactionPassword());
+        SharedPrefUtils.setString(this, Constants.SharedPref.USER_DETAIL, Constants.SharedPref.KEY_AGENT_CODE, aLoginResponse.getAgentCode());
+        Intent redirectMenu = new Intent(getApplicationContext(), MenuActivity.class);
+        startActivity(redirectMenu);
+        finish();
+    }
+
+    @Override
+    public void onForgotPassSuccess(BaseResponse aBaseResponse) {
+        hideDialogLoader();
+        Snackbar.make(mUsernameView, "" + aBaseResponse.getMsg(), Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void invalidUserName(String aUserName) {
+        mTextUsername.setError(getString(R.string.error_invalid_email));
+    }
+
+    @Override
+    public void invalidPassword(String aPassword) {
+        mTextPassword.setError(getString(R.string.error_incorrect_password));
+    }
+
+    @Override
+    public void onForgotPassFail(String aError) {
+        hideDialogLoader();
+        if (dialogForgotPassword != null && dialogForgotPassword.isShowing()) {
+            ButterKnife.<TextInputLayout>findById(dialogForgotPassword, R.id.dialog_TITEmailForgot).setError(aError);
+        }
+    }
+}
+

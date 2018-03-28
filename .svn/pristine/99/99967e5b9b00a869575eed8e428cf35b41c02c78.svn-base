@@ -1,0 +1,291 @@
+/*
+ * Copyright 2016 Goldenmace IT Solutions
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+package com.atishay.online.history;
+
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Point;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.Display;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.atishay.online.AtishayOnlineApp;
+import com.atishay.online.Interface.ComplainCallback;
+import com.atishay.online.R;
+import com.atishay.online.utils.Constants;
+import com.atishay.online.utils.Loader;
+import com.atishay.online.utils.MyProgressDialog;
+import com.goldenmace.framework.utils.NetworkUtils;
+import com.goldenmace.framework.utils.SharedPrefUtils;
+import com.goldenmace.framework.views.widgets.DividerItemDecoration;
+
+import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
+import static android.content.Context.WINDOW_SERVICE;
+
+/**
+ * Created by Vishal Patel on 3,December,2016.
+ * AtishayOnline
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public class PrepaidHistoryFragment extends Fragment implements ComplainCallback, ComplainView {
+
+    @BindView(R.id.history_rvHistory)
+    RecyclerView mHistoryList;
+    HistoryAdapter mHistoryAdapter;
+    ArrayList<HistoryBean> mHistoryBeen;
+    Context context;
+    ProgressDialog progressDialog;
+
+    private ComplainPresenter complainPresenter;
+
+    private ComplainCallback complainCallback;
+
+    Loader mLoader;
+
+    SweetAlertDialog pDialog;
+
+    MyProgressDialog myProgressDialog;
+    private String mUsername, mPassword;
+    private Dialog dialog;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+
+        pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
+        pDialog.getProgressHelper().setBarColor(Color.parseColor("#00668E"));
+        pDialog.setTitleText("Loading");
+        pDialog.setCancelable(false);
+
+
+        mUsername = SharedPrefUtils.getString(getContext(), Constants.SharedPref.USER_DETAIL, Constants.SharedPref.KEY_USER_NAME, "");
+        mPassword = SharedPrefUtils.getString(getContext(), Constants.SharedPref.USER_DETAIL, Constants.SharedPref.KEY_PASSWORD, "");
+
+
+    }
+
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.tab_history, container, false);
+        ButterKnife.bind(this, rootView);
+
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
+        mHistoryList.setLayoutManager(mLayoutManager);
+
+        context = getActivity().getApplicationContext();
+        mHistoryBeen = new ArrayList<>();
+
+        mHistoryAdapter = new HistoryAdapter(context, mHistoryBeen, this);
+
+        mHistoryList.setAdapter(mHistoryAdapter);
+        mHistoryList.setNestedScrollingEnabled(false);
+        //  mHistoryList.addItemDecoration(new DividerItemDecoration(context, R.drawable.divider));
+
+        complainPresenter = new ComplainPresenter(this);
+
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage("please wait.....");
+
+
+        return rootView;
+    }
+
+    public void onDataFetched(ArrayList<HistoryBean> aHistoryBeen) {
+        mHistoryBeen.clear();
+        mHistoryBeen.addAll(aHistoryBeen);
+        mHistoryAdapter.notifyDataSetChanged();
+    }
+
+
+    public void onDataReload() {
+        if (mHistoryBeen != null) {
+            mHistoryBeen.clear();
+            mHistoryAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onMethodCallback(String id) {
+        // do something
+
+        System.out.println("Yes:" + id);
+
+        //   Toast.makeText(context, mUsername, Toast.LENGTH_SHORT).show();
+
+        OpenPopUp(id);
+
+//
+
+
+    }
+
+
+    private void OpenPopUp(final String id) {
+        //Find screen size
+        WindowManager manager = (WindowManager) getContext().getSystemService(WINDOW_SERVICE);
+        Display display = manager.getDefaultDisplay();
+        Point point = new Point();
+        display.getSize(point);
+        int width = point.x;
+        int height = point.y;
+        int smallerDimension = width < height ? width : height;
+        smallerDimension = smallerDimension * 3 / 4;
+        dialog = new Dialog(getContext());
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //  dialog.getWindow().getAttributes().windowAnimations = R.style.animationdialog;
+        dialog.setContentView(R.layout.complain_msg_popup);
+
+        Button button = (Button) dialog.findViewById(R.id.ok);
+
+        final EditText cmsg = (EditText) dialog.findViewById(R.id.cmsg);
+
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (cmsg.getText().toString().equals("")) {
+
+
+                    Toast.makeText(context, "please enter msg", Toast.LENGTH_SHORT).show();
+
+                } else {
+
+                    if (NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+
+
+                        dialog.dismiss();
+
+                        complainPresenter.getTrans(mUsername, mPassword, id, cmsg.getText().toString());
+
+
+                    } else {
+
+                        Toast.makeText(context, "Network unavailable", Toast.LENGTH_SHORT).show();
+
+
+                    }
+                }
+            }
+        });
+
+
+        dialog.show();
+
+
+    }
+
+
+    @Override
+    public void showFErrorMeassage() {
+
+        Toast.makeText(context, "something went wrong,please try again later", Toast.LENGTH_SHORT).show();
+
+
+    }
+
+    @Override
+    public void showFLoginSuccessMsg(String code, String msg) {
+
+
+        System.out.println("My:" + msg);
+
+
+        if (msg.equals(Constants.SUCCESS)) {
+
+            pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.SUCCESS_TYPE);
+            pDialog.setCancelable(false);
+            pDialog
+                    .setTitleText(msg)
+                    .setContentText("your complain registered successfully against " + code)
+                    .setConfirmText("Ok")
+                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sDialog) {
+                            sDialog.dismissWithAnimation();
+                        }
+                    })
+                    .show();
+
+        } else {
+
+            if (msg.equals(Constants.FAILED)) {
+
+                pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE);
+                pDialog.setCancelable(false);
+                pDialog
+                        .setTitleText(msg)
+                        .setContentText("Your request is already registered " + code)
+                        .setConfirmText("Ok")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                sDialog.dismissWithAnimation();
+                            }
+                        })
+                        .show();
+
+            }
+
+
+        }
+
+
+        //   System.out.println("Msg" + msg);
+
+
+    }
+
+    @Override
+    public void showprogress() {
+
+        pDialog.show();
+
+    }
+
+    @Override
+    public void hideprogress() {
+
+        pDialog.dismiss();
+
+    }
+}

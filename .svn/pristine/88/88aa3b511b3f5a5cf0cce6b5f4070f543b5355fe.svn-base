@@ -1,0 +1,23 @@
+
+package com.atishay.online.searchifsc;
+
+import com.atishay.online.common.CommonInterface;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+public class BankListBean implements CommonInterface {
+
+    @SerializedName("BANK")
+    @Expose
+    private String bANK;
+
+    @Override
+    public int getID() {
+        return 0;
+    }
+
+    @Override
+    public String getTitle() {
+        return bANK;
+    }
+}

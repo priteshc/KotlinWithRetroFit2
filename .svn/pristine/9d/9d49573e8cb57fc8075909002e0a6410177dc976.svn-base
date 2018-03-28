@@ -1,0 +1,206 @@
+package com.atishay.online.postpaid;
+
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.Layout;
+import android.text.TextWatcher;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.atishay.online.AppBaseActivity;
+import com.atishay.online.R;
+import com.atishay.online.utils.Constants;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+import static com.atishay.online.R.id.mobile_txtProceed;
+
+/**
+ * Created by Atishay on 09-02-2018.
+ */
+
+public class PostpaidMobilePayment extends AppBaseActivity implements ConvesView {
+
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.mobile_rlMain)
+    RelativeLayout mMobileMainView;
+    @BindView(R.id.amount)
+    EditText amount;
+    @BindView(R.id.fees)
+    EditText fees;
+    @BindView(R.id.total)
+    TextView total;
+    @BindView(R.id.mobile_txtProceed)
+    TextView mView;
+
+
+    private Context context = PostpaidMobilePayment.this;
+    private ConvesPresenter convesPresenter;
+    private ProgressDialog progressDialog;
+
+    private String service, location, smsno, mobno,billerid;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_postpaid_mobile);
+        ButterKnife.bind(this);
+        setToolbar(mToolbar);
+        ButterKnife.<TextView>findById(this, R.id.toolbar_txtTitle).setText(getString(R.string.postpaid));
+
+        amount.setTransformationMethod(null);
+        fees.setTransformationMethod(null);
+        total.setTransformationMethod(null);
+
+
+        convesPresenter = new ConvesPresenter(this);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Please wait");
+        progressDialog.setCancelable(false);
+
+        if (getIntent().getExtras() != null) {
+
+            service = getIntent().getExtras().getString("Service");
+            location = getIntent().getExtras().getString("Location");
+            smsno = getIntent().getExtras().getString("Smsno");
+            mobno = getIntent().getExtras().getString("Mobno");
+            billerid = getIntent().getExtras().getString("BillerId");
+
+            Toast.makeText(context, location, Toast.LENGTH_SHORT).show();
+
+
+        }
+
+
+        //String  id = getIntent().getExtras().getString("Id","");
+
+
+      /*   if(id.equals("2")){
+
+             fetch.setVisibility(View.VISIBLE);
+
+         }
+         else {
+
+             lay.setVisibility(View.VISIBLE);
+
+         }
+*/
+
+        amount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+                if (editable.toString().equals("")) {
+                    amount.setText("0");
+                }
+
+                convesPresenter.getConves(editable.toString(), Constants.ApiKeys.KEY_BBPS);
+
+
+            }
+        });
+
+    }
+
+    @OnClick(mobile_txtProceed)
+    public void doProceedRecharge() {
+
+        if (!amount.getText().toString().isEmpty()) {
+
+            if (amount.getText().toString().equals("0")) {
+
+                Toast.makeText(context, "please enter valid amount", Toast.LENGTH_SHORT).show();
+
+            }
+            else {
+
+                Intent redirectMobile = new Intent(getApplicationContext(), Fetch_Bill.class);
+
+                redirectMobile.putExtra("Service",service);
+                redirectMobile.putExtra("Location",location);
+                redirectMobile.putExtra("Smsno",smsno);
+                redirectMobile.putExtra("Mobno",mobno);
+                redirectMobile.putExtra("Amount",amount.getText().toString());
+                redirectMobile.putExtra("Convess",fees.getText().toString());
+                redirectMobile.putExtra("Total",total.getText().toString());
+                redirectMobile.putExtra("BillerId",billerid);
+
+                startActivity(redirectMobile);
+            }
+        }
+        else {
+
+            Toast.makeText(context, "please enter amount", Toast.LENGTH_SHORT).show();
+
+        }
+    }
+
+
+
+        @Override
+    public void showFErrorMeassage(String msg) {
+
+            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+
+        }
+
+    @Override
+    public void showBSuccessMsg(String msg, String response) {
+
+        Toast.makeText(context,response,Toast.LENGTH_SHORT).show();
+
+        fees.setText(response);
+
+        float p = Float.parseFloat(response);
+
+        float i = Float.valueOf(amount.getText().toString()) + p;
+
+        total.setText(String.valueOf(i));
+
+
+    }
+
+    @Override
+    public void showBfailedMeassage(String msg) {
+
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void showprogress() {
+
+        progressDialog.show();
+
+    }
+
+    @Override
+    public void hideprogress() {
+
+        progressDialog.dismiss();
+    }
+}

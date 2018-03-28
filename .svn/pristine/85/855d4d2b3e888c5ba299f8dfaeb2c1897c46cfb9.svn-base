@@ -1,0 +1,21 @@
+package com.atishay.online.history;
+
+import java.util.List;
+
+/**
+ * Created by Atishay on 13-02-2018.
+ */
+
+public interface UtilityHView {
+
+
+    void showFErrorMeassage(String msg);
+
+    void showUtilitySuccessMsg(String msg, List<UtitlityResponse> utitlityResponses);
+
+    void showUtilityfailedMsg(String msg);
+
+    void showprogress();
+
+    void hideprogress();
+}

@@ -1,0 +1,280 @@
+/*
+ * Copyright 2016 GoldenMace IT Solutions
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+package com.atishay.online.benefiaciary;
+
+import com.atishay.online.AtishayOnlineApp;
+import com.atishay.online.BaseResponse;
+import com.atishay.online.R;
+import com.atishay.online.moneytransfer.CommonRegistrationResponse;
+import com.atishay.online.utils.Constants;
+import com.atishay.online.utils.network.ApiError;
+import com.atishay.online.utils.network.RestApiCallback;
+import com.goldenmace.framework.mvp.presenters.Presenter;
+import com.goldenmace.framework.utils.NetworkUtils;
+import com.goldenmace.framework.utils.StringUtils;
+
+import java.net.HttpURLConnection;
+import java.util.ArrayList;
+import java.util.Map;
+
+import static com.atishay.online.R.string.please_wait;
+import static com.atishay.online.utils.Constants.APICODE.ALERTCONFORMATION;
+import static com.atishay.online.utils.Constants.APICODE.BENEFICIARYLIST;
+import static com.atishay.online.utils.Constants.APICODE.BENEFICIARYVALIDATION;
+import static com.atishay.online.utils.Constants.APICODE.CUSTREGISTER;
+import static com.atishay.online.utils.Constants.APICODE.DEACTIVATEBENEFICIARY;
+import static com.atishay.online.utils.Constants.APICODE.OTP;
+import static com.atishay.online.utils.Constants.APICODE.QUERYREGISTER;
+import static com.atishay.online.utils.Constants.APICODE.VALIDATEDEACTIVATEBENEFICIARY;
+
+/**
+ * Created by Vishal Patel on 18,October,2016.
+ * AtishayOnline
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public class BeneficiaryPresenter implements Presenter, RestApiCallback<Object, ApiError<Object>> {
+
+    BeneficiaryView mBeneficiaryView;
+    BeneficiaryController mBeneficiaryController;
+    ArrayList<Integer> mApiList;
+
+    public BeneficiaryPresenter(BeneficiaryView aBeneficiaryView) {
+        mBeneficiaryController = new BeneficiaryController(this);
+        mBeneficiaryView = aBeneficiaryView;
+        mApiList = new ArrayList<>();
+    }
+
+    public void getBeneficiaryList(Map<String, String> aQueryMap) {
+        if (NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            mBeneficiaryView.showLoader(please_wait);
+            mApiList.add(Constants.APICODE.BENEFICIARYLIST);
+            mBeneficiaryController.getBeneficiaryList(aQueryMap);
+        } else {
+            mBeneficiaryView.hideLoader();
+            mBeneficiaryView.noInternetConnection();
+        }
+    }
+
+    public void getBeneficiaryListRefresh(Map<String, String> aQueryMap) {
+        if (NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            mApiList.add(Constants.APICODE.BENEFICIARYLIST);
+            mBeneficiaryController.getBeneficiaryList(aQueryMap);
+        } else {
+            mBeneficiaryView.hideRefresh();
+            mBeneficiaryView.noInternetConnection();
+        }
+    }
+
+    public void getOTP(String aUsername, String aPassword, String aMobile) {
+
+        if (StringUtils.isTrimmedEmpty(aMobile)) {
+            mBeneficiaryView.invalidMobile(aMobile);
+            return;
+        }
+        if (mBeneficiaryView != null && NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            mBeneficiaryView.showDialogLoader(R.string.please_wait);
+            mBeneficiaryView.showLoader(R.string.please_wait);
+            mApiList.add(OTP);
+            mBeneficiaryController.getOTP(aUsername, aPassword, aMobile);
+        } else {
+            mBeneficiaryView.hideLoader();
+            mBeneficiaryView.hideDialogLoader();
+            mBeneficiaryView.noInternetConnection();
+        }
+    }
+
+    public void doQueryRegister(Map<String, String> aQueryMap) {
+
+        if (mBeneficiaryView != null && NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            mBeneficiaryView.showLoader(R.string.please_wait);
+            mApiList.add(QUERYREGISTER);
+            mBeneficiaryController.doQueryRegister(aQueryMap);
+        } else {
+            mBeneficiaryView.hideLoader();
+            mBeneficiaryView.noInternetConnection();
+        }
+    }
+
+    public void getCustRegister(Map<String, String> aQueryMap) {
+
+        if (mBeneficiaryView != null && NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            mBeneficiaryView.showLoader(R.string.please_wait);
+            mApiList.add(CUSTREGISTER);
+            mBeneficiaryController.doCustRegister(aQueryMap);
+        } else {
+            mBeneficiaryView.hideLoader();
+            mBeneficiaryView.noInternetConnection();
+        }
+    }
+
+    public void doDeactivateBeneficiary(Map<String, String> aQueryMap) {
+
+        if (mBeneficiaryView != null && NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            mBeneficiaryView.showLoader(R.string.please_wait);
+            mApiList.add(DEACTIVATEBENEFICIARY);
+            mBeneficiaryController.doDeactivateBeneficiary(aQueryMap);
+        } else {
+            mBeneficiaryView.hideLoader();
+            mBeneficiaryView.noInternetConnection();
+        }
+    }
+
+    public void doValidateDeactivateBeneficiary(Map<String, String> aQueryMap) {
+
+        if (mBeneficiaryView != null && NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            mBeneficiaryView.showDialogLoader(R.string.please_wait);
+            mApiList.add(VALIDATEDEACTIVATEBENEFICIARY);
+            mBeneficiaryController.doValidateDeactivateBeneficiary(aQueryMap);
+        } else {
+            mBeneficiaryView.hideDialogLoader();
+            mBeneficiaryView.noInternetConnection();
+        }
+    }
+
+    public void getAlertConformation(String aUsername, String aPassword) {
+
+        if (mBeneficiaryView != null && NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            mBeneficiaryView.showLoader(R.string.please_wait);
+            mApiList.add(ALERTCONFORMATION);
+            mBeneficiaryController.getAlertConformation(aUsername, aPassword);
+        } else {
+            mBeneficiaryView.hideLoader();
+            mBeneficiaryView.noInternetConnection();
+        }
+    }
+
+    public void doBeneficiaryValidation(Map<String, String> aQueryMap) {
+
+        if (mBeneficiaryView != null && NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            mBeneficiaryView.showDialogLoader(R.string.please_wait);
+            mApiList.add(BENEFICIARYVALIDATION);
+            mBeneficiaryController.doBeneficiaryValidation(aQueryMap);
+        } else {
+            mBeneficiaryView.hideDialogLoader();
+            mBeneficiaryView.noInternetConnection();
+        }
+    }
+
+    @Override
+    public void onSuccess(int aApiCode, Object aSuccessResponse) {
+        if (mBeneficiaryView != null) {
+            mApiList.remove(Integer.valueOf(aApiCode));
+            if (mApiList.size() == 0) {
+                mBeneficiaryView.hideLoader();
+                mBeneficiaryView.hideDialogLoader();
+                mBeneficiaryView.hideRefresh();
+            }
+            if (aSuccessResponse == null) {
+                if (aApiCode == BENEFICIARYLIST) {
+                    mBeneficiaryView.getBeneficiaryList((ArrayList<BeneficiaryListBean>) aSuccessResponse);
+                } else {
+                    AtishayOnlineApp.getAppInstance().getString(R.string.error_network_server_errors);
+                }
+            } else {
+                switch (aApiCode) {
+                    case BENEFICIARYLIST:
+                        mBeneficiaryView.getBeneficiaryList((ArrayList<BeneficiaryListBean>) aSuccessResponse);
+                        break;
+                    case OTP:
+                        mBeneficiaryView.onOTPSuccess((CommonRegistrationResponse) aSuccessResponse);
+                        break;
+                    case QUERYREGISTER:
+                        mBeneficiaryView.doQueryRegister((CommonRegistrationResponse) aSuccessResponse);
+                        break;
+                    case CUSTREGISTER:
+                        mBeneficiaryView.doCustRegister((CommonRegistrationResponse) aSuccessResponse);
+                        break;
+                    case DEACTIVATEBENEFICIARY:
+                        mBeneficiaryView.doDeactivateBeneficiary((DeactiveBeneficiaryResponse) aSuccessResponse);
+                        break;
+                    case VALIDATEDEACTIVATEBENEFICIARY:
+                        mBeneficiaryView.doValidateDeactivateBeneficiary((DeactiveBeneficiaryResponse) aSuccessResponse);
+                        break;
+                    case ALERTCONFORMATION:
+                        mBeneficiaryView.getAlertConformation((BaseResponse) aSuccessResponse);
+                        break;
+                    case BENEFICIARYVALIDATION:
+                        mBeneficiaryView.doBeneficiaryValidation((BeneficiaryValidationResponse) aSuccessResponse);
+                        break;
+                }
+            }
+        } else {
+
+        }
+    }
+
+    @Override
+    public void onApiError(int aApiCode, ApiError<Object> aFailureResponse) {
+        if (mBeneficiaryView != null) {
+            mApiList.remove(Integer.valueOf(aApiCode));
+            if (mApiList.size() == 0) {
+                mBeneficiaryView.hideLoader();
+                mBeneficiaryView.hideDialogLoader();
+                mBeneficiaryView.hideRefresh();
+                if (aFailureResponse.getApiErrorCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                    mBeneficiaryView.onUserUnAuthorized((String) aFailureResponse.getError());
+                    return;
+                }
+                switch (aApiCode) {
+                    case OTP:
+                        if (aFailureResponse.getApiErrorCode() == 302) {
+                            mBeneficiaryView.userAlreadyRegistered();
+                        } else {
+                            mBeneficiaryView.apiError(aApiCode, (String) aFailureResponse.getError());
+                        }
+                        break;
+                    case QUERYREGISTER:
+                    case CUSTREGISTER:
+                    case BENEFICIARYLIST:
+                    case DEACTIVATEBENEFICIARY:
+                    case VALIDATEDEACTIVATEBENEFICIARY:
+                    case ALERTCONFORMATION:
+                    case BENEFICIARYVALIDATION:
+                        if (aFailureResponse.getApiErrorCode() == -1) {
+                            mBeneficiaryView.apiError(aApiCode, (String) aFailureResponse.getError());
+                            return;
+                        }
+                        if (aFailureResponse.getError() instanceof String) {
+                            mBeneficiaryView.apiError((String) aFailureResponse.getError());
+                            return;
+                        }
+                        mBeneficiaryView.apiError((String) AtishayOnlineApp.getAppInstance().getString(R.string.error_network_server_errors));
+                        break;
+                }
+            } else {
+
+            }
+        }
+    }
+
+    @Override
+    public void registerBus() {
+
+    }
+
+    @Override
+    public void unRegisterBus() {
+
+    }
+
+    @Override
+    public void clearReferences() {
+        mBeneficiaryView = null;
+    }
+}

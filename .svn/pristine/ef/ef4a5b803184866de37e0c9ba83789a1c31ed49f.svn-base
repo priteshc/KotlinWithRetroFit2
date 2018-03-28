@@ -1,0 +1,16 @@
+package com.atishay.online.history;
+
+import com.atishay.online.AppBaseView;
+
+import java.util.ArrayList;
+
+/**
+ * Created by hrdudhat on 11/22/2016.
+ */
+public interface HistoryView extends AppBaseView {
+    void onPrepaidHistoryFetched(ArrayList<HistoryBean> aHistoryBeen);
+
+    void onPostpaidHistoryFetched(ArrayList<HistoryBean> aHistoryBeen);
+
+    void onDTHHistoryFetched(ArrayList<HistoryBean> aHistoryBeen);
+}

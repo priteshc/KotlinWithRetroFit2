@@ -1,0 +1,70 @@
+// Generated code from Butter Knife. Do not modify!
+package com.atishay.online.searchifsc;
+
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
+import butterknife.Unbinder;
+import butterknife.internal.DebouncingOnClickListener;
+import butterknife.internal.Finder;
+import com.atishay.online.R;
+import com.atishay.online.utils.Loader;
+import java.lang.IllegalStateException;
+import java.lang.Object;
+import java.lang.Override;
+
+public class SearchIFSCActivity_ViewBinding<T extends SearchIFSCActivity> implements Unbinder {
+  protected T target;
+
+  private View view2131231248;
+
+  public SearchIFSCActivity_ViewBinding(final T target, Finder finder, Object source) {
+    this.target = target;
+
+    View view;
+    target.mToolbar = finder.findRequiredViewAsType(source, R.id.toolbar, "field 'mToolbar'", Toolbar.class);
+    target.mLoader = finder.findRequiredViewAsType(source, R.id.loader, "field 'mLoader'", Loader.class);
+    target.mSearchIFSCMain = finder.findRequiredViewAsType(source, R.id.searchIFSC_rlMain, "field 'mSearchIFSCMain'", RelativeLayout.class);
+    target.mBank = finder.findRequiredViewAsType(source, R.id.searchIFSC_spBank, "field 'mBank'", Spinner.class);
+    target.mState = finder.findRequiredViewAsType(source, R.id.searchIFSC_spState, "field 'mState'", Spinner.class);
+    target.mDistrict = finder.findRequiredViewAsType(source, R.id.searchIFSC_spDistrict, "field 'mDistrict'", Spinner.class);
+    target.mCity = finder.findRequiredViewAsType(source, R.id.searchIFSC_spCity, "field 'mCity'", Spinner.class);
+    target.mBranch = finder.findRequiredViewAsType(source, R.id.searchIFSC_spBranch, "field 'mBranch'", Spinner.class);
+    target.mBankName = finder.findRequiredViewAsType(source, R.id.item_txtBankName, "field 'mBankName'", TextView.class);
+    target.mIFSCCode = finder.findRequiredViewAsType(source, R.id.item_txtIFSCCode, "field 'mIFSCCode'", TextView.class);
+    target.mAddress = finder.findRequiredViewAsType(source, R.id.item_txtAddress, "field 'mAddress'", TextView.class);
+    view = finder.findRequiredView(source, R.id.searchIFSC_cvView, "method 'passSearchIFSCCode'");
+    view2131231248 = view;
+    view.setOnClickListener(new DebouncingOnClickListener() {
+      @Override
+      public void doClick(View p0) {
+        target.passSearchIFSCCode();
+      }
+    });
+  }
+
+  @Override
+  public void unbind() {
+    T target = this.target;
+    if (target == null) throw new IllegalStateException("Bindings already cleared.");
+
+    target.mToolbar = null;
+    target.mLoader = null;
+    target.mSearchIFSCMain = null;
+    target.mBank = null;
+    target.mState = null;
+    target.mDistrict = null;
+    target.mCity = null;
+    target.mBranch = null;
+    target.mBankName = null;
+    target.mIFSCCode = null;
+    target.mAddress = null;
+
+    view2131231248.setOnClickListener(null);
+    view2131231248 = null;
+
+    this.target = null;
+  }
+}

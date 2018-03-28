@@ -1,0 +1,118 @@
+package com.atishay.online.aadhaar;
+
+import com.atishay.online.AtishayOnlineApp;
+import com.atishay.online.BaseResponse;
+import com.atishay.online.R;
+import com.atishay.online.utils.Constants;
+import com.atishay.online.utils.network.ApiError;
+import com.atishay.online.utils.network.RestApiCallback;
+import com.goldenmace.framework.mvp.presenters.Presenter;
+import com.goldenmace.framework.utils.NetworkUtils;
+
+import java.net.HttpURLConnection;
+import java.util.ArrayList;
+import java.util.Map;
+
+/**
+ * Created by Vishal Patel on 01,December,2016.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public class AadhaarVerificationPresenter implements Presenter, RestApiCallback<Object, ApiError<Object>> {
+
+    private AadhaarVerificationView mAadhaarVerificationView;
+    private AadhaarVerificationController mAadhaarVerificationController;
+    private ArrayList<Integer> mApiList;
+
+    public AadhaarVerificationPresenter(AadhaarVerificationView aAadhaarVerificationView) {
+        mAadhaarVerificationView = aAadhaarVerificationView;
+        mAadhaarVerificationController = new AadhaarVerificationController(this);
+        mApiList = new ArrayList<>();
+    }
+
+    public void doAadhaarVerification(Map<String, String> aBeanArrayList) {
+        if (NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            mAadhaarVerificationView.showLoader(R.string.please_wait);
+            mApiList.add(Constants.APICODE.AADHAARVERIFICATION);
+            mAadhaarVerificationController.doAadhaarVerication(aBeanArrayList);
+        } else {
+            mAadhaarVerificationView.hideLoader();
+            mAadhaarVerificationView.noInternetConnection();
+        }
+    }
+
+    void loadAadhaarVeriHistory(String aUserName, String aPassword) {
+        if (NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            mAadhaarVerificationView.showLoader(R.string.please_wait);
+            mAadhaarVerificationController.loadAadhaarVerificationDetails(aUserName, aPassword);
+        } else {
+            mAadhaarVerificationView.noInternetConnection();
+        }
+    }
+
+    @Override
+    public void onSuccess(int aApiCode, Object aSuccessResponse) {
+        if (mAadhaarVerificationView != null) {
+            mApiList.remove(Integer.valueOf(aApiCode));
+            if (mApiList.size() == 0) {
+                mAadhaarVerificationView.hideLoader();
+            }
+            if (aSuccessResponse == null) {
+                AtishayOnlineApp.getAppInstance().getString(R.string.error_network_server_errors);
+            } else {
+                switch (aApiCode) {
+                    case Constants.APICODE.AADHAARVERIFICATION:
+                        mAadhaarVerificationView.doAadhaarVerificationDetails((BaseResponse) aSuccessResponse);
+                        break;
+                    case Constants.APICODE.AADHAARHISTORY:
+                        mAadhaarVerificationView.onAadhaarVerificationHistoryFetched((ArrayList<AadhaarVerificationBean>) aSuccessResponse);
+                        break;
+                }
+            }
+        } else {
+
+        }
+    }
+
+    @Override
+    public void onApiError(int aApiCode, ApiError<Object> aFailureResponse) {
+        if (mAadhaarVerificationView != null) {
+            mApiList.remove(Integer.valueOf(aApiCode));
+            if (mApiList.size() == 0) {
+                mAadhaarVerificationView.hideLoader();
+            }
+            if (aFailureResponse.getApiErrorCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                mAadhaarVerificationView.onUserUnAuthorized((String) aFailureResponse.getError());
+                return;
+            }
+            if (aFailureResponse.getApiErrorCode() == -1) {
+                mAadhaarVerificationView.apiError(aApiCode, (String) aFailureResponse.getError());
+                return;
+            }
+            if (aFailureResponse.getError() instanceof String) {
+                mAadhaarVerificationView.apiError((String) aFailureResponse.getError());
+                return;
+            }
+            mAadhaarVerificationView.apiError((String) AtishayOnlineApp.getAppInstance().getString(R.string.error_network_server_errors));
+        } else {
+
+        }
+    }
+
+    @Override
+    public void registerBus() {
+
+    }
+
+    @Override
+    public void unRegisterBus() {
+
+    }
+
+    @Override
+    public void clearReferences() {
+        mAadhaarVerificationView = null;
+    }
+}

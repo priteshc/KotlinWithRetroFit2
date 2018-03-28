@@ -1,0 +1,14 @@
+package com.atishay.online.changepassword;
+
+import com.atishay.online.AppBaseView;
+import com.atishay.online.BaseResponse;
+
+/**
+ * Created by hrdudhat on 11/22/2016.
+ */
+public interface TabChngPassView extends AppBaseView {
+
+    void onTransactionCodeChanged(BaseResponse aSuccessResponse);
+
+    void onPasswordChanged(BaseResponse aSuccessResponse);
+}

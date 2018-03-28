@@ -1,0 +1,436 @@
+/*
+ * Copyright 2016 GoldenMace IT Solutions
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+package com.atishay.online.addbenefiaciary;
+
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.TextUtils;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.atishay.online.AppBaseActivity;
+import com.atishay.online.AtishayOnlineApp;
+import com.atishay.online.R;
+import com.atishay.online.benefiaciary.BankIFSCDetailBean;
+import com.atishay.online.searchifsc.SearchIFSCActivity;
+import com.atishay.online.utils.Constants;
+import com.atishay.online.utils.DialogUtils;
+import com.atishay.online.utils.Loader;
+import com.goldenmace.framework.utils.NetworkUtils;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+import static com.atishay.online.R.string.address;
+import static com.atishay.online.R.string.bank;
+import static com.atishay.online.R.string.branch;
+import static com.atishay.online.R.string.ifsc;
+
+/**
+ * Created by Vishal Patel on 15,October,2016.
+ * AtishayOnline
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public class AddBeneficiaryActivity extends AppBaseActivity implements AddBeneficiaryView, View.OnFocusChangeListener {
+
+    private static final int MASTER_POSITION = 121;
+    private static final int SEARCH_POSITION = 122;
+    @BindView(R.id.add_beni_rlView)
+    RelativeLayout mAddBeneficiaryMain;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.bene_txtName)
+    TextView mTxtName;
+    @BindView(R.id.bene_txtMobile)
+    TextView mTxtMobile;
+    @BindView(R.id.bene_txtIFSC)
+    TextView mTxtIFSC;
+    @BindView(R.id.bene_txtBankNo)
+    TextView mTxtBankNo;
+    @BindView(R.id.bene_txtConfirmNo)
+    TextView mTxtConfirmBankNo;
+    @BindView(R.id.bene_txtTransCode)
+    TextView mTxtTranCode;
+    @BindView(R.id.bene_edtName)
+    EditText mBenName;
+    @BindView(R.id.bene_edtMobile)
+    EditText mBenMobile;
+    @BindView(R.id.bene_edtIFSC)
+    EditText mBenIFSCCode;
+    @BindView(R.id.bene_edtBankNo)
+    EditText mBenBankNo;
+    @BindView(R.id.bene_edtConfirmNo)
+    EditText mBenConformBankNo;
+    @BindView(R.id.bene_edtTransCode)
+    EditText mBenTransCode;
+
+    @BindView(R.id.bene_loader)
+    Loader mLoader;
+    Dialog mBottomSheetDialog;
+    OTPHolder mOTPHolder;
+    IFSCDeatilsHolder mIFSCDeatilsHolder;
+    AddBeneficiaryPresenter mAddBeneficiaryPresenter;
+    ArrayList<MasterIFSCBean> mMasterIFSCBean;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.add_beneficiary);
+
+        ButterKnife.bind(this);
+        setToolbar(mToolbar);
+        mMasterIFSCBean = new ArrayList<>();
+
+        /**
+         * Custom Toolbar with amount view
+         */
+        ButterKnife.<TextView>findById(this, R.id.toolbar_txtAmount).setVisibility(View.GONE);
+        ButterKnife.<TextView>findById(this, R.id.toolbar_txtTitle).setText(getString(R.string.add_beneficiary));
+
+        mAddBeneficiaryPresenter = new AddBeneficiaryPresenter(this);
+        mTxtName.setText(Html.fromHtml(getString(R.string.bene_name)), TextView.BufferType.SPANNABLE);
+        mTxtMobile.setText(Html.fromHtml(getString(R.string.mobile_no)), TextView.BufferType.SPANNABLE);
+        mTxtIFSC.setText(Html.fromHtml(getString(R.string.bene_ifsc)), TextView.BufferType.SPANNABLE);
+        mTxtBankNo.setText(Html.fromHtml(getString(R.string.bene_bank_no)), TextView.BufferType.SPANNABLE);
+        mTxtConfirmBankNo.setText(Html.fromHtml(getString(R.string.bene_confirm_bank_no)), TextView.BufferType.SPANNABLE);
+        mTxtTranCode.setText(Html.fromHtml(getString(R.string.trans_code)), TextView.BufferType.SPANNABLE);
+        mBenIFSCCode.setOnFocusChangeListener(this);
+    }
+
+    @OnClick(R.id.bene_txtSearchIFSC)
+    public void onSearchIFSCCode() {
+        if (NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            Intent redirectMasterIFSC = new Intent(this, SearchIFSCActivity.class);
+            startActivityForResult(redirectMasterIFSC, SEARCH_POSITION);
+        } else {
+            noInternetConnection();
+        }
+    }
+
+    @OnClick(R.id.bene_txtMasterIFSC)
+    public void onMasterIFSCCode() {
+        if (!TextUtils.isEmpty(mUsername) && !TextUtils.isEmpty(mPassword)) {
+            mAddBeneficiaryPresenter.getMasterIFSC(mUsername, mPassword);
+        } else {
+            Snackbar.make(mAddBeneficiaryMain, getResources().getString(R.string.invalide_username), Snackbar.LENGTH_SHORT).show();
+        }
+    }
+
+    @OnClick(R.id.bene_txtNext)
+    public void onNext(View v) {
+        hideKeyboard();
+        if (!TextUtils.isEmpty(mBenName.getText().toString()) && !TextUtils.isEmpty(mBenMobile.getText().toString())
+                && !TextUtils.isEmpty(mBenIFSCCode.getText().toString()) && !TextUtils.isEmpty(mBenBankNo.getText().toString())
+                && !TextUtils.isEmpty(mBenConformBankNo.getText().toString()) && !TextUtils.isEmpty(mBenTransCode.getText().toString())) {
+            if (mBenBankNo.getText().toString().equals(mBenConformBankNo.getText().toString())) {
+                Map<String, String> queryMap = new HashMap<>();
+                queryMap.put(Constants.ApiKeys.USERNAME, mUsername);
+                queryMap.put(Constants.ApiKeys.PASSWORD, mPassword);
+                queryMap.put(Constants.ApiKeys.AGENTCODE, mAgentCode);
+                queryMap.put(Constants.ApiKeys.REMITTERMOBILE, mMobileNo);
+                queryMap.put(Constants.ApiKeys.BENNAME, mBenName.getText().toString());
+                queryMap.put(Constants.ApiKeys.BENMOBILE, mBenMobile.getText().toString());
+                queryMap.put(Constants.ApiKeys.BENIFSCCODE, mBenIFSCCode.getText().toString());
+                queryMap.put(Constants.ApiKeys.BENACCOUNTNUMBER, mBenBankNo.getText().toString());
+                queryMap.put(Constants.ApiKeys.BENTRANSCODE, mBenTransCode.getText().toString());
+                mAddBeneficiaryPresenter.doAddBeneficiary(queryMap);
+            } else {
+                Snackbar.make(mAddBeneficiaryMain, getResources().getString(R.string.error_field_bankno), Snackbar.LENGTH_SHORT).show();
+            }
+        } else {
+            Snackbar.make(mAddBeneficiaryMain, getResources().getString(R.string.error_field_required), Snackbar.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void getMasterIFSC(ArrayList<MasterIFSCBean> aMasterIFSCBeen) {
+        mMasterIFSCBean.clear();
+        mMasterIFSCBean.addAll(aMasterIFSCBeen);
+
+        if (mMasterIFSCBean != null) {
+            Intent redirectMasterIFSC = new Intent(this, MasterIFSCActivity.class);
+            redirectMasterIFSC.putExtra("masterifsc", mMasterIFSCBean);
+            startActivityForResult(redirectMasterIFSC, MASTER_POSITION);
+        } else {
+
+        }
+    }
+
+    @Override
+    public void doAddBeneficiary(final AddBeneficiaryResponse aAddBeneficiaryResponse) {
+
+        Snackbar.make(mAddBeneficiaryMain, aAddBeneficiaryResponse.getMsg(), Snackbar.LENGTH_SHORT).show();
+        View view = getLayoutInflater().inflate(R.layout.otp_bottomdialog, null);
+        mOTPHolder = new OTPHolder(view);
+        mBottomSheetDialog = new Dialog(AddBeneficiaryActivity.this,
+                R.style.MaterialDialogSheet);
+        mBottomSheetDialog.setContentView(view);
+        mBottomSheetDialog.setCanceledOnTouchOutside(false);
+        if (mBottomSheetDialog.getWindow() != null) {
+            mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            mBottomSheetDialog.getWindow().setGravity(Gravity.BOTTOM);
+        }
+        mBottomSheetDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                //do whatever you want the back key to do
+                mBottomSheetDialog.dismiss();
+            }
+        });
+        mOTPHolder.mResendOTP.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideKeyboard();
+                Map<String, String> queryMap = new HashMap<>();
+                queryMap.put(Constants.ApiKeys.USERNAME, mUsername);
+                queryMap.put(Constants.ApiKeys.PASSWORD, mPassword);
+                queryMap.put(Constants.ApiKeys.AGENTCODE, mAgentCode);
+                queryMap.put(Constants.ApiKeys.REMITTERMOBILE, mMobileNo);
+                queryMap.put(Constants.ApiKeys.BENEFICIARY_CODE, aAddBeneficiaryResponse.getBeneficiaryCode());
+                mAddBeneficiaryPresenter.doResendOTP(queryMap);
+            }
+        });
+        mOTPHolder.mConformAddBeneficiary.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideKeyboard();
+                if (!TextUtils.isEmpty(mOTPHolder.mOTP.getText().toString()) && !TextUtils.isEmpty(mOTPHolder.mTrnasCode.getText().toString())) {
+                    Map<String, String> queryMap = new HashMap<>();
+                    queryMap.put(Constants.ApiKeys.USERNAME, mUsername);
+                    queryMap.put(Constants.ApiKeys.PASSWORD, mPassword);
+                    queryMap.put(Constants.ApiKeys.AGENTCODE, mAgentCode);
+                    queryMap.put(Constants.ApiKeys.REMITTERMOBILE, mMobileNo);
+                    queryMap.put(Constants.ApiKeys.BENEFICIARY_CODE, aAddBeneficiaryResponse.getBeneficiaryCode());
+                    queryMap.put(Constants.ApiKeys.OTP, mOTPHolder.mOTP.getText().toString());
+                    queryMap.put(Constants.ApiKeys.BENTRANSCODE, mOTPHolder.mTrnasCode.getText().toString());
+                    mAddBeneficiaryPresenter.doValidateBeneficiary(queryMap);
+                } else {
+                    Snackbar.make(mAddBeneficiaryMain, getResources().getString(R.string.error_field_required), Snackbar.LENGTH_SHORT).show();
+                }
+            }
+        });
+        mBottomSheetDialog.show();
+    }
+
+    @Override
+    public void doResendOTP(ResendOTPResponse aResendOTPResponse) {
+        Snackbar.make(mAddBeneficiaryMain, aResendOTPResponse.getMsg(), Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void getIFSCDetials(ArrayList<BankIFSCDetailBean> aBankIFSCDetailBeen) {
+        View view = getLayoutInflater().inflate(R.layout.ifsc_details, null);
+        mIFSCDeatilsHolder = new IFSCDeatilsHolder(view);
+        mBottomSheetDialog = new Dialog(AddBeneficiaryActivity.this,
+                R.style.MaterialDialogSheet);
+        mBottomSheetDialog.setContentView(view);
+        mBottomSheetDialog.setCancelable(true);
+        if (mBottomSheetDialog.getWindow() != null) {
+            mBottomSheetDialog.getWindow().setLayout(getResources().getDimensionPixelSize(R.dimen.dialog_width),
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            mBottomSheetDialog.getWindow().setGravity(Gravity.CENTER);
+        }
+        mIFSCDeatilsHolder.mIFSCDeatilsIFSC.setText(Html.fromHtml(String.format(getString(ifsc), aBankIFSCDetailBeen.get(0).getIFSC())));
+        mIFSCDeatilsHolder.mIFSCDeatilsBank.setText(Html.fromHtml(String.format(getString(bank), aBankIFSCDetailBeen.get(0).getBANK())));
+        mIFSCDeatilsHolder.mIFSCDeatilsBranch.setText(Html.fromHtml(String.format(getString(branch), aBankIFSCDetailBeen.get(0).getBRANCH())));
+        mIFSCDeatilsHolder.mIFSCDeatilsAddress.setText(Html.fromHtml(String.format(getString(address), aBankIFSCDetailBeen.get(0).getADDRESS())));
+        mBottomSheetDialog.show();
+    }
+
+    @Override
+    public void doValidateBeneficiary(ValidateBeneficiaryResponse aValidateBeneficiaryResponse) {
+        DialogUtils.getSingleButtonDialog(this, R.drawable.ic_success, getResources().getString(R.string.add_beneficiary), aValidateBeneficiaryResponse.getMsg(), getString(R.string.lbl_ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == DialogInterface.BUTTON_POSITIVE) {
+                    finish();
+                }
+            }
+        }, false).show();
+    }
+
+    @Override
+    public void showDialogLoader(int aResId) {
+        if (mBottomSheetDialog != null && mBottomSheetDialog.isShowing()) {
+            ButterKnife.<FrameLayout>findById(mBottomSheetDialog, R.id.dialog_loader).setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void hideDialogLoader() {
+        if (mBottomSheetDialog != null && mBottomSheetDialog.isShowing()) {
+            ButterKnife.<FrameLayout>findById(mBottomSheetDialog, R.id.dialog_loader).setVisibility(View.GONE);
+        }
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case MASTER_POSITION:
+                if (resultCode == RESULT_OK) {
+                    Bundle res = data.getExtras();
+                    int masterifscposition = res.getInt("position");
+                    mBenIFSCCode.setText(mMasterIFSCBean.get(masterifscposition).getBankIFSC());
+                }
+                break;
+            case SEARCH_POSITION:
+                if (resultCode == RESULT_OK) {
+                    Bundle res = data.getExtras();
+                    String searchifsccode = res.getString("searchifsccode");
+                    mBenIFSCCode.setText(searchifsccode);
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void showLoader(String aMessage) {
+        if (aMessage != null) {
+            mLoader.setText(aMessage);
+        }
+        mLoader.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showLoader(int aResId) {
+        if (aResId > 0) {
+            mLoader.setText(getString(aResId));
+        }
+        mLoader.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideLoader() {
+        mLoader.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void noInternetConnection() {
+        Snackbar.make(mAddBeneficiaryMain, getString(R.string.error_network_no_internet), Snackbar.LENGTH_SHORT).show();
+        hideLoader();
+    }
+
+    @Override
+    public void apiError(String aError) {
+        hideLoader();
+        Snackbar.make(mAddBeneficiaryMain, aError, Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void apiError(int aApiCode, String aError) {
+        switch (aApiCode) {
+            case Constants.APICODE.RESENDOTP:
+                Snackbar.make(mOTPHolder.mOTPDialog, aError, Snackbar.LENGTH_INDEFINITE).setAction(R.string.ok, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        finish();
+                    }
+                }).show();
+                break;
+            case Constants.APICODE.VALIDATEBENEFICIARY:
+                DialogUtils.getSingleButtonDialog(this, R.drawable.ic_fail, getResources().getString(R.string.add_beneficiary), aError, getString(R.string.lbl_ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which == DialogInterface.BUTTON_POSITIVE) {
+                            finish();
+                        }
+                    }
+                }, false).show();
+                break;
+            case Constants.APICODE.ADD_BENE:
+            case Constants.APICODE.SEARCHIFSC:
+            case Constants.APICODE.MASTERIFSC:
+            case Constants.APICODE.IFSCDETAILS:
+                Snackbar.make(mAddBeneficiaryMain, aError, Snackbar.LENGTH_LONG).show();
+                break;
+            default:
+                Snackbar.make(mAddBeneficiaryMain, aError, Snackbar.LENGTH_LONG).show();
+                break;
+        }
+        super.apiError(aApiCode, aError);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mAddBeneficiaryPresenter.clearReferences();
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if (!hasFocus) {
+            if (!TextUtils.isEmpty(mBenIFSCCode.getText())) {
+                mAddBeneficiaryPresenter.getIFSCDetails(mBenIFSCCode.getText().toString());
+            } else {
+            }
+        } else {
+
+        }
+    }
+
+    static class OTPHolder {
+        @BindView(R.id.otp_txtResend)
+        TextView mResendOTP;
+        @BindView(R.id.otp_txtConfirm)
+        TextView mConformAddBeneficiary;
+        @BindView(R.id.otp_flDialog)
+        FrameLayout mOTPDialog;
+        @BindView(R.id.otp_edtOTP)
+        EditText mOTP;
+        @BindView(R.id.otp_edtTransCode)
+        EditText mTrnasCode;
+
+        OTPHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
+
+    }
+
+    static class IFSCDeatilsHolder {
+        @BindView(R.id.ifsc_txtIFSCCode)
+        TextView mIFSCDeatilsIFSC;
+        @BindView(R.id.ifsc_txtBankName)
+        TextView mIFSCDeatilsBank;
+        @BindView(R.id.ifsc_txtBankBranch)
+        TextView mIFSCDeatilsBranch;
+        @BindView(R.id.ifsc_txtAddress)
+        TextView mIFSCDeatilsAddress;
+
+        IFSCDeatilsHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
+
+    }
+}

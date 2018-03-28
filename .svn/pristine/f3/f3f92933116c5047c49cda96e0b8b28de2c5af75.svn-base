@@ -1,0 +1,101 @@
+package com.atishay.online.history;
+
+/**
+ * Created by Atishay on 13-02-2018.
+ */
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+public class UtitlityResponse {
+
+    @SerializedName("TransactionID")
+    @Expose
+    private String transactionID;
+    @SerializedName("Date")
+    @Expose
+    private String date;
+    @SerializedName("OperatorName")
+    @Expose
+    private String operatorName;
+    @SerializedName("CustomerParam")
+    @Expose
+    private String customerParam;
+    @SerializedName("Amount")
+    @Expose
+    private Double amount;
+    @SerializedName("TransStatus")
+    @Expose
+    private String transStatus;
+    @SerializedName("Valid_TransactionId")
+    @Expose
+    private String validTransactionId;
+    @SerializedName("Complaint")
+    @Expose
+    private String complaint;
+
+    public String getTransactionID() {
+        return transactionID;
+    }
+
+    public void setTransactionID(String transactionID) {
+        this.transactionID = transactionID;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getOperatorName() {
+        return operatorName;
+    }
+
+    public void setOperatorName(String operatorName) {
+        this.operatorName = operatorName;
+    }
+
+    public String getCustomerParam() {
+        return customerParam;
+    }
+
+    public void setCustomerParam(String customerParam) {
+        this.customerParam = customerParam;
+    }
+
+    public Double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
+
+    public String getTransStatus() {
+        return transStatus;
+    }
+
+    public void setTransStatus(String transStatus) {
+        this.transStatus = transStatus;
+    }
+
+    public String getValidTransactionId() {
+        return validTransactionId;
+    }
+
+    public void setValidTransactionId(String validTransactionId) {
+        this.validTransactionId = validTransactionId;
+    }
+
+    public String getComplaint() {
+        return complaint;
+    }
+
+    public void setComplaint(String complaint) {
+        this.complaint = complaint;
+    }
+
+}

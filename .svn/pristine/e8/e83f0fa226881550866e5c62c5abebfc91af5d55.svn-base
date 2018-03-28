@@ -1,0 +1,59 @@
+// Generated code from Butter Knife. Do not modify!
+package com.atishay.online.postpaid;
+
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import butterknife.Unbinder;
+import butterknife.internal.DebouncingOnClickListener;
+import butterknife.internal.Finder;
+import com.atishay.online.R;
+import java.lang.IllegalStateException;
+import java.lang.Object;
+import java.lang.Override;
+
+public class PostpaidMobilePayment_ViewBinding<T extends PostpaidMobilePayment> implements Unbinder {
+  protected T target;
+
+  private View view2131231089;
+
+  public PostpaidMobilePayment_ViewBinding(final T target, Finder finder, Object source) {
+    this.target = target;
+
+    View view;
+    target.mToolbar = finder.findRequiredViewAsType(source, R.id.toolbar, "field 'mToolbar'", Toolbar.class);
+    target.mMobileMainView = finder.findRequiredViewAsType(source, R.id.mobile_rlMain, "field 'mMobileMainView'", RelativeLayout.class);
+    target.amount = finder.findRequiredViewAsType(source, R.id.amount, "field 'amount'", EditText.class);
+    target.fees = finder.findRequiredViewAsType(source, R.id.fees, "field 'fees'", EditText.class);
+    target.total = finder.findRequiredViewAsType(source, R.id.total, "field 'total'", TextView.class);
+    view = finder.findRequiredView(source, R.id.mobile_txtProceed, "field 'mView' and method 'doProceedRecharge'");
+    target.mView = finder.castView(view, R.id.mobile_txtProceed, "field 'mView'", TextView.class);
+    view2131231089 = view;
+    view.setOnClickListener(new DebouncingOnClickListener() {
+      @Override
+      public void doClick(View p0) {
+        target.doProceedRecharge();
+      }
+    });
+  }
+
+  @Override
+  public void unbind() {
+    T target = this.target;
+    if (target == null) throw new IllegalStateException("Bindings already cleared.");
+
+    target.mToolbar = null;
+    target.mMobileMainView = null;
+    target.amount = null;
+    target.fees = null;
+    target.total = null;
+    target.mView = null;
+
+    view2131231089.setOnClickListener(null);
+    view2131231089 = null;
+
+    this.target = null;
+  }
+}

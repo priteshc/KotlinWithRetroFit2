@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2016 GoldenMace IT Solutions
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/svContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbarAlwaysDrawVerticalTrack="false"
+            android:scrollbarSize="0dip"
+            android:scrollbarThumbVertical="@android:color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/ftrans_txtTransCode"
+            style="@style/TextStyle"
+            android:text="@string/fchange_trans_code"/>
+
+        <EditText
+            android:id="@+id/ftrans_edtTransCode"
+            style="@style/EditStyle"
+            android:hint="@string/fchange_trans_code"
+            android:inputType="numberPassword"
+            android:maxLength="4"/>
+
+        <TextView
+            android:id="@+id/ftrans_txtNewTransCode"
+            style="@style/TextStyle"
+            android:text="@string/hint_new_trans_code"/>
+
+        <EditText
+            android:id="@+id/ftrans_edtNewTransCode"
+            style="@style/EditStyle"
+            android:hint="@string/fchange_new_trans_code"
+            android:inputType="numberPassword"
+            android:maxLength="4"/>
+
+        <TextView
+            android:id="@+id/ftrans_txtConfirmTransCode"
+            style="@style/TextStyle"
+            android:text="@string/hint_confirm_trans_code"/>
+
+        <EditText
+            android:id="@+id/ftrans_edtConfirmTransCode"
+            style="@style/EditStyle"
+            android:hint="@string/fchange_confirm_trans_code"
+            android:inputType="numberPassword"
+            android:maxLength="4"/>
+
+        <Button
+            android:id="@+id/ftrans_txtSubmit"
+            style="@style/FormStyle"
+            android:text="@string/submit"/>
+    </LinearLayout>
+
+</ScrollView>

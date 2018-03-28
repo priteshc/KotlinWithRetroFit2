@@ -1,0 +1,59 @@
+/*
+ * Copyright 2016 GoldenMace IT Solutions
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+package com.atishay.online.mobilerecharge;
+
+import com.atishay.online.AtishayOnlineApp;
+import com.atishay.online.common.CommonBean;
+import com.atishay.online.utils.network.ApiError;
+import com.atishay.online.utils.network.RestApiCallback;
+
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
+
+/**
+ * Created by Vishal Patel on 11,November,2016.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public class MobileRechargeController implements MobileRechargeUsecase {
+    RestApiCallback<Object, ApiError<Object>> mApiCallback;
+    private EventBus mEventBus;
+
+    public MobileRechargeController(EventBus aEventBus, RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+        mEventBus = aEventBus;
+        mApiCallback = aApiCallback;
+    }
+
+    @Override
+    public void doMobileOperator(String username, String password) {
+        AtishayOnlineApp.getAppInstance().getRestApis().getMobileOperator(username, password, mApiCallback);
+    }
+
+    @Override
+    public void doMobileCircle(String username, String password) {
+        AtishayOnlineApp.getAppInstance().getRestApis().getCircleList(username, password, mApiCallback);
+    }
+
+    @Override
+    public void doMobileRecharge(ArrayList<CommonBean> bean) {
+        AtishayOnlineApp.getAppInstance().getRestApis().getMobileRecharge(bean, mApiCallback);
+    }
+
+}

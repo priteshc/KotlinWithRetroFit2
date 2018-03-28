@@ -1,0 +1,57 @@
+package com.atishay.online.history;
+
+/**
+ * Created by Atishay on 15-02-2018.
+ */
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+public class UtilityComplainPojo {
+
+    @SerializedName("ResponseCode")
+    @Expose
+    private String responseCode;
+    @SerializedName("ResponseMessage")
+    @Expose
+    private String responseMessage;
+    @SerializedName("ComplaintId")
+    @Expose
+    private String complaintId;
+    @SerializedName("ComplaintStatus")
+    @Expose
+    private String complaintStatus;
+
+    public String getResponseCode() {
+        return responseCode;
+    }
+
+    public void setResponseCode(String responseCode) {
+        this.responseCode = responseCode;
+    }
+
+    public String getResponseMessage() {
+        return responseMessage;
+    }
+
+    public void setResponseMessage(String responseMessage) {
+        this.responseMessage = responseMessage;
+    }
+
+    public String getComplaintId() {
+        return complaintId;
+    }
+
+    public void setComplaintId(String complaintId) {
+        this.complaintId = complaintId;
+    }
+
+    public String getComplaintStatus() {
+        return complaintStatus;
+    }
+
+    public void setComplaintStatus(String complaintStatus) {
+        this.complaintStatus = complaintStatus;
+    }
+
+}

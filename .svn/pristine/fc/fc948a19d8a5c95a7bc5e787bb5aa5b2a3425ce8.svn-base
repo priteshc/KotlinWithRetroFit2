@@ -1,0 +1,108 @@
+package com.atishay.online.aadhaar;
+
+import com.atishay.online.BaseResponse;
+import com.atishay.online.utils.Constants;
+import com.atishay.online.utils.RestApis;
+import com.atishay.online.utils.RetrofitClientFactory;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+/**
+ * Created by Atishay on 07-02-2018.
+ */
+
+public class PvcValidatePresenter {
+
+
+        private CommonInterface commonInterface;
+
+        private RetrofitClientFactory clientFactory;
+
+        private RestApis mRestApis;
+
+
+
+        public PvcValidatePresenter(CommonInterface commonInterface) {
+
+
+            this.commonInterface = commonInterface;
+
+            clientFactory = new RetrofitClientFactory();
+
+            mRestApis = RetrofitClientFactory.get();
+
+
+        }
+
+
+        public void getPvcValidate(String username,String password){
+
+            commonInterface.showprogress();
+
+            Call<PvcValidatePojo> pojoCall = clientFactory.get1().getPvcValidate(username,password);
+
+            pojoCall.enqueue(new Callback<PvcValidatePojo>() {
+                @Override
+                public void onResponse(Call<PvcValidatePojo> call, Response<PvcValidatePojo> response) {
+
+                    commonInterface.hideprogress();
+
+
+                    if(response.isSuccessful()) {
+
+                        System.out.println("Res:"+ response.body().getStrOutMEssage() );
+
+
+                        if (response.body().getStrOutMEssage().toString().equals(Constants.SUCCESS)) {
+
+                            commonInterface.showFLoginSuccessMsg(response.body().getStrOutMEssage(), response.body().getMsg());
+
+                            System.out.println("Res:"+ response.body().getStrOutMEssage() );
+
+
+                        } else
+                        {
+
+                            if (response.body().getStrOutMEssage().toString().equals("fail")) {
+
+                                commonInterface.showFLoginSuccessMsg(response.body().getStrOutMEssage(), response.body().getMsg());
+
+                                System.out.println("Res:"+ response.body().getStrOutMEssage() );
+
+
+                            }
+
+                        }
+                    }
+                    else {
+
+
+                       commonInterface.showFErrorMeassage();
+
+                    }
+
+                }
+
+                @Override
+                public void onFailure(Call<PvcValidatePojo> call, Throwable t) {
+
+                    commonInterface.hideprogress();
+
+                    commonInterface.showFErrorMeassage();
+
+                }
+            });
+
+        }
+
+    }
+
+
+
+
+
+
+
+

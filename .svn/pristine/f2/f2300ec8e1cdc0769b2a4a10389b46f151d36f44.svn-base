@@ -1,0 +1,360 @@
+/*
+ * Copyright 2016 Goldenmace IT Solutions
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+package com.atishay.online.dth;
+
+import android.content.Context;
+import android.content.DialogInterface;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.customtabs.CustomTabsIntent;
+import android.support.design.widget.Snackbar;
+import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.atishay.online.AppBaseActivity;
+import com.atishay.online.AtishayOnlineApp;
+import com.atishay.online.R;
+import com.atishay.online.common.CommonAdapter;
+import com.atishay.online.common.CommonBean;
+import com.atishay.online.common.CommonInterface;
+import com.atishay.online.common.CommonRechargeResponse;
+import com.atishay.online.mobilerecharge.CircleBean;
+import com.atishay.online.utils.Constants;
+import com.atishay.online.utils.DialogUtils;
+import com.atishay.online.utils.Loader;
+import com.jaredrummler.materialspinner.MaterialSpinner;
+
+import java.util.ArrayList;
+import java.util.regex.Pattern;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+import static com.atishay.online.R.id.dth_txtProceed;
+import static com.atishay.online.utils.Constants.DTHRECHARGE;
+import static com.atishay.online.utils.Constants.PENDING;
+import static com.atishay.online.utils.Constants.REGX_AMOUNT;
+import static com.atishay.online.utils.Constants.SUCCESS;
+
+/**
+ * Created by Vishal Patel on 12,October,2016.
+ * AtishayOnline
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public class DTHActivity extends AppBaseActivity implements DthView {
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.dht_loader)
+    Loader mLoader;
+    @BindView(R.id.dth_rlMain)
+    RelativeLayout mDthMainView;
+    @BindView(R.id.dth_spOperator)
+    Spinner mOperator;
+    @BindView(R.id.dth_edtSubscrID)
+    EditText mSubscrID;
+    @BindView(R.id.dth_spCircle)
+    Spinner mCircle;
+    @BindView(R.id.dth_edtAmount)
+    EditText mAmount;
+    @BindView(R.id.dth_edtTransaction)
+    EditText mTransactionCode;
+    @BindView(R.id.txtOperator)
+    TextView mTxtOperator;
+    @BindView(R.id.txtSubscriber)
+    TextView mTxtSubscriber;
+    @BindView(R.id.txtCircle)
+    TextView mTxtCircle;
+    @BindView(R.id.txtAmount)
+    TextView mTxtAmount;
+    @BindView(R.id.txtTranCode)
+    TextView mTxtTranCode;
+    @BindView(R.id.dth_txtProceed)
+    View mProceedToPay;
+
+    ArrayList<CommonBean> mCommonBeanArrayList;
+    int statusImg;
+    private CommonAdapter mDthOperatorAdapter;
+    private ArrayList<CommonInterface> mDthOperatorList;
+    private CommonAdapter mCircleAdapter;
+    private ArrayList<CommonInterface> mCircleList;
+    private DthPresenter mDthPresenter;
+
+    private MaterialSpinner dthmaterialSpinner;
+
+    ArrayList<String>dthoperatorStrings;
+    ArrayList<Integer>operatorid;
+
+    private Context context = DTHActivity.this;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_dth);
+
+        ButterKnife.bind(this);
+        setToolbar(mToolbar);
+        mDthPresenter = new DthPresenter(this);
+
+        dthoperatorStrings = new ArrayList<>();
+        operatorid = new ArrayList<>();
+
+
+        mSubscrID.setTransformationMethod(null);
+        mAmount.setTransformationMethod(null);
+
+        /**
+         * Custom Toolbar with amount view
+         */
+        ButterKnife.<TextView>findById(this, R.id.toolbar_txtAmount).setText(getString(R.string.amount, AtishayOnlineApp.getAppInstance().getBalance()));
+        ButterKnife.<TextView>findById(this, R.id.toolbar_txtAmount).setVisibility(View.GONE);
+        ButterKnife.<TextView>findById(this, R.id.toolbar_txtTitle).setText(getString(R.string.dth));
+
+        ButterKnife.<TextView>findById(this, R.id.bal).setText(getString(R.string.amount, AtishayOnlineApp.getAppInstance().getBalance()));
+
+        dthmaterialSpinner = (MaterialSpinner) findViewById(R.id.dth_operator);
+
+
+        mTxtOperator.setText(Html.fromHtml(getString(R.string.operator)), TextView.BufferType.SPANNABLE);
+        mTxtSubscriber.setText(Html.fromHtml(getString(R.string.subscrb_id)), TextView.BufferType.SPANNABLE);
+        mTxtCircle.setText(Html.fromHtml(getString(R.string.circle_nm)), TextView.BufferType.SPANNABLE);
+        mTxtAmount.setText(Html.fromHtml(getString(R.string.rchrg_amunt)), TextView.BufferType.SPANNABLE);
+        mTxtTranCode.setText(Html.fromHtml(getString(R.string.trans_code)), TextView.BufferType.SPANNABLE);
+        mOperator.setPadding(0, mOperator.getPaddingTop(), mOperator.getPaddingRight(), mOperator.getPaddingBottom());
+        mCircle.setPadding(0, mCircle.getPaddingTop(), mCircle.getPaddingRight(), mCircle.getPaddingBottom());
+        mDthOperatorList = new ArrayList<>();
+        mCircleList = new ArrayList<>();
+        mDthOperatorAdapter = new CommonAdapter(this, mDthOperatorList);
+        mCircleAdapter = new CommonAdapter(this, mCircleList);
+        mOperator.setAdapter(mDthOperatorAdapter);
+        mCircle.setAdapter(mCircleAdapter);
+
+        mDthPresenter.getCircleList(mUsername, mPassword);
+        mDthPresenter.getDthOperators(mUsername, mPassword);
+        mOperator.setAdapter(mDthOperatorAdapter);
+        mCircle.setAdapter(mCircleAdapter);
+    }
+
+    /**
+     * View particular operator and circlewise plan
+     *
+     * @param v
+     */
+    @OnClick(R.id.dth_txtViewPlan)
+    public void doViewPlan(View v) {
+        String url = "http://www.airtel.in/mobile/prepaid/recharge-online";
+        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+        CustomTabsIntent customTabsIntent = builder.build();
+        customTabsIntent.launchUrl(this, Uri.parse(url));
+    }
+
+    @OnClick(dth_txtProceed)
+    public void doProceedRecharge() {
+        hideKeyboard();
+
+        if(!mSubscrID.getText().toString().isEmpty() && !mAmount.getText().toString().isEmpty()&& dthmaterialSpinner.getSelectedIndex()!=0){
+
+            //  Toast.makeText(context,"success",Toast.LENGTH_SHORT).show();
+
+            if (!Pattern.matches(REGX_AMOUNT, mAmount.getText().toString())) {
+                Snackbar.make(mDthMainView, getResources().getString(R.string.invalid_recharge_amount), Snackbar.LENGTH_LONG).show();
+            } else if (Float.parseFloat(mAmount.getText().toString()) <= 0) {
+                Snackbar.make(mDthMainView, getResources().getString(R.string.invalid_recharge_amount), Snackbar.LENGTH_LONG).show();
+            }
+            else {
+
+            //    Toast.makeText(context,String.valueOf(operatorid.get(dthmaterialSpinner.getSelectedIndex())),Toast.LENGTH_SHORT).show();
+
+                mCommonBeanArrayList = new ArrayList<>();
+                mCommonBeanArrayList.add(new CommonBean(mUsername, mPassword, "0",
+                        "0" ,
+                        String.valueOf(operatorid.get(dthmaterialSpinner.getSelectedIndex())),
+                        mSubscrID.getText().toString(), mAmount.getText().toString(), "", DTHRECHARGE, "", ""));
+                mDthPresenter.doDTHRecharge(mCommonBeanArrayList);
+                mProceedToPay.setEnabled(false);
+            }
+
+        }
+        else {
+
+            Snackbar.make(mDthMainView, getResources().getString(R.string.error_field_required), Snackbar.LENGTH_SHORT).show();
+
+        }
+
+      /*  if (mOperator != null && mOperator.getSelectedItem() != null
+                && mCircle != null && mCircle.getSelectedItem() != null
+                && !mSubscrID.getText().toString().isEmpty()
+                && !mAmount.getText().toString().isEmpty()
+                && !mTransactionCode.getText().toString().isEmpty()) {
+            if (!Pattern.matches(REGX_AMOUNT, mAmount.getText().toString())) {
+                Snackbar.make(mDthMainView, getResources().getString(R.string.invalid_recharge_amount), Snackbar.LENGTH_LONG).show();
+            } else if (Float.parseFloat(mAmount.getText().toString()) <= 0) {
+                Snackbar.make(mDthMainView, getResources().getString(R.string.invalid_recharge_amount), Snackbar.LENGTH_LONG).show();
+            } else if (mTransPassword.equals(mTransactionCode.getText().toString())) {
+                mCommonBeanArrayList = new ArrayList<>();
+                mCommonBeanArrayList.add(new CommonBean(mUsername, mPassword, mTransPassword,
+                        "" + mCircleList.get(mCircle.getSelectedItemPosition()).getID(),
+                        "" + mDthOperatorList.get(mOperator.getSelectedItemPosition()).getID(),
+                        mSubscrID.getText().toString(), mAmount.getText().toString(), "", DTHRECHARGE, "", ""));
+                mDthPresenter.doDTHRecharge(mCommonBeanArrayList);
+                mProceedToPay.setEnabled(false);
+            } else {
+                Snackbar.make(mDthMainView, getResources().getString(R.string.invalid_transaction_password), Snackbar.LENGTH_SHORT).show();
+            }
+        } else {
+            Snackbar.make(mDthMainView, getResources().getString(R.string.error_field_required), Snackbar.LENGTH_SHORT).show();
+        }*/
+    }
+
+    @Override
+    public void onMobileOperatorsFetched(ArrayList<DthOperatorBean> aList) {
+        mDthOperatorList.clear();
+        mDthOperatorList.addAll(aList);
+
+        dthoperatorStrings.clear();
+        operatorid.clear();
+
+        for(int i=0;i< aList.size();i++){
+            dthoperatorStrings.add(aList.get(i).getTitle());
+            operatorid.add(aList.get(i).getID());
+        }
+
+        operatorid.add(0,-1);
+
+        dthoperatorStrings.add(0,"Select operator");
+        dthmaterialSpinner.setItems(dthoperatorStrings);
+        mDthOperatorAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onCircleListFetched(ArrayList<CircleBean> aList) {
+        mCircleList.clear();
+        mCircleList.addAll(aList);
+        mCircleAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onDTHRechargeDetails(CommonRechargeResponse aList) {
+        if (aList.getStatus().equals(SUCCESS)) {
+            statusImg = R.drawable.ic_success;
+        } else if (aList.getStatus().equals(PENDING)) {
+            statusImg = R.drawable.ic_warning_orange_24dp;
+        } else {
+            statusImg = R.drawable.ic_fail;
+        }
+        DialogUtils.getSingleButtonDialog(this, statusImg, getResources().getString(R.string.dth_rcrg), aList.getMsg(), getString(R.string.lbl_ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == DialogInterface.BUTTON_POSITIVE) {
+                    finish();
+                }
+            }
+        }, false).show();
+    }
+
+    @Override
+    public void showLoader(String aMessage) {
+        if (aMessage != null) {
+            mLoader.setText(aMessage);
+        }
+        mLoader.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showLoader(int aResId) {
+        if (aResId > 0) {
+            mLoader.setText(getString(aResId));
+        }
+        mLoader.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideLoader() {
+        mLoader.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void noInternetConnection() {
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //Do something after 100ms
+                mProceedToPay.setEnabled(true);
+            }
+        }, 10);
+        Snackbar.make(mDthMainView, getString(R.string.error_network_no_internet), Snackbar.LENGTH_SHORT).show();
+        hideLoader();
+    }
+
+    @Override
+    public void apiError(String aError) {
+        hideLoader();
+        Snackbar.make(mDthMainView, aError, Snackbar.LENGTH_INDEFINITE).setAction(R.string.error_view_retry, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDthPresenter.getCircleList(mUsername, mPassword);
+                mDthPresenter.getDthOperators(mUsername, mPassword);
+            }
+        }).show();
+    }
+
+    @Override
+    public void apiError(int aApiCode, String aError) {
+        switch (aApiCode) {
+            case Constants.APICODE.CIRCLE:
+            case Constants.APICODE.DTH_OPERATOR:
+                Snackbar.make(mDthMainView, aError, Snackbar.LENGTH_INDEFINITE).setAction(R.string.error_view_retry, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mDthPresenter.getCircleList(mUsername, mPassword);
+                        mDthPresenter.getDthOperators(mUsername, mPassword);
+                    }
+                }).show();
+                break;
+            case Constants.APICODE.DTHRECHARGE:
+                DialogUtils.getSingleButtonDialog(this, R.drawable.ic_fail, getResources().getString(R.string.dth_rcrg), aError, getString(R.string.lbl_ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which == DialogInterface.BUTTON_POSITIVE) {
+                            finish();
+                        }
+                    }
+                }, false).show();
+                break;
+            default:
+                Snackbar.make(mDthMainView, aError, Snackbar.LENGTH_LONG).show();
+                break;
+        }
+        super.apiError(aApiCode, aError);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mDthPresenter.clearReferences();
+    }
+}

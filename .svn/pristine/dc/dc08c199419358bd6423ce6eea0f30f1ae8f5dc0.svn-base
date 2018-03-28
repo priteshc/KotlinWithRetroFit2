@@ -1,0 +1,108 @@
+package com.atishay.online.moneytransfer;
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+public class SingleHistoryBean {
+
+    @SerializedName("BenBankAccountNo")
+    @Expose
+    private String benBankAccountNo;
+    @SerializedName("SenderMobileNo")
+    @Expose
+    private String senderMobileNo;
+    @SerializedName("BeneficiaryCode")
+    @Expose
+    private String beneficiaryCode;
+    @SerializedName("BeneficiaryName")
+    @Expose
+    private String beneficiaryName;
+    @SerializedName("PTID")
+    @Expose
+    private Object pTID;
+    @SerializedName("Amount")
+    @Expose
+    private Double amount;
+    @SerializedName("RechargeStatus")
+    @Expose
+    private String rechargeStatus;
+    @SerializedName("TransactionDate")
+    @Expose
+    private String transactionDate;
+    @SerializedName("UTR")
+    @Expose
+    private String uTR;
+
+    public String getBenBankAccountNo() {
+        return benBankAccountNo;
+    }
+
+    public void setBenBankAccountNo(String benBankAccountNo) {
+        this.benBankAccountNo = benBankAccountNo;
+    }
+
+    public String getSenderMobileNo() {
+        return senderMobileNo;
+    }
+
+    public void setSenderMobileNo(String senderMobileNo) {
+        this.senderMobileNo = senderMobileNo;
+    }
+
+    public String getBeneficiaryCode() {
+        return beneficiaryCode;
+    }
+
+    public void setBeneficiaryCode(String beneficiaryCode) {
+        this.beneficiaryCode = beneficiaryCode;
+    }
+
+    public String getBeneficiaryName() {
+        return beneficiaryName;
+    }
+
+    public void setBeneficiaryName(String beneficiaryName) {
+        this.beneficiaryName = beneficiaryName;
+    }
+
+    public Object getPTID() {
+        return pTID;
+    }
+
+    public void setPTID(Object pTID) {
+        this.pTID = pTID;
+    }
+
+    public Double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
+
+    public String getRechargeStatus() {
+        return rechargeStatus;
+    }
+
+    public void setRechargeStatus(String rechargeStatus) {
+        this.rechargeStatus = rechargeStatus;
+    }
+
+    public String getTransactionDate() {
+        return transactionDate;
+    }
+
+    public void setTransactionDate(String transactionDate) {
+        this.transactionDate = transactionDate;
+    }
+
+    public String getUTR() {
+        return uTR;
+    }
+
+    public void setUTR(String uTR) {
+        this.uTR = uTR;
+    }
+
+}

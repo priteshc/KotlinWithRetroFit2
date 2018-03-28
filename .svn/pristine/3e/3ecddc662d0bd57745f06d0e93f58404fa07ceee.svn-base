@@ -1,0 +1,133 @@
+package com.atishay.online.history;
+
+import com.atishay.online.AtishayOnlineApp;
+import com.atishay.online.R;
+import com.atishay.online.utils.network.ApiError;
+import com.atishay.online.utils.network.RestApiCallback;
+import com.goldenmace.framework.mvp.presenters.Presenter;
+import com.goldenmace.framework.utils.NetworkUtils;
+
+import java.net.HttpURLConnection;
+import java.util.ArrayList;
+
+import static com.atishay.online.utils.Constants.APICODE.DTH_HISTORY;
+import static com.atishay.online.utils.Constants.APICODE.POSTPAID_HISTORY;
+import static com.atishay.online.utils.Constants.APICODE.PREPAID_HISTORY;
+
+/**
+ * Created by Vishal Patel on 3,December,2016.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+public class HistoryPresenter implements Presenter, RestApiCallback<Object, ApiError<Object>> {
+
+    private HistoryView mHistoryView;
+    private HistoryController mHistoryController;
+    private ArrayList<Integer> mApiList;
+
+    public HistoryPresenter(HistoryView aHistoryView) {
+        mHistoryView = aHistoryView;
+        mHistoryController = new HistoryController(this);
+        mApiList = new ArrayList<>();
+    }
+
+    void loadPrepaidHistory(String aUserName, String aPassword) {
+        if (NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            mHistoryView.showLoader(R.string.please_wait);
+            mApiList.add(PREPAID_HISTORY);
+            mHistoryController.loadPrepaidHistory(aUserName, aPassword);
+        } else {
+            mHistoryView.noInternetConnection();
+        }
+    }
+
+    void loadPostpaidHistory(String aUserName, String aPassword) {
+        if (NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            mHistoryView.showLoader(R.string.please_wait);
+            mApiList.add(POSTPAID_HISTORY);
+            mHistoryController.loadPostpaidHistory(aUserName, aPassword);
+        } else {
+            mHistoryView.noInternetConnection();
+        }
+    }
+
+    void loadDTHHistory(String aUserName, String aPassword) {
+        if (NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            mHistoryView.showLoader(R.string.please_wait);
+            mApiList.add(DTH_HISTORY);
+            mHistoryController.loadDTHHistory(aUserName, aPassword);
+        } else {
+            mHistoryView.noInternetConnection();
+        }
+    }
+
+    @Override
+    public void onSuccess(int aApiCode, Object aSuccessResponse) {
+
+        if (mHistoryView != null) {
+            mApiList.remove(Integer.valueOf(aApiCode));
+            if (mApiList.size() == 0) {
+                mHistoryView.hideLoader();
+            }
+            if (aSuccessResponse == null) {
+                AtishayOnlineApp.getAppInstance().getString(R.string.error_network_server_errors);
+            } else {
+                switch (aApiCode) {
+                    case PREPAID_HISTORY:
+                        mHistoryView.onPrepaidHistoryFetched((ArrayList<HistoryBean>) aSuccessResponse);
+                        break;
+                    case POSTPAID_HISTORY:
+                        mHistoryView.onPostpaidHistoryFetched((ArrayList<HistoryBean>) aSuccessResponse);
+                        break;
+                    case DTH_HISTORY:
+                        mHistoryView.onDTHHistoryFetched((ArrayList<HistoryBean>) aSuccessResponse);
+                        break;
+                }
+            }
+        } else {
+
+        }
+    }
+
+    @Override
+    public void onApiError(int aApiCode, ApiError<Object> aFailureResponse) {
+
+        if (mHistoryView != null) {
+            mApiList.remove(Integer.valueOf(aApiCode));
+            if (mApiList.size() == 0) {
+                mHistoryView.hideLoader();
+            }
+            if (aFailureResponse.getApiErrorCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                mHistoryView.onUserUnAuthorized((String) aFailureResponse.getError());
+                return;
+            }
+            if (aFailureResponse.getApiErrorCode() == -1) {
+                mHistoryView.apiError(aApiCode, (String) aFailureResponse.getError());
+                return;
+            }
+            if (aFailureResponse.getError() instanceof String) {
+                mHistoryView.apiError((String) aFailureResponse.getError());
+                return;
+            }
+            mHistoryView.apiError((String) AtishayOnlineApp.getAppInstance().getString(R.string.error_network_server_errors));
+        } else {
+
+        }
+    }
+
+    @Override
+    public void registerBus() {
+
+    }
+
+    @Override
+    public void unRegisterBus() {
+
+    }
+
+    @Override
+    public void clearReferences() {
+        mHistoryView = null;
+    }
+}

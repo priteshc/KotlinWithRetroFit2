@@ -1,0 +1,33 @@
+package com.atishay.online.history;
+
+import com.atishay.online.AtishayOnlineApp;
+import com.atishay.online.utils.network.ApiError;
+import com.atishay.online.utils.network.RestApiCallback;
+
+/**
+ * Created by Vishal Patel on 3,December,2016.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+public class HistoryController implements HistoryUsecase {
+    private RestApiCallback<Object, ApiError<Object>> mApiCallback;
+    public HistoryController(RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+        mApiCallback = aApiCallback;
+    }
+
+    @Override
+    public void loadPrepaidHistory(String aUserName, String aPassword) {
+        AtishayOnlineApp.getAppInstance().getRestApis().loadPrepaidHistory(aUserName, aPassword, mApiCallback);
+    }
+
+    @Override
+    public void loadPostpaidHistory(String aUserName, String aPassword) {
+        AtishayOnlineApp.getAppInstance().getRestApis().loadPostpaidHistory(aUserName, aPassword, mApiCallback);
+    }
+
+    @Override
+    public void loadDTHHistory(String aUserName, String aPassword) {
+        AtishayOnlineApp.getAppInstance().getRestApis().loadDTHHistory(aUserName, aPassword, mApiCallback);
+    }
+}

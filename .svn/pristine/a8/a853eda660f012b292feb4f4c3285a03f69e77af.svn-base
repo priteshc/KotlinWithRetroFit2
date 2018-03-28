@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mobile_rlMain"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/mobile_alView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar"/>
+    </android.support.design.widget.AppBarLayout>
+
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+     android:layout_marginTop="?actionBarSize"
+     android:id="@+id/bill1"
+        >
+
+
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:id="@+id/img"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:src="@drawable/tjsblogo"
+
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="BILL CONFORMATION"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:id="@+id/bill"
+        android:layout_below="@+id/img"
+        android:textSize="@dimen/font_xlarge"
+        android:textColor="@color/textColorPrimary1"
+
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@+id/bill"
+        android:layout_marginLeft="20dp"
+        >
+
+ <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_marginTop="20dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Biller Location"
+        android:layout_weight="1"
+        android:textSize="@dimen/font_normal"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Biller Location"
+        android:layout_weight="1"
+        android:id="@+id/Location"
+        android:textSize="@dimen/font_large"
+        android:textColor="@color/textColorPrimary1"
+        />
+
+</LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Biller Service"
+                android:layout_weight="1"
+                android:textSize="@dimen/font_normal"
+
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Biller Location"
+                android:layout_weight="1"
+                android:id="@+id/service"
+                android:textSize="@dimen/font_large"
+                android:textColor="@color/textColorPrimary1"
+
+
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Consumer Number"
+                android:layout_weight="1"
+                android:textSize="@dimen/font_normal"
+
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Biller Location"
+                android:layout_weight="1"
+                android:id="@+id/consnumber"
+                android:textSize="@dimen/font_large"
+                android:textColor="@color/textColorPrimary1"
+
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="SMS Mobile Number"
+                android:layout_weight="1"
+                android:textSize="@dimen/font_normal"
+
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Biller Location"
+                android:layout_weight="1"
+                android:id="@+id/smsnumber"
+                android:textSize="@dimen/font_large"
+                android:textColor="@color/textColorPrimary1"
+
+
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Bill Amount"
+                android:layout_weight="1"
+                android:textSize="@dimen/font_normal"
+
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Biller Location"
+                android:layout_weight="1"
+                android:id="@+id/amount"
+                android:textSize="@dimen/font_large"
+                android:textColor="@color/textColorPrimary1"
+
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Conv.Fee"
+                android:layout_weight="1"
+                android:textSize="@dimen/font_normal"
+
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Conv.Fee"
+                android:layout_weight="1"
+                android:id="@+id/convfee"
+                android:textSize="@dimen/font_large"
+                android:textColor="@color/textColorPrimary1"
+
+                />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Total"
+                android:layout_weight="1"
+                android:textSize="@dimen/font_normal"
+
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Biller Location"
+                android:layout_weight="1"
+                android:id="@+id/total"
+                android:textSize="@dimen/font_large"
+                android:textColor="@color/textColorPrimary1"
+
+                />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:id="@+id/lin1"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Due Date"
+                android:layout_weight="1"
+                android:textSize="@dimen/font_normal"
+
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Biller Location"
+                android:layout_weight="1"
+                android:id="@+id/date"
+                android:textSize="@dimen/font_large"
+                android:textColor="@color/textColorPrimary1"
+
+                />
+
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/mobile_txtProceed"
+            style="@style/FormStyle1"
+            android:text="Proceed To Pay "
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:padding="10dp"
+            android:layout_marginTop="50dp"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            />
+
+    </LinearLayout>
+
+</RelativeLayout>
+</RelativeLayout>

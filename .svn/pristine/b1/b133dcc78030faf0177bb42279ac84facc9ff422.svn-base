@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ExpandableListView
+        android:id="@+id/expandableListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp"
+        android:indicatorLeft="?android:attr/expandableListPreferredItemIndicatorLeft"
+        android:listSelector="@android:color/transparent" />
+
+    <com.goldenmace.framework.views.widgets.errorview.ErrorView
+        android:id="@+id/history_errorView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        app:ev_errorImage="@drawable/ic_list_200dp"
+        app:ev_retryButtonBackground="@color/colorAccent"
+        app:ev_retryButtonTextColor="@color/windowBackground" />
+</RelativeLayout>

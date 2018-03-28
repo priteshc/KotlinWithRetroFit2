@@ -1,0 +1,111 @@
+package com.atishay.online;
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+public class WalletBalanceBean {
+
+    @SerializedName("AtishayVendorID")
+    @Expose
+    private String atishayVendorID;
+    @SerializedName("UserName")
+    @Expose
+    private String userName;
+    @SerializedName("Password")
+    @Expose
+    private String password;
+    @SerializedName("AccountBalance")
+    @Expose
+    private float accountBalance;
+    @SerializedName("VendorName")
+    @Expose
+    private String vendorName;
+    @SerializedName("ChannelPartner")
+    @Expose
+    private String channelPartner;
+
+    /**
+     * @return The atishayVendorID
+     */
+    public String getAtishayVendorID() {
+        return atishayVendorID;
+    }
+
+    /**
+     * @param atishayVendorID The AtishayVendorID
+     */
+    public void setAtishayVendorID(String atishayVendorID) {
+        this.atishayVendorID = atishayVendorID;
+    }
+
+    /**
+     * @return The userName
+     */
+    public String getUserName() {
+        return userName;
+    }
+
+    /**
+     * @param userName The UserName
+     */
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    /**
+     * @return The password
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * @param password The Password
+     */
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    /**
+     * @return The accountBalance
+     */
+    public float getAccountBalance() {
+        return accountBalance;
+    }
+
+    /**
+     * @param accountBalance The AccountBalance
+     */
+    public void setAccountBalance(float accountBalance) {
+        this.accountBalance = accountBalance;
+    }
+
+    /**
+     * @return The vendorName
+     */
+    public String getVendorName() {
+        return vendorName;
+    }
+
+    /**
+     * @param vendorName The VendorName
+     */
+    public void setVendorName(String vendorName) {
+        this.vendorName = vendorName;
+    }
+
+    /**
+     * @return The channelPartner
+     */
+    public String getChannelPartner() {
+        return channelPartner;
+    }
+
+    /**
+     * @param channelPartner The ChannelPartner
+     */
+    public void setChannelPartner(String channelPartner) {
+        this.channelPartner = channelPartner;
+    }
+
+}

@@ -1,0 +1,119 @@
+package com.atishay.online.history;
+
+import android.util.Log;
+
+import com.atishay.online.AtishayOnlineApp;
+import com.atishay.online.BaseResponse;
+import com.atishay.online.R;
+import com.atishay.online.WalletBalanceService;
+import com.atishay.online.utils.Constants;
+import com.atishay.online.utils.RestApis;
+import com.atishay.online.utils.RetrofitClientFactory;
+import com.atishay.online.utils.network.ApiError;
+import com.atishay.online.utils.network.RestApiCallback;
+import com.goldenmace.framework.utils.NetworkUtils;
+
+import java.io.IOException;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+/**
+ * Created by Atishay on 19-01-2018.
+ */
+
+public class UtilityHistoryPresenter {
+
+    private UtilityHView utilityView;
+
+    private RetrofitClientFactory clientFactory;
+
+    private RestApis mRestApis;
+
+    RestApiCallback<Object, ApiError<Object>> mApiCallback;
+
+
+
+    public UtilityHistoryPresenter(UtilityHView utilityView,RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+
+
+        this.utilityView = utilityView;
+
+        clientFactory = new RetrofitClientFactory();
+
+        mRestApis = RetrofitClientFactory.get();
+
+        this.mApiCallback = aApiCallback;
+
+
+    }
+
+
+    public void getUtilityHistory(String username,String password){
+
+
+        utilityView.showprogress();
+
+        Call<UtilityHistoryPojo> pojoCall = mRestApis.fetchUtilityHistory(username,password);
+
+        pojoCall.enqueue(new Callback<UtilityHistoryPojo>() {
+            @Override
+            public void onResponse(Call<UtilityHistoryPojo> call, Response<UtilityHistoryPojo> response) {
+
+                utilityView.hideprogress();
+
+                if(response.isSuccessful()) {
+
+
+                    if (response.body().getResponseMessage().equals(Constants.SUCCESS)) {
+
+                        utilityView.showUtilitySuccessMsg(response.body().getResponseMessage(),response.body().getResponse());
+
+                    } else
+                        {
+                            if (response.body().getResponseMessage().equals(Constants.FAILED)){
+
+                                utilityView.showUtilityfailedMsg(response.body().getResponseMessage());
+
+                        }
+
+                    }
+
+                }
+
+                else {
+
+                    ApiError apiError;
+
+                    if (response.errorBody() != null) {
+
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+
+                    mApiCallback.onApiError(Constants.APICODE.POSTPAID_OPERATOR,apiError);
+                }
+
+                }
+
+            @Override
+            public void onFailure(Call<UtilityHistoryPojo> call, Throwable t) {
+
+                utilityView.hideprogress();
+
+                utilityView.showFErrorMeassage(AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error));
+
+            }
+        });
+
+
+    }
+
+}

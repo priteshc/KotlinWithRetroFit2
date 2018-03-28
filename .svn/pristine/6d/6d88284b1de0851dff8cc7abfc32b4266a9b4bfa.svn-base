@@ -1,0 +1,15 @@
+// Generated code from Butter Knife. Do not modify!
+package com.atishay.online.moneytransfer;
+
+import butterknife.Unbinder;
+import butterknife.internal.Finder;
+import butterknife.internal.ViewBinder;
+import java.lang.Object;
+import java.lang.Override;
+
+public final class SingleFundHistoryFragment_ViewBinder implements ViewBinder<SingleFundHistoryFragment> {
+  @Override
+  public Unbinder bind(Finder finder, SingleFundHistoryFragment target, Object source) {
+    return new SingleFundHistoryFragment_ViewBinding<>(target, finder, source);
+  }
+}

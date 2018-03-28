@@ -1,0 +1,30 @@
+package com.example.atishay.mykotlinpractice
+
+import android.support.v7.app.AppCompatActivity
+import android.os.Bundle
+import android.widget.TextView
+import android.widget.Toast
+import com.example.atishay.mykotlinpractice.R.id.kot
+
+class MainActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+    val text = findViewById<TextView>(R.id.kot)
+
+
+        text.setOnClickListener {
+
+
+            Toast.makeText(this, "Hi there! This is a Toast.", Toast.LENGTH_LONG).show()
+
+
+        }
+
+
+
+
+    }
+}

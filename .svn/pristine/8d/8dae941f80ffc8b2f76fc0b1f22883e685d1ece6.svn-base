@@ -1,0 +1,30 @@
+
+package com.atishay.online;
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class WalletBalanceResponse extends BaseResponse {
+
+    @SerializedName("Response")
+    @Expose
+    private List<WalletBalanceBean> response = new ArrayList<WalletBalanceBean>();
+
+    /**
+     * @return The response
+     */
+    public List<WalletBalanceBean> getResponse() {
+        return response;
+    }
+
+    /**
+     * @param response The Response
+     */
+    public void setResponse(List<WalletBalanceBean> response) {
+        this.response = response;
+    }
+
+}

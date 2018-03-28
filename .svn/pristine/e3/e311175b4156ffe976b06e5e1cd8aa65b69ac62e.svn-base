@@ -1,0 +1,174 @@
+package com.atishay.online.moneytransfer;
+
+import com.atishay.online.AtishayOnlineApp;
+import com.atishay.online.R;
+import com.atishay.online.utils.network.ApiError;
+import com.atishay.online.utils.network.RestApiCallback;
+import com.goldenmace.framework.mvp.presenters.Presenter;
+import com.goldenmace.framework.utils.NetworkUtils;
+
+import java.net.HttpURLConnection;
+import java.util.ArrayList;
+import java.util.Map;
+
+import static com.atishay.online.utils.Constants.APICODE.FUNDTRANSACTIONHISTORY;
+import static com.atishay.online.utils.Constants.APICODE.FUNDTRANSFER;
+import static com.atishay.online.utils.Constants.APICODE.QUERYREMITTANCETRANSACTION;
+import static com.atishay.online.utils.Constants.APICODE.REFUNDTRANSACTION;
+import static com.atishay.online.utils.Constants.APICODE.REMITTANCEVALIDATION;
+import static com.atishay.online.utils.Constants.APICODE.VALIDATEREFUNDTRANSACTION;
+
+/**
+ * Created by Vishal Patel on 03,January,2017.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public class FundTransferPresenter implements Presenter, RestApiCallback<Object, ApiError<Object>> {
+
+    private FundTransferView mFundTransferView;
+    private FundTransferController mFundTransferController;
+    private ArrayList<Integer> mApiList;
+
+    public FundTransferPresenter(FundTransferView aFundTransferView) {
+        mFundTransferView = aFundTransferView;
+        mFundTransferController = new FundTransferController(this);
+        mApiList = new ArrayList<>();
+    }
+
+    void doRemittanceTransaction(Map<String, String> aQueryMap) {
+        if (NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            mFundTransferView.showLoader(R.string.please_wait);
+            mApiList.add(REMITTANCEVALIDATION);
+            mFundTransferController.doRemittanceTransaction(aQueryMap);
+        } else {
+            mFundTransferView.noInternetConnection();
+        }
+    }
+
+    void doFundTransaction(Map<String, String> aQueryMap) {
+        if (NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            mFundTransferView.showLoader(R.string.please_wait);
+            mApiList.add(FUNDTRANSFER);
+            mFundTransferController.doFundTransaction(aQueryMap);
+        } else {
+            mFundTransferView.noInternetConnection();
+        }
+    }
+
+    void doFundTransferHistory(Map<String, String> aQueryMap) {
+        if (NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            mFundTransferView.showLoader(R.string.please_wait);
+            mApiList.add(FUNDTRANSACTIONHISTORY);
+            mFundTransferController.doFundTransferHistory(aQueryMap);
+        } else {
+            mFundTransferView.noInternetConnection();
+        }
+    }
+
+    void doQueryRemittanceTransaction(Map<String, String> aQueryMap) {
+        if (NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            mFundTransferView.showLoader(R.string.please_wait);
+            mApiList.add(QUERYREMITTANCETRANSACTION);
+            mFundTransferController.doQueryRemittanceTransaction(aQueryMap);
+        } else {
+            mFundTransferView.noInternetConnection();
+        }
+    }
+
+    void doRefundTransaction(Map<String, String> aQueryMap) {
+        if (NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            mFundTransferView.showLoader(R.string.please_wait);
+            mApiList.add(REFUNDTRANSACTION);
+            mFundTransferController.doRefundTransaction(aQueryMap);
+        } else {
+            mFundTransferView.noInternetConnection();
+        }
+    }
+
+    void doValidateRefundTransaction(Map<String, String> aQueryMap) {
+        if (NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            mFundTransferView.showDialogLoader("");
+            mApiList.add(VALIDATEREFUNDTRANSACTION);
+            mFundTransferController.doValidateRefundTransaction(aQueryMap);
+        } else {
+            mFundTransferView.hideDialogLoader();
+            mFundTransferView.noInternetConnection();
+        }
+    }
+
+    @Override
+    public void onSuccess(int aApiCode, Object aSuccessResponse) {
+        if (mFundTransferView != null) {
+            mApiList.remove(Integer.valueOf(aApiCode));
+            if (mApiList.size() == 0) {
+                mFundTransferView.hideLoader();
+                mFundTransferView.hideDialogLoader();
+            }
+            if (aSuccessResponse == null) {
+                AtishayOnlineApp.getAppInstance().getString(R.string.error_network_server_errors);
+            } else {
+                switch (aApiCode) {
+                    case FUNDTRANSFER:
+                        mFundTransferView.doFundTransaction((FundServiceChargeResponse) aSuccessResponse);
+                        break;
+                    case REMITTANCEVALIDATION:
+                        mFundTransferView.doRemittanceTransaction((ServiceResponse) aSuccessResponse);
+                        break;
+                    case FUNDTRANSACTIONHISTORY:
+                        mFundTransferView.onFundSingleHistoryFetched((FundTransferHistoryResponse) aSuccessResponse);
+                        break;
+                    case QUERYREMITTANCETRANSACTION:
+                        mFundTransferView.doQueryRemittanceTransaction((FundServiceChargeResponse) aSuccessResponse);
+                        break;
+                    case REFUNDTRANSACTION:
+                        mFundTransferView.doRefundTransaction((RefundTransactionResponse) aSuccessResponse);
+                        break;
+                    case VALIDATEREFUNDTRANSACTION:
+                        mFundTransferView.doValidateRefundTransaction((QueryRefundTransactionResponse) aSuccessResponse);
+                        break;
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onApiError(int aApiCode, ApiError<Object> aFailureResponse) {
+        if (mFundTransferView != null) {
+            mApiList.remove(Integer.valueOf(aApiCode));
+            if (mApiList.size() == 0) {
+                mFundTransferView.hideLoader();
+                mFundTransferView.hideDialogLoader();
+            }
+            if (aFailureResponse.getApiErrorCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                mFundTransferView.onUserUnAuthorized((String) aFailureResponse.getError());
+                return;
+            }
+            if (aFailureResponse.getApiErrorCode() == -1) {
+                mFundTransferView.apiError(aApiCode, (String) aFailureResponse.getError());
+                return;
+            }
+            if (aFailureResponse.getError() instanceof String) {
+                mFundTransferView.apiError((String) aFailureResponse.getError());
+                return;
+            }
+            mFundTransferView.apiError((String) AtishayOnlineApp.getAppInstance().getString(R.string.error_network_server_errors));
+        }
+    }
+
+    @Override
+    public void registerBus() {
+
+    }
+
+    @Override
+    public void unRegisterBus() {
+
+    }
+
+    @Override
+    public void clearReferences() {
+        mFundTransferView = null;
+    }
+}

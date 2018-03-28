@@ -1,0 +1,35 @@
+package com.atishay.online.postpaid;
+
+/**
+ * Created by Atishay on 02-02-2018.
+ */
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+public class PostpaidResponse {
+
+    @SerializedName("TelecomID")
+    @Expose
+    private Integer telecomID;
+    @SerializedName("TelecomName")
+    @Expose
+    private String telecomName;
+
+    public Integer getTelecomID() {
+        return telecomID;
+    }
+
+    public void setTelecomID(Integer telecomID) {
+        this.telecomID = telecomID;
+    }
+
+    public String getTelecomName() {
+        return telecomName;
+    }
+
+    public void setTelecomName(String telecomName) {
+        this.telecomName = telecomName;
+    }
+
+}

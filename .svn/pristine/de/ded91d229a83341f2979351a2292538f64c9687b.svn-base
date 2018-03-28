@@ -1,0 +1,166 @@
+package com.atishay.online.addbenefiaciary;
+
+import com.atishay.online.AtishayOnlineApp;
+import com.atishay.online.R;
+import com.atishay.online.benefiaciary.BankIFSCDetailBean;
+import com.atishay.online.utils.Constants;
+import com.atishay.online.utils.network.ApiError;
+import com.atishay.online.utils.network.RestApiCallback;
+import com.goldenmace.framework.mvp.presenters.Presenter;
+import com.goldenmace.framework.utils.NetworkUtils;
+
+import java.net.HttpURLConnection;
+import java.util.ArrayList;
+import java.util.Map;
+
+import static com.atishay.online.utils.Constants.APICODE.IFSCDETAILS;
+
+/**
+ * Created by Vishal Patel on 17,December,2016.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public class AddBeneficiaryPresenter implements Presenter, RestApiCallback<Object, ApiError<Object>> {
+    private AddBeneficiaryView mAddBeneficiaryView;
+    private AddBeneficiaryController mAddBeneficiaryController;
+    private ArrayList<Integer> mApiList;
+
+    public AddBeneficiaryPresenter(AddBeneficiaryView aAddBeneficiaryView) {
+        mAddBeneficiaryView = aAddBeneficiaryView;
+        mAddBeneficiaryController = new AddBeneficiaryController(this);
+        mApiList = new ArrayList<>();
+    }
+
+    public void getMasterIFSC(String username, String password) {
+        if (NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            mAddBeneficiaryView.showLoader(R.string.please_wait);
+            mApiList.add(Constants.APICODE.MASTERIFSC);
+            mAddBeneficiaryController.getMasterIFSC(username, password);
+        } else {
+            mAddBeneficiaryView.hideLoader();
+            mAddBeneficiaryView.noInternetConnection();
+        }
+    }
+
+    public void doAddBeneficiary(Map<String, String> aQuaryMap) {
+        if (NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            mAddBeneficiaryView.showLoader(R.string.please_wait);
+            mApiList.add(Constants.APICODE.ADD_BENE);
+            mAddBeneficiaryController.doAddBeneficiary(aQuaryMap);
+        } else {
+            mAddBeneficiaryView.hideLoader();
+            mAddBeneficiaryView.noInternetConnection();
+        }
+    }
+
+    public void getIFSCDetails(String ifsc) {
+
+        if (mAddBeneficiaryView != null && NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            mAddBeneficiaryView.showLoader(R.string.please_wait);
+            mApiList.add(IFSCDETAILS);
+            mAddBeneficiaryController.getIFSCDetials(ifsc);
+        } else {
+            mAddBeneficiaryView.hideLoader();
+            mAddBeneficiaryView.noInternetConnection();
+        }
+    }
+
+    public void doResendOTP(Map<String, String> aQuaryMap) {
+        if (NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            mAddBeneficiaryView.showDialogLoader(R.string.please_wait);
+            mApiList.add(Constants.APICODE.RESENDOTP);
+            mAddBeneficiaryController.doResendOTP(aQuaryMap);
+        } else {
+            mAddBeneficiaryView.hideDialogLoader();
+            mAddBeneficiaryView.noInternetConnection();
+        }
+    }
+
+    public void doValidateBeneficiary(Map<String, String> aQuaryMap) {
+        if (NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            mAddBeneficiaryView.showDialogLoader(R.string.please_wait);
+            mApiList.add(Constants.APICODE.VALIDATEBENEFICIARY);
+            mAddBeneficiaryController.doValidateBeneficiary(aQuaryMap);
+        } else {
+            mAddBeneficiaryView.hideDialogLoader();
+            mAddBeneficiaryView.noInternetConnection();
+        }
+    }
+
+    @Override
+    public void onSuccess(int aApiCode, Object aSuccessResponse) {
+        if (mAddBeneficiaryView != null) {
+            mApiList.remove(Integer.valueOf(aApiCode));
+            if (mApiList.size() == 0) {
+                mAddBeneficiaryView.hideLoader();
+                mAddBeneficiaryView.hideDialogLoader();
+            }
+            if (aSuccessResponse == null) {
+                AtishayOnlineApp.getAppInstance().getString(R.string.error_network_server_errors);
+            } else {
+                switch (aApiCode) {
+                    case Constants.APICODE.MASTERIFSC:
+                        mAddBeneficiaryView.getMasterIFSC((ArrayList<MasterIFSCBean>) aSuccessResponse);
+                        break;
+                    case Constants.APICODE.ADD_BENE:
+                        mAddBeneficiaryView.doAddBeneficiary((AddBeneficiaryResponse) aSuccessResponse);
+                        break;
+                    case Constants.APICODE.RESENDOTP:
+                        mAddBeneficiaryView.doResendOTP((ResendOTPResponse) aSuccessResponse);
+                        break;
+                    case Constants.APICODE.VALIDATEBENEFICIARY:
+                        mAddBeneficiaryView.doValidateBeneficiary((ValidateBeneficiaryResponse) aSuccessResponse);
+                        break;
+                    case Constants.APICODE.IFSCDETAILS:
+                        mAddBeneficiaryView.getIFSCDetials((ArrayList<BankIFSCDetailBean>) aSuccessResponse);
+                        break;
+                }
+            }
+        } else {
+
+        }
+    }
+
+    @Override
+    public void onApiError(int aApiCode, ApiError<Object> aFailureResponse) {
+        if (mAddBeneficiaryView != null) {
+            mApiList.remove(Integer.valueOf(aApiCode));
+            if (mApiList.size() == 0) {
+                mAddBeneficiaryView.hideLoader();
+                mAddBeneficiaryView.hideDialogLoader();
+            }
+            if (aFailureResponse.getApiErrorCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                mAddBeneficiaryView.onUserUnAuthorized((String) aFailureResponse.getError());
+                return;
+            }
+            if (aFailureResponse.getApiErrorCode() == -1) {
+                mAddBeneficiaryView.apiError(aApiCode, (String) aFailureResponse.getError());
+                return;
+            }
+            if (aFailureResponse.getError() instanceof String) {
+                mAddBeneficiaryView.apiError((String) aFailureResponse.getError());
+                return;
+            }
+            mAddBeneficiaryView.apiError((String) AtishayOnlineApp.getAppInstance().getString(R.string.error_network_server_errors));
+        } else {
+
+        }
+    }
+
+    @Override
+    public void registerBus() {
+
+    }
+
+    @Override
+    public void unRegisterBus() {
+
+    }
+
+    @Override
+    public void clearReferences() {
+        mAddBeneficiaryView = null;
+    }
+}

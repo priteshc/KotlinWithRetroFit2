@@ -1,0 +1,60 @@
+/*
+ * Copyright 2016 Goldenmace IT Solutions
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+package com.atishay.online.login;
+
+import com.atishay.online.AtishayOnlineApp;
+import com.atishay.online.utils.network.ApiError;
+import com.atishay.online.utils.network.RestApiCallback;
+
+/**
+ * Created by Vishal Patel on 10,October,2016.
+ * AtishayOnline
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+public class LoginController implements LoginUsecase {
+    RestApiCallback<Object, ApiError<Object>> mApiCallback;
+
+    public LoginController(RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+        mApiCallback = aApiCallback;
+    }
+
+    @Override
+    public void validateLogin(String aUsername, String aPassword) {
+        AtishayOnlineApp.getAppInstance().getRestApis().doLogin(aUsername, aPassword, mApiCallback);
+    }
+
+    @Override
+    public void validateLoginView(String aUsername, String aPassword) {
+        AtishayOnlineApp.getAppInstance().getRestApis().doLogin(aUsername, aPassword, mApiCallback);
+    }
+
+    @Override
+    public void validateForgotPassword(String aUsername) {
+        AtishayOnlineApp.getAppInstance().getRestApis().doForgotPassword(aUsername, mApiCallback);
+    }
+
+    @Override
+    public void fetchConfig() {
+
+    }
+
+    @Override
+    public void onDestroy() {
+
+    }
+}

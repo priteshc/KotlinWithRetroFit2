@@ -1,0 +1,188 @@
+/*
+ * Copyright 2016 GoldenMace IT Solutions
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+package com.atishay.online;
+
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
+
+import com.atishay.online.login.LoginActivity;
+import com.atishay.online.utils.Constants;
+import com.atishay.online.utils.DialogUtils;
+import com.goldenmace.framework.utils.SharedPrefUtils;
+import com.goldenmace.framework.views.activities.BaseActivity;
+
+import butterknife.ButterKnife;
+
+import static com.atishay.online.NotificationService.ACTION_NOTIFICATION_FETCHED;
+import static com.atishay.online.WalletBalanceService.ACTION_WALLET_BALANCE_FETCHED;
+
+/**
+ * Created by Vishal Patel on 20,October,2016.
+ * AtishayOnline
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public class AppBaseActivity extends BaseActivity implements AppBaseView {
+
+    public String mUsername, mPassword, mAgentCode, mTransPassword, mMobileNo;
+
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            float balance = intent.getFloatExtra("AccountBalance", 0.00f);
+            TextView view = ButterKnife.<TextView>findById(AppBaseActivity.this, R.id.toolbar_txtAmount);
+           TextView view1 = ButterKnife.<TextView>findById(AppBaseActivity.this, R.id.bal);
+
+          /*  if (view != null) {
+              //  view.setText(getString(R.string.amount, String.format("%.2f", balance)));
+
+            }*/
+
+            if(view1 != null){
+
+                view1.setText(getString(R.string.amount, String.format("%.2f", balance)));
+
+            }
+        }
+    };
+
+    private BroadcastReceiver mBroadcastReceiverNotification = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String mNotification = intent.getStringExtra("Notification");
+            AtishayOnlineApp.getAppInstance().setNotification(mNotification);
+            TextView view = ButterKnife.<TextView>findById(AppBaseActivity.this, R.id.menu_txtNotification);
+            if (view != null) {
+                view.setText(mNotification);
+            }
+        }
+    };
+
+    @SuppressWarnings("ConstantConditions")
+    public void setToolbar(Toolbar mToolbar) {
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        registerReceiver(mBroadcastReceiver, new IntentFilter(ACTION_WALLET_BALANCE_FETCHED));
+        registerReceiver(mBroadcastReceiverNotification, new IntentFilter(ACTION_NOTIFICATION_FETCHED));
+        WalletBalanceService.startFetchingBalance(this);
+        NotificationService.startFetchingNotification(this);
+
+        mUsername = SharedPrefUtils.getString(this, Constants.SharedPref.USER_DETAIL, Constants.SharedPref.KEY_USER_NAME, "");
+        mPassword = SharedPrefUtils.getString(this, Constants.SharedPref.USER_DETAIL, Constants.SharedPref.KEY_PASSWORD, "");
+        mTransPassword = SharedPrefUtils.getString(this, Constants.SharedPref.USER_DETAIL, Constants.SharedPref.KEY_TRANSPASSWORD, "");
+        mAgentCode = SharedPrefUtils.getString(this, Constants.SharedPref.USER_DETAIL, Constants.SharedPref.KEY_AGENT_CODE, "");
+        mMobileNo = SharedPrefUtils.getString(this, Constants.SharedPref.USER_DETAIL, Constants.SharedPref.KEY_MOBILE_NO, "");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        TextView view = ButterKnife.<TextView>findById(AppBaseActivity.this, R.id.toolbar_txtAmount);
+        TextView view1 = ButterKnife.<TextView>findById(AppBaseActivity.this, R.id.bal);
+
+      /*  if (view != null) {
+           // view.setText(getString(R.string.amount, AtishayOnlineApp.getAppInstance().getBalance()));
+        }*/
+
+        if(view1 != null){
+            view1.setText(getString(R.string.amount, AtishayOnlineApp.getAppInstance().getBalance()));
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(mBroadcastReceiver);
+        unregisterReceiver(mBroadcastReceiverNotification);
+        super.onDestroy();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle arrow click here
+        if (item.getItemId() == android.R.id.home) {
+            finish(); // close this activity and return to preview activity (if there is any)
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public void showLoader(String aMessage) {
+
+    }
+
+    @Override
+    public void showLoader(int aResId) {
+
+    }
+
+    @Override
+    public void hideLoader() {
+
+    }
+
+    @Override
+    public void noInternetConnection() {
+
+    }
+
+    @Override
+    public void apiError(String aError) {
+
+    }
+
+    @Override
+    public void apiError(int aApiCode, String aError) {
+
+    }
+
+    public void hideKeyboard() {
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+    }
+    @Override
+    public void onUserUnAuthorized(String aErrorMessage) {
+        DialogUtils.getSingleButtonDialog(this, getString(R.string.app_name), aErrorMessage, getString(R.string.lbl_ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                SharedPrefUtils.getSharedPreferences(AppBaseActivity.this, Constants.SharedPref.USER_DETAIL).edit().clear().apply();
+                Intent redirectLogout = new Intent(getApplicationContext(), LoginActivity.class);
+                redirectLogout.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(redirectLogout);
+                finish();
+            }
+        }, false).show();
+    }
+}

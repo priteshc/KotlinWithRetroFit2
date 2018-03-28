@@ -1,0 +1,40 @@
+package com.atishay.online.postpaid;
+
+/**
+ * Created by Atishay on 02-02-2018.
+ */
+
+import java.util.List;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+public class PostpaidPojo {
+
+    @SerializedName("strOutMEssage")
+    @Expose
+    private String strOutMEssage;
+    @SerializedName("Response")
+    @Expose
+    private List<PostpaidResponse> response = null;
+
+    public String getStrOutMEssage() {
+        return strOutMEssage;
+    }
+
+    public void setStrOutMEssage(String strOutMEssage) {
+        this.strOutMEssage = strOutMEssage;
+    }
+
+    public List<PostpaidResponse> getResponse() {
+        return response;
+    }
+
+    public void setResponse(List<PostpaidResponse> response) {
+        this.response = response;
+    }
+
+}

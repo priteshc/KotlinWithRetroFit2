@@ -1,0 +1,22 @@
+
+package com.atishay.online.benefiaciary;
+
+import com.atishay.online.BaseResponse;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
+
+public class BankIFSCDetailResponse extends BaseResponse {
+    @SerializedName("Bank Details")
+    @Expose
+    private List<BankIFSCDetailBean> bankDetails = null;
+
+    public List<BankIFSCDetailBean> getBankDetails() {
+        return bankDetails;
+    }
+
+    public void setBankDetails(List<BankIFSCDetailBean> aBankDetails) {
+        bankDetails = aBankDetails;
+    }
+}

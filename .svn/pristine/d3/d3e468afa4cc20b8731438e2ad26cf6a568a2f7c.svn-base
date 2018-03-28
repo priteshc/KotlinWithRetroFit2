@@ -1,0 +1,36 @@
+package com.atishay.online.utility;
+
+import com.atishay.online.postpaid.BillerCoverge;
+import com.atishay.online.postpaid.PostpaidResponse;
+
+import java.util.List;
+
+/**
+ * Created by Atishay on 19-01-2018.
+ */
+
+public interface UtiltiyoperatorView {
+
+
+    void showFErrorMeassage(String msg);
+
+    void showFLoginSuccessMsg(String msg, List<PostpaidResponse> postpaidResponseList);
+
+    void showCovergeSuccessMsg(String msg, List<BillerCoverge> billerCoverges);
+
+    void showCovergeFailedMeassage(String msg);
+
+    void showBillSuccessMsg(String msg,List<MainDetailPojo> mainDetailPojos, List<AdditionalDetailPojo> additionalDetailPojos,List<CustomerParamsDetail> customerParamsDetails,List<BillDetailPojo> billDetailPojos);
+
+
+    void showFinalBillPayment(String msg);
+
+    void showBillFailedMeassage(String msg);
+
+    void showFailedMeassage(String msg);
+
+    void showprogress();
+
+    void hideprogress();
+
+}

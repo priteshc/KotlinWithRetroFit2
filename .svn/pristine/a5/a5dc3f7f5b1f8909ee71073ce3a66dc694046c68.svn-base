@@ -1,0 +1,477 @@
+/*
+ * Copyright 2016 GoldenMace IT Solutions
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+package com.atishay.online.postpaid;
+
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.design.widget.Snackbar;
+import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.Html;
+import android.text.TextWatcher;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
+
+import com.atishay.online.AppBaseActivity;
+import com.atishay.online.AtishayOnlineApp;
+import com.atishay.online.R;
+import com.atishay.online.common.CommonAdapter;
+import com.atishay.online.common.CommonBean;
+import com.atishay.online.common.CommonInterface;
+import com.atishay.online.common.CommonRechargeResponse;
+import com.atishay.online.common.SurchargeBean;
+import com.atishay.online.utils.Constants;
+import com.atishay.online.utils.DialogUtils;
+import com.atishay.online.utils.Loader;
+
+import java.util.ArrayList;
+import java.util.regex.Pattern;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+import static com.atishay.online.utils.Constants.PENDING;
+import static com.atishay.online.utils.Constants.REGX_AMOUNT;
+import static com.atishay.online.utils.Constants.SUCCESS;
+
+/**
+ * Created by Vishal Patel on 15,November,2016.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public class PostpaidActivity extends AppBaseActivity implements PostpaidView {
+
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.postoaid_rlMain)
+    RelativeLayout mPostpaidMain;
+    @BindView(R.id.txtOperator)
+    TextView mTxtOperator;
+    @BindView(R.id.postoaid_spOperator)
+    Spinner mOperator;
+    @BindView(R.id.notice_txt)
+    TextView mTxtNotice;
+    @BindView(R.id.mobile_llExtraView)
+    LinearLayout mMobileExtraView;
+    @BindView(R.id.txtMobile)
+    TextView mTxtMobile;
+    @BindView(R.id.postoaid_edtMobile)
+    EditText mMobile;
+    @BindView(R.id.phone_llExtraView)
+    LinearLayout mPhoneExtraView;
+    @BindView(R.id.txtPhone)
+    TextView mTxtPhone;
+    @BindView(R.id.postoaid_edtPhone)
+    EditText mPhone;
+    @BindView(R.id.bsnl_llExtraView)
+    LinearLayout mExtraBsnlView;
+    @BindView(R.id.txtAccountNo)
+    TextView mTxtAccountNo;
+    @BindView(R.id.postoaid_edtAccountNo)
+    EditText mAccountNumber;
+    @BindView(R.id.txtServiceType)
+    TextView mTxtServiceType;
+    @BindView(R.id.postoaid_spServiceType)
+    Spinner mServiceType;
+    @BindView(R.id.txtAmount)
+    TextView mTxtAmount;
+    @BindView(R.id.postoaid_edtAmount)
+    EditText mAmount;
+    @BindView(R.id.money_txtTotalAmunt)
+    TextView mTxtTotalAmount;
+    @BindView(R.id.money_edtTotalAmunt)
+    EditText mTotalAmount;
+    @BindView(R.id.txtTranCode)
+    TextView mTxtTransactionCode;
+    @BindView(R.id.postoaid_edtTransaction)
+    EditText mTransactionCode;
+    @BindView(R.id.postoaid_txtProceed)
+    TextView mProceedPay;
+    @BindView(R.id.loader)
+    Loader mLoader;
+    PostpaidPresenter mPostpaidPresenter;
+    String[] transactionType;
+    float surchargeValue;
+    CommonBean cb;
+    int statusImg;
+    private ArrayList<CommonInterface> mPostOperatorList;
+    private CommonAdapter mPostOperatorAdapter;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_postpaid);
+
+        ButterKnife.bind(this);
+        setToolbar(mToolbar);
+        mPostpaidPresenter = new PostpaidPresenter(this);
+        mPostOperatorList = new ArrayList<>();
+        mPostOperatorAdapter = new CommonAdapter(this, mPostOperatorList);
+        transactionType = getResources().getStringArray(R.array.transaction_type);
+        /**
+         * Custom Toolbar with amount view
+         */
+        ButterKnife.<TextView>findById(this, R.id.toolbar_txtAmount).setText(getString(R.string.amount, AtishayOnlineApp.getAppInstance().getBalance()));
+        ButterKnife.<TextView>findById(this, R.id.toolbar_txtTitle).setText(getString(R.string.postpaid));
+
+
+        mTxtOperator.setText(Html.fromHtml(getString(R.string.operator)), TextView.BufferType.SPANNABLE);
+        mTxtNotice.setText(Html.fromHtml(getString(R.string.notice_msg)), TextView.BufferType.SPANNABLE);
+        mTxtMobile.setText(Html.fromHtml(getString(R.string.mobile_no)), TextView.BufferType.SPANNABLE);
+        mTxtAccountNo.setText(Html.fromHtml(getString(R.string.account_number)), TextView.BufferType.SPANNABLE);
+        mTxtServiceType.setText(Html.fromHtml(getString(R.string.service_type)), TextView.BufferType.SPANNABLE);
+        mTxtAmount.setText(Html.fromHtml(getString(R.string.bill_amount)), TextView.BufferType.SPANNABLE);
+        mTxtTotalAmount.setText(Html.fromHtml(getString(R.string.total_amount)), TextView.BufferType.SPANNABLE);
+        mTxtTransactionCode.setText(Html.fromHtml(getString(R.string.trans_code)), TextView.BufferType.SPANNABLE);
+        mTxtPhone.setText(Html.fromHtml(getString(R.string.phone_no)), TextView.BufferType.SPANNABLE);
+
+        ArrayAdapter<String> transTypeAdapter = new ArrayAdapter<>(this, R.layout.simple_spinner_item, transactionType);
+        mServiceType.setAdapter(transTypeAdapter);
+        mPostpaidPresenter.doPostOperator(mUsername, mPassword);
+        mOperator.setAdapter(mPostOperatorAdapter);
+        mAmount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                calculateTotalAmount(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        mOperator.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                resetAllEditText();
+                switch (mPostOperatorList.get(position).getTitle()) {
+                    case Constants.AIRCEL:
+                        mExtraBsnlView.setVisibility(View.GONE);
+                        mMobileExtraView.setVisibility(View.VISIBLE);
+                        mPhoneExtraView.setVisibility(View.GONE);
+                        mTxtNotice.setVisibility(View.VISIBLE);
+                        break;
+
+                    case Constants.AIRTEL_LANDLINE:
+                        mExtraBsnlView.setVisibility(View.GONE);
+                        mTxtNotice.setVisibility(View.GONE);
+                        mPhoneExtraView.setVisibility(View.VISIBLE);
+                        mMobileExtraView.setVisibility(View.GONE);
+                        break;
+                    case Constants.AIRTEL:
+                        mExtraBsnlView.setVisibility(View.GONE);
+                        mTxtNotice.setVisibility(View.GONE);
+                        mPhoneExtraView.setVisibility(View.GONE);
+                        mMobileExtraView.setVisibility(View.VISIBLE);
+                        break;
+
+                    case Constants.BSNL:
+                        mTxtNotice.setVisibility(View.GONE);
+                        mExtraBsnlView.setVisibility(View.VISIBLE);
+                        mPhoneExtraView.setVisibility(View.VISIBLE);
+                        mMobileExtraView.setVisibility(View.GONE);
+                        break;
+
+                    case Constants.RELIANCE:
+                        mExtraBsnlView.setVisibility(View.GONE);
+                        mTxtNotice.setVisibility(View.VISIBLE);
+                        mPhoneExtraView.setVisibility(View.GONE);
+                        mMobileExtraView.setVisibility(View.VISIBLE);
+                        break;
+
+                    default:
+                        mExtraBsnlView.setVisibility(View.GONE);
+                        mTxtNotice.setVisibility(View.GONE);
+                        mPhoneExtraView.setVisibility(View.GONE);
+                        mMobileExtraView.setVisibility(View.VISIBLE);
+                        break;
+                }
+                mPostpaidPresenter.doSurcharge(mPostOperatorList.get(position).getID());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        mAmount.addTextChangedListener(new TextWatcher() {
+                                           @Override
+                                           public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                                           }
+
+                                           @Override
+                                           public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                               try {
+                                                   float value = Float.parseFloat(mAmount.getText().toString());
+                                                   if (value > 0) {
+                                                       float sum = value + surchargeValue;
+                                                       mTotalAmount.setText(String.format("%.02f", sum));
+                                                   } else {
+                                                       mTotalAmount.setText(String.valueOf(0));
+                                                   }
+                                               } catch (NumberFormatException ex) {
+                                                   mTotalAmount.setText(String.valueOf(0));
+                                               }
+
+                                           }
+
+                                           @Override
+                                           public void afterTextChanged(Editable s) {
+
+                                           }
+                                       }
+
+        );
+    }
+
+    private void resetAllEditText() {
+        mMobile.setText(null);
+        mPhone.setText(null);
+        mAccountNumber.setText(null);
+        mAmount.setText(null);
+        mTotalAmount.setText(null);
+        mTransactionCode.setText(null);
+    }
+
+    @OnClick(R.id.postoaid_txtProceed)
+    public void doPostpaidRechargePay() {
+        hideKeyboard();
+        if (Constants.BSNL.equals(mPostOperatorList.get(mOperator.getSelectedItemPosition()).getTitle())) {
+            if (mOperator != null && mOperator.getSelectedItem() != null
+                    && mServiceType != null && mServiceType.getSelectedItem() != null
+                    && !mPhone.getText().toString().isEmpty()
+                    && !mAccountNumber.getText().toString().isEmpty()
+                    && !mAmount.getText().toString().isEmpty()
+                    && !mTotalAmount.getText().toString().isEmpty()
+                    && !mTransactionCode.getText().toString().isEmpty()) {
+                if (!Pattern.matches(REGX_AMOUNT, mAmount.getText().toString())) {
+                    Snackbar.make(mPostpaidMain, getResources().getString(R.string.invalid_bill_amount), Snackbar.LENGTH_LONG).show();
+                } else if (Float.parseFloat(mAmount.getText().toString()) <= 0) {
+                    Snackbar.make(mPostpaidMain, getResources().getString(R.string.invalid_bill_amount), Snackbar.LENGTH_LONG).show();
+                } else if (mTransPassword.equals(mTransactionCode.getText().toString())) {
+                    cb = new CommonBean(mUsername, mPassword, mTransPassword, "",
+                            "" + mPostOperatorList.get(mOperator.getSelectedItemPosition()).getID(),
+                            mPhone.getText().toString(), "",
+                            mAmount.getText().toString(), "", "" + mServiceType.getSelectedItemPosition(),
+                            mAccountNumber.getText().toString());
+                    mPostpaidPresenter.doBSNLPostpaidRecharge(cb);
+                    mProceedPay.setEnabled(false);
+                } else {
+                    Snackbar.make(mPostpaidMain, getResources().getString(R.string.invalid_transaction_password), Snackbar.LENGTH_SHORT).show();
+                }
+            } else {
+                Snackbar.make(mPostpaidMain, getResources().getString(R.string.error_field_required), Snackbar.LENGTH_SHORT).show();
+            }
+        } else if (Constants.AIRTEL_LANDLINE.equals(mPostOperatorList.get(mOperator.getSelectedItemPosition()).getTitle())) {
+            if (!Pattern.matches(REGX_AMOUNT, mAmount.getText().toString())) {
+                Snackbar.make(mPostpaidMain, getResources().getString(R.string.invalid_bill_amount), Snackbar.LENGTH_LONG).show();
+            } else if (Float.parseFloat(mAmount.getText().toString()) <= 0) {
+                Snackbar.make(mPostpaidMain, getResources().getString(R.string.invalid_bill_amount), Snackbar.LENGTH_LONG).show();
+            } else if (mOperator != null && mOperator.getSelectedItem() != null
+                    && !mPhone.getText().toString().isEmpty()
+                    && !mAmount.getText().toString().isEmpty()
+                    && !mTotalAmount.getText().toString().isEmpty()
+                    && !mTransactionCode.getText().toString().isEmpty()) {
+
+                if (mTransPassword.equals(mTransactionCode.getText().toString())) {
+                    cb = new CommonBean(mUsername, mPassword, mTransPassword, "",
+                            "" + mPostOperatorList.get(mOperator.getSelectedItemPosition()).getID(),
+                            mPhone.getText().toString(), "", mAmount.getText().toString(), "", "", "");
+                    mPostpaidPresenter.doPostpaidRecharge(cb);
+                    mProceedPay.setEnabled(false);
+                } else {
+                    Snackbar.make(mPostpaidMain, getResources().getString(R.string.invalid_transaction_password), Snackbar.LENGTH_SHORT).show();
+                }
+            } else {
+                Snackbar.make(mPostpaidMain, getResources().getString(R.string.error_field_required), Snackbar.LENGTH_SHORT).show();
+            }
+        } else {
+            if (!Pattern.matches(REGX_AMOUNT, mAmount.getText().toString())) {
+                Snackbar.make(mPostpaidMain, getResources().getString(R.string.invalid_bill_amount), Snackbar.LENGTH_LONG).show();
+            } else if (Float.parseFloat(mAmount.getText().toString()) <= 0) {
+                Snackbar.make(mPostpaidMain, getResources().getString(R.string.invalid_bill_amount), Snackbar.LENGTH_LONG).show();
+            } else if (mOperator != null && mOperator.getSelectedItem() != null
+                    && !mMobile.getText().toString().isEmpty()
+                    && !mAmount.getText().toString().isEmpty()
+                    && !mTotalAmount.getText().toString().isEmpty()
+                    && !mTransactionCode.getText().toString().isEmpty()) {
+
+                if (mTransPassword.equals(mTransactionCode.getText().toString())) {
+                    cb = new CommonBean(mUsername, mPassword, mTransPassword, "",
+                            "" + mPostOperatorList.get(mOperator.getSelectedItemPosition()).getID(),
+                            mMobile.getText().toString(), "", mAmount.getText().toString(), "", "", "");
+                    mPostpaidPresenter.doPostpaidRecharge(cb);
+                    mProceedPay.setEnabled(false);
+                } else {
+                    Snackbar.make(mPostpaidMain, getResources().getString(R.string.invalid_transaction_password), Snackbar.LENGTH_SHORT).show();
+                }
+            } else {
+                Snackbar.make(mPostpaidMain, getResources().getString(R.string.error_field_required), Snackbar.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    @Override
+    public void doPostpaidOperator(ArrayList<PostpaidOperatorBean> aPostList) {
+        mPostOperatorList.clear();
+        mPostOperatorList.addAll(aPostList);
+        mPostOperatorAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void showLoader(String aMessage) {
+        if (aMessage != null) {
+            mLoader.setText(aMessage);
+        }
+        mLoader.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showLoader(int aResId) {
+        if (aResId > 0) {
+            mLoader.setText(getString(aResId));
+        }
+        mLoader.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideLoader() {
+        mLoader.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void noInternetConnection() {
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //Do something after 100ms
+                mProceedPay.setEnabled(true);
+            }
+        }, 10);
+        Snackbar.make(mPostpaidMain, getString(R.string.error_network_no_internet), Snackbar.LENGTH_SHORT).show();
+        hideLoader();
+    }
+
+    @Override
+    public void apiError(String aError) {
+        hideLoader();
+        Snackbar.make(mPostpaidMain, aError, Snackbar.LENGTH_INDEFINITE).setAction(R.string.error_view_retry, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPostpaidPresenter.doPostOperator(mUsername, mPassword);
+            }
+        }).show();
+    }
+
+    @Override
+    public void apiError(int aApiCode, String aError) {
+        switch (aApiCode) {
+            case Constants.APICODE.POSTPAID_OPERATOR:
+            case Constants.APICODE.SURCHARGE:
+                Snackbar.make(mPostpaidMain, aError, Snackbar.LENGTH_INDEFINITE).setAction(R.string.error_view_retry, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mPostpaidPresenter.doPostOperator(mUsername, mPassword);
+                    }
+                }).show();
+                break;
+            case Constants.APICODE.POSTPAIDRECHARGE:
+                DialogUtils.getSingleButtonDialog(this, R.drawable.ic_fail, getResources().getString(R.string.postpaid_rcrg), aError, getString(R.string.lbl_ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which == DialogInterface.BUTTON_POSITIVE) {
+                            finish();
+                        }
+                    }
+                }, false).show();
+                break;
+            default:
+                Snackbar.make(mPostpaidMain, aError, Snackbar.LENGTH_LONG).show();
+                break;
+        }
+        super.apiError(aApiCode, aError);
+    }
+
+    @Override
+    public void doSurcharge(ArrayList<SurchargeBean> surcharge) {
+        if (surcharge.size() > 0) {
+            surchargeValue = surcharge.get(0).getSurCharge();
+        } else {
+            surchargeValue = 0;
+        }
+        calculateTotalAmount(mAmount.getText().toString());
+    }
+
+    private void calculateTotalAmount(String aAmount) {
+        try {
+            float value = Float.parseFloat(aAmount.toString());
+            if (value > 0) {
+                float sum = value + surchargeValue;
+                mTotalAmount.setText(String.format("%.02f", sum));
+            } else {
+                mTotalAmount.setText(String.valueOf(0));
+            }
+        } catch (NumberFormatException ex) {
+            mTotalAmount.setText(String.valueOf(0));
+        }
+    }
+
+    @Override
+    public void onPostpaidRechargeDetails(CommonRechargeResponse aList) {
+        if (aList.getStatus().equals(SUCCESS)) {
+            statusImg = R.drawable.ic_success;
+        } else if (aList.getStatus().equals(PENDING)) {
+            statusImg = R.drawable.ic_warning_orange_24dp;
+        } else {
+            statusImg = R.drawable.ic_fail;
+        }
+        DialogUtils.getSingleButtonDialog(this, statusImg, getResources().getString(R.string.postpaid_rcrg), aList.getMsg(), getString(R.string.lbl_ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == DialogInterface.BUTTON_POSITIVE) {
+                    finish();
+                }
+            }
+        }, false).show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPostpaidPresenter.clearReferences();
+    }
+}

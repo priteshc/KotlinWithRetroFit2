@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2016 Goldenmace IT Solutions
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group
+        android:id="@+id/recharge"
+        android:checkableBehavior="none">
+        <item
+            android:id="@+id/nav_mobile"
+            android:icon="@drawable/ic_phone_android_black_24dp"
+            android:title="@string/mobile"/>
+        <item
+            android:id="@+id/nav_dth"
+            android:icon="@drawable/ic_live_tv_black_24dp"
+            android:title="@string/dth"/>
+
+        <!--<item
+            android:id="@+id/nav_postpaid"
+            android:icon="@drawable/ic_sim_card_black_24dp"
+            android:title="@string/postpaid"/>
+        -->
+   <!--     <item
+            android:id="@+id/nav_utility"
+            android:icon="@drawable/ic_build_black_24dp"
+            android:title="@string/utility"/>-->
+
+        <item
+            android:id="@+id/nav_money"
+            android:icon="@drawable/ic_money_transfer"
+            android:title="@string/money"/>
+
+        <item
+            android:id="@+id/nav_account_recharge"
+            android:icon="@drawable/ic_account_circle_black_24dp"
+            android:title="@string/ac_recharge"/>
+    </group>
+
+    <group
+        android:id="@+id/profile"
+        android:checkableBehavior="none">
+       <!-- <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_person_black_24dp"
+            android:visible="false"
+            android:title="@string/profile"/>-->
+
+      <!--  <item
+            android:id="@+id/nav_aadhaar_verification"
+            android:icon="@drawable/ic_aadhar_verify"
+            android:title="@string/aadhaar_verification"/>-->
+
+        <item
+            android:id="@+id/nav_transfer_history"
+            android:icon="@drawable/ic_format_list_bulleted_accent_24dp"
+            android:title="@string/my_ac_history"/>
+
+        <item
+            android:id="@+id/nav_fundtransfer_history"
+            android:icon="@drawable/ic_format_list_bulleted_accent_24dp"
+            android:title="@string/fund_ac_history" />
+
+        <item
+            android:id="@+id/nav_change_password"
+            android:icon="@drawable/ic_lock_black_24dp"
+            android:title="@string/nav_change_password"/>
+    </group>
+
+    <group
+        android:id="@+id/other"
+        android:checkableBehavior="none">
+        <item
+            android:id="@+id/nav_about"
+            android:title="@string/nav_about"/>
+
+        <item
+            android:id="@+id/nav_rate"
+            android:title="@string/nav_rate"/>
+
+        <item
+            android:id="@+id/nav_logout"
+            android:title="@string/nav_logout"/>
+    </group>
+</menu>

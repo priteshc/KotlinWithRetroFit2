@@ -1,0 +1,300 @@
+package com.atishay.online.postpaid;
+
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.atishay.online.AppBaseActivity;
+import com.atishay.online.R;
+import com.atishay.online.mobilerecharge.MobileRechargeActivity;
+import com.atishay.online.utils.Constants;
+import com.atishay.online.utils.network.ApiError;
+import com.atishay.online.utils.network.RestApiCallback;
+import com.jaredrummler.materialspinner.MaterialSpinner;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+import static com.atishay.online.R.id.mobile_txtProceed;
+
+/**
+ * Created by Atishay on 02-02-2018.
+ */
+
+
+
+public class PostpaidNewActivity extends AppBaseActivity implements PoperatorView,RestApiCallback<Object, ApiError<Object>>,BillerView {
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.mobile_rlMain)
+    RelativeLayout mMobileMainView;
+    @BindView(R.id.operator)
+    MaterialSpinner mOperator;
+    @BindView(R.id.coverage)
+    MaterialSpinner mCoverage;
+    @BindView(R.id.sms_mobile)
+    EditText smsno;
+    @BindView(R.id.mobile_no)
+    EditText mobile_no;
+    @BindView(R.id.mobile_txtProceed)
+    TextView mView;
+
+    private OperatorPresenter operatorPresenter;
+
+    private BillerPresenter billerPresenter;
+
+   private ArrayList<String> operatorlist;
+   private ArrayList<Integer> operatorId;
+
+    private ArrayList<String> covergrId;
+    private ArrayList<String> covergeName;
+
+    private ProgressDialog progressDialog;
+
+    private  List<PostpaidResponse> operator;
+
+    private Context  context = PostpaidNewActivity.this;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_postpaid_new);
+        ButterKnife.bind(this);
+        setToolbar(mToolbar);
+        ButterKnife.<TextView>findById(this, R.id.toolbar_txtTitle).setText(getString(R.string.postpaid));
+
+
+        smsno.setTransformationMethod(null);
+        mobile_no.setTransformationMethod(null);
+
+        operatorPresenter = new OperatorPresenter(this,this);
+
+        billerPresenter = new BillerPresenter(this);
+
+        operatorlist = new ArrayList<>();
+        operatorId = new ArrayList<>();
+        operator = new ArrayList<>();
+        covergrId = new ArrayList<>();
+        covergeName = new ArrayList<>();
+
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Please wait");
+        progressDialog.setCancelable(false);
+
+        operatorPresenter.getTrans(mUsername,mPassword);
+
+        mCoverage.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
+
+                String name = covergeName.get(position);
+
+                Toast.makeText(context,name,Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+    }
+
+    public void hideKeyboard() {
+
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+
+    }
+
+    @OnClick(mobile_txtProceed)
+    public void doProceedRecharge() {
+
+        if(mOperator.getSelectedIndex() != 0 && mCoverage.getSelectedIndex()!=0 && !smsno.getText().toString().isEmpty() && !mobile_no.getText().toString().isEmpty()){
+
+
+           // Toast.makeText(context,"Full",Toast.LENGTH_SHORT).show();
+
+
+            if(smsno.getText().toString().length() != 10 && mobile_no.getText().toString().length() !=10){
+
+
+                Toast.makeText(context,"Enter 10 digit mobile number",Toast.LENGTH_SHORT).show();
+
+            }
+            else {
+
+                String covid = covergrId.get(mCoverage.getSelectedIndex());
+                String catid = Constants.UTILITY;
+                String bname = operatorlist.get(mOperator.getSelectedIndex());
+
+                billerPresenter.getBiller(covid,catid,bname);
+
+            }
+
+        }
+
+
+        else {
+
+            Toast.makeText(context,R.string.error_field_required,Toast.LENGTH_SHORT).show();
+
+
+        }
+
+
+        }
+
+    @Override
+    public void showFErrorMeassage(String msg) {
+
+        Toast.makeText(context,msg,Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void showBSuccessMsg(String msg, List<BillerResponse> billerResponses) {
+
+        Toast.makeText(context,billerResponses.get(0).getBillerMode(),Toast.LENGTH_SHORT).show();
+
+        if(billerResponses.get(0).getBillerMode().equals("2")){
+
+
+            Intent redirectMobile = new Intent(getApplicationContext(), PostpaidMobilePayment.class);
+
+            redirectMobile.putExtra("Service",operatorlist.get(mOperator.getSelectedIndex()));
+            redirectMobile.putExtra("Location",covergeName.get(mCoverage.getSelectedIndex()));
+            redirectMobile.putExtra("Smsno",smsno.getText().toString());
+            redirectMobile.putExtra("Mobno",mobile_no.getText().toString());
+            redirectMobile.putExtra("BillerId",billerResponses.get(0).getBillerID());
+
+            startActivity(redirectMobile);
+
+        }
+
+        if(billerResponses.get(0).getBillerMode().equals("1")){
+
+            Intent redirectMobile = new Intent(getApplicationContext(), Fetch_Bill.class);
+            startActivity(redirectMobile);
+
+        }
+
+    }
+
+    @Override
+    public void showBfailedMeassage(String msg) {
+
+        Toast.makeText(context,msg,Toast.LENGTH_SHORT).show();
+
+
+    }
+
+    @Override
+    public void showFLoginSuccessMsg(String msg, List<PostpaidResponse> postpaidResponseList) {
+
+        Log.d("size",String.valueOf(postpaidResponseList.size()));
+
+
+        operator = postpaidResponseList;
+
+        operatorPresenter.getCoverge(mUsername,mPassword);
+
+
+    }
+
+    @Override
+    public void showCovergeSuccessMsg(String msg, List<BillerCoverge> billerCoverges) {
+
+
+
+        for(int i =0;i<operator.size();i++){
+
+            operatorlist.add(operator.get(i).getTelecomName());
+            operatorId.add(operator.get(i).getTelecomID());
+        }
+
+        operatorlist.add(0,"Select Biller");
+        operatorId.add(0,-1);
+
+        mOperator.setItems(operatorlist);
+
+
+        for(int i =0;i<billerCoverges.size();i++){
+
+            covergeName.add(billerCoverges.get(i).getName());
+            covergrId.add(billerCoverges.get(i).getId());
+        }
+
+    //    Collections.sort(covergeName);
+
+/*
+        Collections.sort(covergeName, new Comparator<String>() {
+            @Override
+            public int compare(String s1, String s2) {
+                return s1.compareToIgnoreCase(s2);
+            }
+        });*/
+
+
+        covergeName.add(0,"Select Biller Location");
+        covergrId.add(0,"nan");
+
+        mCoverage.setItems(covergeName);
+        mCoverage.setDropdownHeight(250);
+
+
+    }
+
+    @Override
+    public void showCovergeFailedMeassage(String msg) {
+
+
+        Toast.makeText(context,msg,Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void showFailedMeassage(String msg)
+    {
+
+        Toast.makeText(context,msg,Toast.LENGTH_SHORT).show();
+
+
+    }
+
+    @Override
+    public void showprogress() {
+
+        progressDialog.show();
+
+    }
+
+    @Override
+    public void hideprogress() {
+
+        progressDialog.dismiss();
+    }
+
+    @Override
+    public void onSuccess(int aApiCode, Object aSuccessResponse) {
+
+    }
+
+    @Override
+    public void onApiError(int aApiCode, ApiError<Object> aFailureResponse) {
+
+        Toast.makeText(context,R.string.error_network_server_errors,Toast.LENGTH_SHORT).show();
+
+    }
+}

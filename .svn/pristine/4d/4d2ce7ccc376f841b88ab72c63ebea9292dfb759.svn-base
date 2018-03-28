@@ -1,0 +1,402 @@
+package com.atishay.online.moneytransfer;
+
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.view.Gravity;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.atishay.online.AppBaseActivity;
+import com.atishay.online.AtishayOnlineApp;
+import com.atishay.online.R;
+import com.atishay.online.common.ViewPagerAdapter;
+import com.atishay.online.utils.Constants;
+import com.atishay.online.utils.DialogUtils;
+import com.atishay.online.utils.Loader;
+import com.goldenmace.framework.utils.NetworkUtils;
+import com.goldenmace.framework.views.widgets.errorview.ErrorView;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+import static android.support.design.widget.Snackbar.make;
+import static com.atishay.online.utils.Constants.APICODE.REFUNDTRANSACTION;
+import static com.atishay.online.utils.Constants.APICODE.VALIDATEREFUNDTRANSACTION;
+
+/**
+ * Created by Vishal Patel on 11,January,2017.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public class FundTransferHistoryActivity extends AppBaseActivity implements FundTransferView {
+
+    private static final int REQUEST_PERMISSIONSG = 106;
+    public static FundTransferPresenter mFundTransferPresenter;
+    @BindView(R.id.fundTransfer_alView)
+    AppBarLayout fundTransferAlView;
+    @BindView(R.id.fundTransfer_tlTab)
+    TabLayout fundTransferTlTab;
+    @BindView(R.id.fundTransfer_vpViewPager)
+    ViewPager fundTransferVpViewPager;
+    @BindView(R.id.fundTransfer_loader)
+    Loader mLoader;
+    @BindView(R.id.fundTransfer_errorView)
+    ErrorView fundTransferErrorView;
+    @BindView(R.id.fundTransfer_RLContainer)
+    RelativeLayout fundTransferRLContainer;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    ViewPagerAdapter adapter;
+    String mSenderMobile, mReportType;
+    OTPHolder mOTPHolder;
+    Dialog mBottomSheetDialog;
+    private SingleFundHistoryFragment mSingleFundHistoryFragment;
+    private GroupFundHistoryFragment mGroupFundHistoryFragment;
+    ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            switch (position) {
+                case 0:
+                    if (NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+                        fundTransferHistoryCall();
+                    } else {
+                        mSingleFundHistoryFragment.onDataReload();
+                        mGroupFundHistoryFragment.onDataReload();
+                        noInternetConnection();
+                    }
+                    break;
+            }
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
+    };
+    private String mIsFundType;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_fundtransfer_history);
+        ButterKnife.bind(this);
+        setToolbar(mToolbar);
+
+        Bundle bundle = getIntent().getExtras();
+        mSenderMobile = bundle.getString("SenderMobile");
+        mReportType = bundle.getString("ReportType");
+        mIsFundType = bundle.getString("isFundType");
+        fundTransferTlTab.setupWithViewPager(fundTransferVpViewPager);
+        mFundTransferPresenter = new FundTransferPresenter(this);
+        /**
+         * Custom Toolbar with amount view
+         */
+        ButterKnife.<TextView>findById(this, R.id.toolbar_txtAmount).setText(getString(R.string.amount, AtishayOnlineApp.getAppInstance().getBalance()));
+        ButterKnife.<TextView>findById(this, R.id.toolbar_txtTitle).setText(getString(R.string.fund_ac_history));
+
+        fundTransferErrorView.setOnRetryListener(new ErrorView.RetryListener() {
+            @Override
+            public void onRetry() {
+                fundTransferErrorView.setVisibility(View.GONE);
+                fundTransferHistoryCall();
+            }
+        });
+        setupViewPager(fundTransferVpViewPager);
+        fundTransferVpViewPager.setOnPageChangeListener(pageChangeListener);
+        fundTransferVpViewPager.post(new Runnable() {
+            @Override
+            public void run() {
+                pageChangeListener.onPageSelected(fundTransferVpViewPager.getCurrentItem());
+            }
+        });
+    }
+
+    public void fundTransferHistoryCall() {
+        Map<String, String> queryMap = new HashMap<>();
+        queryMap.put(Constants.ApiKeys.USERNAME, mUsername);
+        queryMap.put(Constants.ApiKeys.PASSWORD, mPassword);
+        queryMap.put(Constants.ApiKeys.SENDERMOBILENO, mSenderMobile);
+        queryMap.put(Constants.ApiKeys.REPORTTYPE, mReportType);
+        mFundTransferPresenter.doFundTransferHistory(queryMap);
+    }
+
+    private void setupViewPager(ViewPager aViewPager) {
+        adapter = new ViewPagerAdapter(getSupportFragmentManager());
+
+        mSingleFundHistoryFragment = new SingleFundHistoryFragment();
+        adapter.addFragment(mSingleFundHistoryFragment, getResources().getString(R.string.single_history));
+        Bundle bundle = new Bundle();
+        bundle.putString("isMain", mIsFundType);
+        mSingleFundHistoryFragment.setArguments(bundle);
+
+        mGroupFundHistoryFragment = new GroupFundHistoryFragment();
+        adapter.addFragment(mGroupFundHistoryFragment, getResources().getString(R.string.group_history));
+        Bundle bundleA = new Bundle();
+        bundleA.putString("isMain", mIsFundType);
+        mGroupFundHistoryFragment.setArguments(bundleA);
+
+        aViewPager.setAdapter(adapter);
+    }
+
+    @Override
+    public void apiError(int aApiCode, String aError) {
+        switch (aApiCode) {
+            case Constants.APICODE.FUNDTRANSACTIONHISTORY:
+                make(fundTransferRLContainer, aError, Snackbar.LENGTH_INDEFINITE).setAction(R.string.error_view_retry, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        fundTransferHistoryCall();
+                    }
+                }).show();
+                break;
+            case Constants.APICODE.QUERYREMITTANCETRANSACTION:
+                final Snackbar snackbar = Snackbar.make(fundTransferRLContainer, aError, Snackbar.LENGTH_INDEFINITE);
+                snackbar.setAction(R.string.ok, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        snackbar.dismiss();
+                    }
+                }).show();
+                break;
+            case REFUNDTRANSACTION:
+                final Snackbar snackbarRefund = Snackbar.make(fundTransferRLContainer, aError, Snackbar.LENGTH_INDEFINITE);
+                snackbarRefund.setAction(R.string.ok, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        snackbarRefund.dismiss();
+                    }
+                }).show();
+                break;
+            case VALIDATEREFUNDTRANSACTION:
+                DialogUtils.getSingleButtonDialog(this, R.drawable.ic_fail, getResources().getString(R.string.refund_transaction), aError, getString(R.string.lbl_ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which == DialogInterface.BUTTON_POSITIVE) {
+
+                        }
+                    }
+                }, false).show();
+                break;
+            default:
+                make(fundTransferRLContainer, aError, Snackbar.LENGTH_LONG).show();
+                break;
+        }
+        super.apiError(aApiCode, aError);
+    }
+
+
+    @Override
+    public void showLoader(String aMessage) {
+        if (aMessage != null) {
+            mLoader.setText(aMessage);
+        }
+        mLoader.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showLoader(int aResId) {
+        if (aResId > 0) {
+            mLoader.setText(getString(aResId));
+        }
+        mLoader.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideLoader() {
+        mLoader.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void noInternetConnection() {
+        fundTransferErrorView.setVisibility(View.VISIBLE);
+        fundTransferErrorView.setImage(R.drawable.ic_wifi_200dp);
+        fundTransferErrorView.setTitle(R.string.error_network_no_internet);
+        fundTransferErrorView.setSubtitle("Please check your internet settings");
+        fundTransferErrorView.setRetryButtonText("Retry");
+        fundTransferErrorView.showRetryButton(true);
+        hideLoader();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mFundTransferPresenter.clearReferences();
+    }
+
+    @Override
+    public void showDialogLoader(String aResId) {
+        if (mBottomSheetDialog != null && mBottomSheetDialog.isShowing()) {
+            ButterKnife.<FrameLayout>findById(mBottomSheetDialog, R.id.dialog_loader).setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void hideDialogLoader() {
+        if (mBottomSheetDialog != null && mBottomSheetDialog.isShowing()) {
+            ButterKnife.<FrameLayout>findById(mBottomSheetDialog, R.id.dialog_loader).setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void doRemittanceTransaction(ServiceResponse aServiceResponse) {
+
+    }
+
+    @Override
+    public void doFundTransaction(FundServiceChargeResponse aFundServiceChargeResponse) {
+
+    }
+
+    @Override
+    public void onFundSingleHistoryFetched(FundTransferHistoryResponse aHistoryBeen) {
+        mSingleFundHistoryFragment.onDataFetched(aHistoryBeen.getResponse().getSingleTransaction());
+        mGroupFundHistoryFragment.onDataFetched(aHistoryBeen.getResponse().getGroupTransactions());
+    }
+
+    @Override
+    public void doQueryRemittanceTransaction(FundServiceChargeResponse aFundServiceChargeResponse) {
+        final Snackbar snackbar = Snackbar.make(fundTransferRLContainer, aFundServiceChargeResponse.getMsg(), Snackbar.LENGTH_INDEFINITE);
+        snackbar.setAction(R.string.ok, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                snackbar.dismiss();
+            }
+        }).show();
+    }
+
+    @Override
+    public void doRefundTransaction(RefundTransactionResponse aRefundTransactionResponse) {
+        View view = getLayoutInflater().inflate(R.layout.otp_bottomdialog, null);
+        mOTPHolder = new OTPHolder(view);
+        mBottomSheetDialog = new Dialog(FundTransferHistoryActivity.this,
+                R.style.MaterialDialogSheet);
+        mBottomSheetDialog.setContentView(view);
+        mBottomSheetDialog.setCanceledOnTouchOutside(false);
+        if (mBottomSheetDialog.getWindow() != null) {
+            mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            mBottomSheetDialog.getWindow().setGravity(Gravity.BOTTOM);
+        }
+        mOTPHolder.mResendOTP.setVisibility(View.GONE);
+        mOTPHolder.mConformAddBeneficiary.setText(R.string.submit);
+        mOTPHolder.mTrnasCode.setVisibility(View.GONE);
+        mOTPHolder.mOTPTransCode.setVisibility(View.GONE);
+        mBottomSheetDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                //do whatever you want the back key to do
+                mBottomSheetDialog.dismiss();
+            }
+        });
+        mOTPHolder.mConformAddBeneficiary.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(mOTPHolder.mOTPTransCode.getWindowToken(), 0);
+                if (!TextUtils.isEmpty(mOTPHolder.mOTP.getText().toString())) {
+                    if (fundTransferVpViewPager.getCurrentItem() == 0) {
+                        FundTransferHistoryAdapter.singleOTPCallBack(mOTPHolder.mOTP.getText().toString());
+                    } else {
+                        GroupFundHistoryAdapter.groupOTPCallBack(mOTPHolder.mOTP.getText().toString());
+                    }
+                } else {
+                    Snackbar.make(mOTPHolder.mOTPDialog, getResources().getString(R.string.enter_otp), Snackbar.LENGTH_SHORT).show();
+                }
+            }
+        });
+        mBottomSheetDialog.show();
+    }
+
+    @Override
+    public void doValidateRefundTransaction(QueryRefundTransactionResponse aQueryRefundTransactionResponse) {
+        mBottomSheetDialog.dismiss();
+        DialogUtils.getSingleButtonDialog(this, R.drawable.ic_success, getResources().getString(R.string.refund_transaction), aQueryRefundTransactionResponse.getMsg(), getString(R.string.lbl_ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == DialogInterface.BUTTON_POSITIVE) {
+                    if (NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+                        fundTransferHistoryCall();
+                    } else {
+                        noInternetConnection();
+                    }
+                }
+            }
+        }, false).show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String permissions[],
+                                           @NonNull int[] grantResults) {
+        switch (requestCode) {
+
+            case REQUEST_PERMISSIONSG:
+                if ((grantResults.length > 0) && (grantResults[0]) == PackageManager.PERMISSION_GRANTED) {
+
+                } else {
+                    Snackbar.make(findViewById(android.R.id.content), "Enable Permissions from settings",
+                            Snackbar.LENGTH_INDEFINITE).setAction("ENABLE",
+                            new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent();
+                                    intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                    intent.addCategory(Intent.CATEGORY_DEFAULT);
+                                    intent.setData(Uri.parse("package:" + getPackageName()));
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                                    startActivity(intent);
+                                }
+                            }).show();
+                }
+                return;
+        }
+    }
+
+    static class OTPHolder {
+        @BindView(R.id.otp_txtResend)
+        TextView mResendOTP;
+        @BindView(R.id.otp_txtTransCode)
+        TextView mOTPTransCode;
+        @BindView(R.id.otp_txtConfirm)
+        TextView mConformAddBeneficiary;
+        @BindView(R.id.otp_flDialog)
+        FrameLayout mOTPDialog;
+        @BindView(R.id.otp_edtOTP)
+        EditText mOTP;
+        @BindView(R.id.otp_edtTransCode)
+        EditText mTrnasCode;
+
+        OTPHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
+    }
+
+}

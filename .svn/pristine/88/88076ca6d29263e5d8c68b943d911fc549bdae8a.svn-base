@@ -1,0 +1,74 @@
+// Generated code from Butter Knife. Do not modify!
+package com.atishay.online.moneytransfer;
+
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.TextView;
+import butterknife.Unbinder;
+import butterknife.internal.DebouncingOnClickListener;
+import butterknife.internal.Finder;
+import com.atishay.online.R;
+import com.atishay.online.utils.Loader;
+import java.lang.IllegalStateException;
+import java.lang.Object;
+import java.lang.Override;
+
+public class SinglePDFPrintActivity_ViewBinding<T extends SinglePDFPrintActivity> implements Unbinder {
+  protected T target;
+
+  private View view2131231180;
+
+  public SinglePDFPrintActivity_ViewBinding(final T target, Finder finder, Object source) {
+    this.target = target;
+
+    View view;
+    target.mToolbar = finder.findRequiredViewAsType(source, R.id.toolbar, "field 'mToolbar'", Toolbar.class);
+    target.loginEdtUniqueID = finder.findRequiredViewAsType(source, R.id.login_edtUniqueID, "field 'loginEdtUniqueID'", TextView.class);
+    target.loginEdtSenderName = finder.findRequiredViewAsType(source, R.id.login_edtSenderName, "field 'loginEdtSenderName'", TextView.class);
+    target.loginEdtSenderMobile = finder.findRequiredViewAsType(source, R.id.login_edtSenderMobile, "field 'loginEdtSenderMobile'", TextView.class);
+    target.loginEdtBeneName = finder.findRequiredViewAsType(source, R.id.login_edtBeneName, "field 'loginEdtBeneName'", TextView.class);
+    target.loginEdtBeneAC = finder.findRequiredViewAsType(source, R.id.login_edtBeneAC, "field 'loginEdtBeneAC'", TextView.class);
+    target.loginEdtIFSC = finder.findRequiredViewAsType(source, R.id.login_edtIFSC, "field 'loginEdtIFSC'", TextView.class);
+    target.loginEdtBankName = finder.findRequiredViewAsType(source, R.id.login_edtBankName, "field 'loginEdtBankName'", TextView.class);
+    target.loginEdtUTR = finder.findRequiredViewAsType(source, R.id.login_edtUTR, "field 'loginEdtUTR'", TextView.class);
+    target.loginEdtAmount = finder.findRequiredViewAsType(source, R.id.login_edtAmount, "field 'loginEdtAmount'", TextView.class);
+    target.loginEdtDate = finder.findRequiredViewAsType(source, R.id.login_edtDate, "field 'loginEdtDate'", TextView.class);
+    target.loginEdtStatus = finder.findRequiredViewAsType(source, R.id.login_edtStatus, "field 'loginEdtStatus'", TextView.class);
+    target.loginEdt = finder.findRequiredViewAsType(source, R.id.login_edt, "field 'loginEdt'", TextView.class);
+    target.mLoader = finder.findRequiredViewAsType(source, R.id.loader, "field 'mLoader'", Loader.class);
+    view = finder.findRequiredView(source, R.id.print, "method 'onClick'");
+    view2131231180 = view;
+    view.setOnClickListener(new DebouncingOnClickListener() {
+      @Override
+      public void doClick(View p0) {
+        target.onClick();
+      }
+    });
+  }
+
+  @Override
+  public void unbind() {
+    T target = this.target;
+    if (target == null) throw new IllegalStateException("Bindings already cleared.");
+
+    target.mToolbar = null;
+    target.loginEdtUniqueID = null;
+    target.loginEdtSenderName = null;
+    target.loginEdtSenderMobile = null;
+    target.loginEdtBeneName = null;
+    target.loginEdtBeneAC = null;
+    target.loginEdtIFSC = null;
+    target.loginEdtBankName = null;
+    target.loginEdtUTR = null;
+    target.loginEdtAmount = null;
+    target.loginEdtDate = null;
+    target.loginEdtStatus = null;
+    target.loginEdt = null;
+    target.mLoader = null;
+
+    view2131231180.setOnClickListener(null);
+    view2131231180 = null;
+
+    this.target = null;
+  }
+}

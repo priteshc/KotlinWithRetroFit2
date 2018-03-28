@@ -1,0 +1,32 @@
+
+package com.atishay.online.history;
+
+import com.atishay.online.BaseResponse;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class HistoryResponse extends BaseResponse {
+
+    @SerializedName("Response")
+    @Expose
+    private List<HistoryBean> response = new ArrayList<HistoryBean>();
+
+
+    /**
+     * @return The response
+     */
+    public List<HistoryBean> getResponse() {
+        return response;
+    }
+
+    /**
+     * @param response The Response
+     */
+    public void setResponse(List<HistoryBean> response) {
+        this.response = response;
+    }
+
+}

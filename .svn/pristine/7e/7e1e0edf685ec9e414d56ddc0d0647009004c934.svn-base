@@ -1,0 +1,248 @@
+package com.atishay.online.utility;
+
+import android.util.Log;
+
+import com.atishay.online.AtishayOnlineApp;
+import com.atishay.online.BaseResponse;
+import com.atishay.online.R;
+import com.atishay.online.postpaid.BillerCovergePojo;
+import com.atishay.online.postpaid.PoperatorView;
+import com.atishay.online.postpaid.PostpaidPojo;
+import com.atishay.online.utils.Constants;
+import com.atishay.online.utils.RestApis;
+import com.atishay.online.utils.RetrofitClientFactory;
+import com.atishay.online.utils.network.ApiError;
+import com.atishay.online.utils.network.RestApiCallback;
+import com.goldenmace.framework.utils.NetworkUtils;
+
+import java.io.IOException;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+/**
+ * Created by Atishay on 19-01-2018.
+ */
+
+public class UtilityOperatorPresenter {
+
+    private UtiltiyoperatorView utiltiyoperatorView;
+
+    private RetrofitClientFactory clientFactory;
+
+    private RestApis mRestApis;
+
+
+
+
+    public UtilityOperatorPresenter(UtiltiyoperatorView utiltiyoperatorView) {
+
+
+        this.utiltiyoperatorView = utiltiyoperatorView;
+
+        clientFactory = new RetrofitClientFactory();
+
+        mRestApis = RetrofitClientFactory.get();
+
+
+
+    }
+
+
+    public void getOperator(String username,String password){
+
+
+        utiltiyoperatorView.showprogress();
+
+        Call<PostpaidPojo> pojoCall = mRestApis.getUtilityOperator(username,password);
+
+        pojoCall.enqueue(new Callback<PostpaidPojo>() {
+            @Override
+            public void onResponse(Call<PostpaidPojo> call, Response<PostpaidPojo> response) {
+
+                utiltiyoperatorView.hideprogress();
+
+
+                if(response.isSuccessful()) {
+
+
+                    if (response.body().getStrOutMEssage().equals(Constants.SUCCESS)) {
+
+                        Log.d("Msg", response.body().getStrOutMEssage());
+
+
+                        utiltiyoperatorView.showFLoginSuccessMsg(response.body().getStrOutMEssage(),response.body().getResponse());
+
+
+                    } else
+                        {
+
+
+                            if (response.body().getStrOutMEssage().equals(Constants.FAILED)) {
+
+                                utiltiyoperatorView.showFailedMeassage(response.body().getStrOutMEssage());
+                        }
+
+                    }
+                }
+
+
+
+                }
+
+            @Override
+            public void onFailure(Call<PostpaidPojo> call, Throwable t) {
+
+                utiltiyoperatorView.hideprogress();
+
+                utiltiyoperatorView.showFErrorMeassage(AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error));
+
+            }
+        });
+
+
+        //  clientFactory.get1().doComplain(username,password,id,msg);
+
+
+    }
+
+
+    public void getCoverge(String username,String password){
+
+        Call<BillerCovergePojo> pojoCall = mRestApis.getBillerCoverage(username,password);
+
+        pojoCall.enqueue(new Callback<BillerCovergePojo>() {
+            @Override
+            public void onResponse(Call<BillerCovergePojo> call, Response<BillerCovergePojo> response) {
+
+                utiltiyoperatorView.hideprogress();
+
+                if(response.isSuccessful()) {
+
+
+                    if (response.body().getResponseMessage().equals("Successful")) {
+
+                        utiltiyoperatorView.showCovergeSuccessMsg(response.body().getResponseMessage(),response.body().getResponse());
+
+                    } else
+                    {
+
+                        if (response.body().getResponseMessage().equals(Constants.FAILED)) {
+
+                            utiltiyoperatorView.showCovergeFailedMeassage(response.body().getResponseMessage());
+                        }
+
+                    }
+                }
+
+
+
+            }
+
+            @Override
+            public void onFailure(Call<BillerCovergePojo> call, Throwable t) {
+
+                utiltiyoperatorView.hideprogress();
+
+                utiltiyoperatorView.showFErrorMeassage(AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error));
+
+            }
+        });
+
+    }
+
+
+    public void getBillDetails(String username,String password,String billid,String mobilno,String parms) {
+
+
+        utiltiyoperatorView.showprogress();
+
+        Call<BillFetchPojo> pojoCall = mRestApis.getBillDetail(username, password, billid, mobilno, parms);
+
+        pojoCall.enqueue(new Callback<BillFetchPojo>() {
+            @Override
+            public void onResponse(Call<BillFetchPojo> call, Response<BillFetchPojo> response) {
+
+                utiltiyoperatorView.hideprogress();
+
+
+                if (response.isSuccessful()) {
+
+
+                    if (response.body().getResponseMessage().equals(Constants.SUCCESSFUL)) {
+
+
+                        // utiltiyoperatorView.showFLoginSuccessMsg(response.body().getStrOutMEssage(),response.body().getResponse());
+
+                        utiltiyoperatorView.showBillSuccessMsg(response.body().getResponseMessage(),response.body().getMainDetails(),response.body().getAdditionalDetails(),response.body().getCustomerParamsDetails(),response.body().getBillDetails());
+
+
+                    } else {
+
+                            //      utiltiyoperatorView.showFailedMeassage(response.body().getStrOutMEssage());
+
+                            utiltiyoperatorView.showBillFailedMeassage(response.body().getResponseMessage());
+
+
+                    }
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<BillFetchPojo> call, Throwable t) {
+
+                utiltiyoperatorView.hideprogress();
+
+                utiltiyoperatorView.showFErrorMeassage(AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error));
+
+            }
+        });
+
+    }
+
+
+    public void getBillPayment(String username,String password,String smsno,String billamount,String parms,String transid,String convfees,String servicetype,String biller) {
+
+
+        utiltiyoperatorView.showprogress();
+
+        Call<FinalbillpaymentPojo> pojoCall = mRestApis.getBillPaymentDetail(username, password, smsno, billamount, parms, transid, convfees, servicetype, biller);
+
+        pojoCall.enqueue(new Callback<FinalbillpaymentPojo>() {
+            @Override
+            public void onResponse(Call<FinalbillpaymentPojo> call, Response<FinalbillpaymentPojo> response) {
+
+                utiltiyoperatorView.hideprogress();
+
+                if (response.isSuccessful()) {
+
+
+                        utiltiyoperatorView.showFinalBillPayment(response.body().getResponseMessage());
+
+
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<FinalbillpaymentPojo> call, Throwable t) {
+
+                utiltiyoperatorView.hideprogress();
+
+                utiltiyoperatorView.showFErrorMeassage(AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error));
+
+            }
+        });
+
+    }
+
+
+
+
+
+
+}

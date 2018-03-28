@@ -1,0 +1,37 @@
+package com.atishay.online.postpaid;
+
+/**
+ * Created by Atishay on 09-02-2018.
+ */
+
+
+    import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+public class BillerResponse {
+
+        @SerializedName("BillerID")
+        @Expose
+        private String billerID;
+        @SerializedName("BillerMode")
+        @Expose
+        private String billerMode;
+
+        public String getBillerID() {
+            return billerID;
+        }
+
+        public void setBillerID(String billerID) {
+            this.billerID = billerID;
+        }
+
+        public String getBillerMode() {
+            return billerMode;
+        }
+
+        public void setBillerMode(String billerMode) {
+            this.billerMode = billerMode;
+        }
+
+    }
+

@@ -1,0 +1,860 @@
+/*
+ * Copyright 2016 GoldenMace IT Solutions
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+package com.atishay.online.benefiaciary;
+
+import android.annotation.TargetApi;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.VectorDrawable;
+import android.os.Build;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
+import android.text.Html;
+import android.text.TextUtils;
+import android.view.Gravity;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.atishay.online.AppBaseActivity;
+import com.atishay.online.AtishayOnlineApp;
+import com.atishay.online.BaseResponse;
+import com.atishay.online.R;
+import com.atishay.online.addbenefiaciary.AddBeneficiaryActivity;
+import com.atishay.online.moneytransfer.CommonRegistrationResponse;
+import com.atishay.online.moneytransfer.CustomerRegistrationActivity;
+import com.atishay.online.moneytransfer.FundTransferActivity;
+import com.atishay.online.moneytransfer.FundTransferHistoryActivity;
+import com.atishay.online.utils.Constants;
+import com.atishay.online.utils.DialogUtils;
+import com.atishay.online.utils.Loader;
+import com.goldenmace.framework.utils.SharedPrefUtils;
+import com.goldenmace.framework.views.widgets.errorview.ErrorView;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+/**
+ * Created by Vishal Patel on 25,December,2016.
+ * AtishayOnline
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+public class BeneficiaryActivity extends AppBaseActivity implements SwipeRefreshLayout.OnRefreshListener, BeneficiaryView {
+
+    private static final int REMOVE_BENEFICIARY = 105;
+    private static final int FUND_TRANSFER_RESULT = 106;
+    @BindView(R.id.money_mainView)
+    RelativeLayout mCoordinatorLayout;
+    @BindView(R.id.beneficiary_fbAdd)
+    FloatingActionButton mBeneficiaryAdd;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.beneficiary_rvList)
+    RecyclerView mBeneficiaryList;
+    @BindView(R.id.swipe_refresh_layout)
+    SwipeRefreshLayout mSwipeRefreshLayout;
+    @BindView(R.id.loader)
+    Loader mLoader;
+    @BindView(R.id.name)
+    TextView mTxtName;
+    @BindView(R.id.mobile)
+    TextView mTxtMobile;
+    @BindView(R.id.fund_ivHistory)
+    ImageView mFundHistoryNavigator;
+    @BindView(R.id.delete_msg)
+    TextView mTxtDeleteMessage;
+    @BindView(R.id.beneficiary_errorView)
+    ErrorView mListError;
+    ArrayList<BeneficiaryListBean> mBeneficiaryListBeen;
+    CommonRegistrationResponse mMoneyTransferResponses;
+    int clickPosition;
+    private BeneficiaryPresenter mBeneficiaryPresenter;
+    private BeneficiaryAdapter mBeneficiaryAdapter;
+    private Dialog mBottomSheetDialog;
+    private Dialog mValidateBottomSheetDialog;
+    private ItemTouchHelper mItemTouchHelper;
+    private ServiceHolder mServiceHolder;
+    private DeleteHolder mDeleteHolder;
+    private ViewHolder mViewHolder;
+    private FundHolder mFundHolder;
+    private ValidationHolder mValidationHolder;
+    private Paint mPaint = new Paint();
+    private int mItemPaddingHorizontal;
+
+    private static Bitmap getBitmap(Context context, int drawableId) {
+        Drawable drawable = ContextCompat.getDrawable(context, drawableId);
+        if (drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable) drawable).getBitmap();
+        } else if (drawable instanceof VectorDrawable) {
+            return getBitmap((VectorDrawable) drawable);
+        } else {
+            throw new IllegalArgumentException("unsupported drawable type");
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private static Bitmap getBitmap(VectorDrawable vectorDrawable) {
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(),
+                vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        vectorDrawable.draw(canvas);
+        return bitmap;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_benefiaciary);
+
+        mBottomSheetDialog = new Dialog(BeneficiaryActivity.this,
+                R.style.MaterialDialogSheet);
+        ButterKnife.bind(this);
+        setToolbar(mToolbar);
+        mItemPaddingHorizontal = getResources().getDimensionPixelSize(R.dimen.spacing_standard);
+        mBeneficiaryPresenter = new BeneficiaryPresenter(this);
+        showCustomerServicesDialog();
+
+        /**
+         * Custom Toolbar with amount view
+         */
+        ButterKnife.<TextView>findById(this, R.id.toolbar_txtAmount).setText(getString(R.string.amount, AtishayOnlineApp.getAppInstance().getBalance()));
+        ButterKnife.<TextView>findById(this, R.id.toolbar_txtTitle).setText(getString(R.string.active_beneficiary));
+
+        mBeneficiaryListBeen = new ArrayList<>();
+        mMoneyTransferResponses = new CommonRegistrationResponse();
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setColorSchemeColors(Color.RED, Color.GREEN, Color.BLUE, Color.CYAN);
+
+        mBeneficiaryAdapter = new BeneficiaryAdapter(this, mBeneficiaryListBeen, this);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        mBeneficiaryList.setLayoutManager(mLayoutManager);
+        mBeneficiaryList.setAdapter(mBeneficiaryAdapter);
+        mBeneficiaryList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0) {
+                    mBeneficiaryAdd.hide();
+                } else {
+                    mBeneficiaryAdd.show();
+                }
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
+        mBeneficiaryAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent redirectAddBene = new Intent(getApplicationContext(), AddBeneficiaryActivity.class);
+                startActivity(redirectAddBene);
+            }
+        });
+        addSwipeListener();
+        mListError.setOnRetryListener(new ErrorView.RetryListener() {
+            @Override
+            public void onRetry() {
+                mListError.setVisibility(View.GONE);
+                Map<String, String> queryMap = new HashMap<>();
+                queryMap.put(Constants.ApiKeys.USERNAME, mUsername);
+                queryMap.put(Constants.ApiKeys.PASSWORD, mPassword);
+                queryMap.put(Constants.ApiKeys.AGENTCODE, mAgentCode);
+                queryMap.put(Constants.ApiKeys.REMITTERMOBILE, mMoneyTransferResponses.getMobile());
+                queryMap.put(Constants.ApiKeys.BENTRANSCODE, mTransPassword);
+                queryMap.put(Constants.ApiKeys.CRNO, mMoneyTransferResponses.getCRNo());
+                mBeneficiaryPresenter.getBeneficiaryList(queryMap);
+            }
+        });
+    }
+
+    @OnClick(R.id.fund_ivHistory)
+    void FundHistory() {
+        Intent redirectFundTransferHistory = new Intent(getApplicationContext(), FundTransferHistoryActivity.class);
+        redirectFundTransferHistory.putExtra("SenderMobile", mMoneyTransferResponses.getMobile());
+        redirectFundTransferHistory.putExtra("ReportType", "Sender");
+        redirectFundTransferHistory.putExtra("isFundType", "2");
+        startActivity(redirectFundTransferHistory);
+    }
+
+    /**
+     * Show Custom Service Dialog
+     */
+    private void showCustomerServicesDialog() {
+        View view = getLayoutInflater().inflate(R.layout.customer_servicedialog, null);
+        mServiceHolder = new ServiceHolder(view);
+
+        mBottomSheetDialog.setContentView(view);
+        mBottomSheetDialog.getWindow().setLayout(getResources().getDimensionPixelSize(R.dimen.dialog_width), LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        mBottomSheetDialog.getWindow().setGravity(Gravity.CENTER);
+        mBottomSheetDialog.setCanceledOnTouchOutside(false);
+        mBottomSheetDialog.show();
+        mBottomSheetDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                //do whatever you want the back key to do
+                finish();
+                mBottomSheetDialog.dismiss();
+            }
+        });
+
+        /**
+         * Attempts to submit register mobile number in customer service dialog.
+         * If there are invalidate or null, the
+         * errors are presented and no actual submit attempt is made then redirect
+         * customer registration form first.
+         */
+        mServiceHolder.mSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(mServiceHolder.mMobileNumber.getWindowToken(), 0);
+                SharedPrefUtils.setString(getApplicationContext(), Constants.SharedPref.USER_DETAIL, Constants.SharedPref.KEY_MOBILE_NO, "");
+                if (!TextUtils.isEmpty(mUsername) && !TextUtils.isEmpty(mPassword)) {
+                    if (!TextUtils.isEmpty(mServiceHolder.mMobileNumber.getText().toString()) && mServiceHolder.mMobileNumber.getText().toString().length() == 10) {
+                        SharedPrefUtils.setString(getApplicationContext(), Constants.SharedPref.USER_DETAIL, Constants.SharedPref.KEY_MOBILE_NO, mServiceHolder.mMobileNumber.getText().toString());
+                        mBeneficiaryPresenter.getOTP(mUsername, mPassword, mServiceHolder.mMobileNumber.getText().toString());
+                    } else {
+                        mServiceHolder.mMobileNumber.setError(getString(R.string.invalide_mobile));
+                    }
+                } else {
+                    mServiceHolder.mMobileNumber.setError(getString(R.string.invalide_username));
+                }
+            }
+        });
+
+        mServiceHolder.mReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                mBottomSheetDialog.dismiss();
+            }
+        });
+    }
+
+    /**
+     * Show Delete Beneficiary Conformation Dialog
+     *
+     * @param position
+     */
+    private void showDeleteBeneficiaryDialog(final int position) {
+        View view = getLayoutInflater().inflate(R.layout.delete_beneficiary, null);
+        mDeleteHolder = new DeleteHolder(view);
+
+        mBottomSheetDialog = new Dialog(BeneficiaryActivity.this,
+                R.style.MaterialDialogSheet);
+        mBottomSheetDialog.setContentView(view);
+        mBottomSheetDialog.getWindow().setLayout(getResources().getDimensionPixelSize(R.dimen.dialog_width), LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        mBottomSheetDialog.getWindow().setGravity(Gravity.CENTER);
+        mBottomSheetDialog.setCanceledOnTouchOutside(false);
+        mBottomSheetDialog.show();
+
+        mDeleteHolder.mCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBeneficiaryAdapter.notifyDataSetChanged();
+                mBottomSheetDialog.dismiss();
+            }
+        });
+        mDeleteHolder.mOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBottomSheetDialog.dismiss();
+                mBeneficiaryAdapter.notifyDataSetChanged();
+                Intent redirectRemoveBeneficiary = new Intent(getApplicationContext(), RemoveBeneficiaryActivity.class);
+                redirectRemoveBeneficiary.putExtra("BenCode", mBeneficiaryListBeen.get(position).getBeneficiaryCode());
+                redirectRemoveBeneficiary.putExtra("BenName", mBeneficiaryListBeen.get(position).getName());
+                redirectRemoveBeneficiary.putExtra("BenAC", mBeneficiaryListBeen.get(position).getBankAccountNumber());
+                redirectRemoveBeneficiary.putExtra("BenIFSC", mBeneficiaryListBeen.get(position).getBankIfscode());
+                redirectRemoveBeneficiary.putExtra("BenBank", mBeneficiaryListBeen.get(position).getBankName());
+                redirectRemoveBeneficiary.putExtra("BenRemitterMobile", mBeneficiaryListBeen.get(position).getRemitterMobile());
+                redirectRemoveBeneficiary.putExtra("BenCRNo", mBeneficiaryListBeen.get(position).getCRNo());
+                startActivityForResult(redirectRemoveBeneficiary, REMOVE_BENEFICIARY);
+            }
+        });
+        mBottomSheetDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                //do whatever you want the back key to do
+                mBeneficiaryAdapter.notifyDataSetChanged();
+                mBottomSheetDialog.dismiss();
+            }
+        });
+    }
+
+    @Override
+    public void onRefresh() {
+        Map<String, String> queryMap = new HashMap<>();
+        queryMap.put(Constants.ApiKeys.USERNAME, mUsername);
+        queryMap.put(Constants.ApiKeys.PASSWORD, mPassword);
+        queryMap.put(Constants.ApiKeys.AGENTCODE, mAgentCode);
+        queryMap.put(Constants.ApiKeys.REMITTERMOBILE, mMoneyTransferResponses.getMobile());
+        queryMap.put(Constants.ApiKeys.BENTRANSCODE, mTransPassword);
+        queryMap.put(Constants.ApiKeys.CRNO, mMoneyTransferResponses.getCRNo());
+        mBeneficiaryPresenter.getBeneficiaryListRefresh(queryMap);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
+    /**
+     * Beneficiary Item Swipe
+     */
+    private void addSwipeListener() {
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getAdapterPosition();
+
+                if (direction == ItemTouchHelper.LEFT) {
+                    showDeleteBeneficiaryDialog(position);
+                }
+            }
+
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+            @Override
+            public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+
+                Bitmap icon;
+                if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+
+                    View itemView = viewHolder.itemView;
+
+                    if (dX < 0) {
+                        int position = itemView.getHeight() / 2;
+                        mPaint.setColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
+                        RectF background = new RectF(Math.max(mItemPaddingHorizontal, (float) itemView.getRight() + dX), (float) itemView.getTop() + 8,
+                                (float) itemView.getRight(), (float) itemView.getBottom() - 8);
+                        c.drawRect(background, mPaint);
+                        icon = getBitmap(BeneficiaryActivity.this, R.drawable.ic_delete_white_24dp);
+                        float width = icon.getWidth();
+                        RectF iconDest = new RectF((float) itemView.getRight() - 2 * width, itemView.getTop() + (position - icon.getHeight() / 2), (float) itemView.getRight() - width,
+                                itemView.getTop() + position + icon.getHeight() / 2);
+                        c.drawBitmap(icon, null, iconDest, mPaint);
+                    }
+                }
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+            }
+        };
+        mItemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        mItemTouchHelper.attachToRecyclerView(mBeneficiaryList);
+    }
+
+    @Override
+    protected void onDestroy() {
+        mBeneficiaryPresenter.clearReferences();
+        super.onDestroy();
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REMOVE_BENEFICIARY:
+                if (resultCode == RESULT_OK) {
+                    Bundle res = data.getExtras();
+                    int masterifscposition = res.getInt("position");
+                    if (masterifscposition == 1) {
+                        Map<String, String> queryMap = new HashMap<>();
+                        queryMap.put(Constants.ApiKeys.USERNAME, mUsername);
+                        queryMap.put(Constants.ApiKeys.PASSWORD, mPassword);
+                        queryMap.put(Constants.ApiKeys.AGENTCODE, mAgentCode);
+                        queryMap.put(Constants.ApiKeys.REMITTERMOBILE, mMoneyTransferResponses.getMobile());
+                        queryMap.put(Constants.ApiKeys.BENTRANSCODE, mTransPassword);
+                        queryMap.put(Constants.ApiKeys.CRNO, mMoneyTransferResponses.getCRNo());
+                        mBeneficiaryPresenter.getBeneficiaryList(queryMap);
+                    } else {
+                        Snackbar.make(mCoordinatorLayout, "Unsuccessfully Remove Beneficiary...", Snackbar.LENGTH_LONG).show();
+                    }
+                }
+                break;
+            case FUND_TRANSFER_RESULT:
+                break;
+        }
+    }
+
+    @Override
+    public void showLoader(String aMessage) {
+        if (aMessage != null) {
+            mLoader.setText(aMessage);
+        }
+        mLoader.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showLoader(int aResId) {
+        if (aResId > 0) {
+            mLoader.setText(getString(aResId));
+        }
+        mLoader.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showDialogLoader(int aResId) {
+        if (mBottomSheetDialog != null && mBottomSheetDialog.isShowing()) {
+            ButterKnife.<FrameLayout>findById(mBottomSheetDialog, R.id.dialog_loader).setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void hideDialogLoader() {
+        if (mBottomSheetDialog != null && mBottomSheetDialog.isShowing()) {
+            ButterKnife.<FrameLayout>findById(mBottomSheetDialog, R.id.dialog_loader).setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void hideRefresh() {
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void hideLoader() {
+        mLoader.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void noInternetConnection() {
+        Snackbar.make(mCoordinatorLayout, getString(R.string.error_network_no_internet), Snackbar.LENGTH_SHORT).show();
+        hideLoader();
+    }
+
+    @Override
+    public void apiError(int aApiCode, String aError) {
+        hideDialogLoader();
+        switch (aApiCode) {
+            case Constants.APICODE.OTP:
+                Toast.makeText(this, aError, Toast.LENGTH_LONG).show();
+                break;
+            case Constants.APICODE.QUERYREGISTER:
+                Snackbar.make(mCoordinatorLayout, aError, Snackbar.LENGTH_INDEFINITE).setAction(R.string.error_view_retry, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String mMobileNo = SharedPrefUtils.getString(getApplicationContext(), Constants.SharedPref.USER_DETAIL, Constants.SharedPref.KEY_MOBILE_NO, "");
+                        Map<String, String> queryMap = new HashMap<>();
+                        queryMap.put(Constants.ApiKeys.USERNAME, mUsername);
+                        queryMap.put(Constants.ApiKeys.PASSWORD, mPassword);
+                        queryMap.put(Constants.ApiKeys.AGENTCODE, mAgentCode);
+                        queryMap.put(Constants.ApiKeys.MOBILENO, mMobileNo);
+                        mBeneficiaryPresenter.doQueryRegister(queryMap);
+                    }
+                }).show();
+                break;
+            case Constants.APICODE.BENEFICIARYLIST:
+                hideRefresh();
+                Snackbar.make(mCoordinatorLayout, aError, Snackbar.LENGTH_INDEFINITE).setAction(R.string.error_view_retry, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Map<String, String> queryMap = new HashMap<>();
+                        queryMap.put(Constants.ApiKeys.USERNAME, mUsername);
+                        queryMap.put(Constants.ApiKeys.PASSWORD, mPassword);
+                        queryMap.put(Constants.ApiKeys.AGENTCODE, mAgentCode);
+                        queryMap.put(Constants.ApiKeys.REMITTERMOBILE, mMoneyTransferResponses.getMobile());
+                        queryMap.put(Constants.ApiKeys.BENTRANSCODE, mTransPassword);
+                        queryMap.put(Constants.ApiKeys.CRNO, mMoneyTransferResponses.getCRNo());
+                        mBeneficiaryPresenter.getBeneficiaryList(queryMap);
+                    }
+                }).show();
+                break;
+            case Constants.APICODE.ALERTCONFORMATION:
+                Snackbar.make(mCoordinatorLayout, aError, Snackbar.LENGTH_LONG).show();
+                break;
+            case Constants.APICODE.BENEFICIARYVALIDATION:
+                mBottomSheetDialog.dismiss();
+                DialogUtils.getSingleButtonDialog(this, R.drawable.ic_fail, getResources().getString(R.string.unverified), aError, getString(R.string.lbl_ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which == DialogInterface.BUTTON_POSITIVE) {
+                            mBeneficiaryAdapter.notifyDataSetChanged();
+                        }
+                    }
+                }, false).show();
+                break;
+            default:
+                Snackbar.make(mCoordinatorLayout, aError, Snackbar.LENGTH_LONG).show();
+                break;
+        }
+        super.apiError(aApiCode, aError);
+    }
+
+    @Override
+    public void onOTPSuccess(CommonRegistrationResponse aMoneyTransferResponse) {
+        hideDialogLoader();
+        Toast.makeText(this, aMoneyTransferResponse.getMsg(), Toast.LENGTH_SHORT).show();
+        Intent in = new Intent(getApplicationContext(), CustomerRegistrationActivity.class);
+        startActivity(in);
+        finish();
+        mBottomSheetDialog.dismiss();
+    }
+
+    @Override
+    public void doQueryRegister(CommonRegistrationResponse aMoneyTransferResponse) {
+        hideDialogLoader();
+        mBottomSheetDialog.dismiss();
+        mTxtDeleteMessage.setVisibility(View.VISIBLE);
+        mFundHistoryNavigator.setVisibility(View.VISIBLE);
+        mMoneyTransferResponses.setCRNo(aMoneyTransferResponse.getCRNo());
+        mMoneyTransferResponses.setMobile(aMoneyTransferResponse.getMobile());
+        String name = getResources().getString(R.string.txt_name) + "<b>" + aMoneyTransferResponse.getName() + "</b>";
+        mTxtName.setText(Html.fromHtml(name));
+        String mobile = getResources().getString(R.string.txt_mobile) + "<b>" + aMoneyTransferResponse.getMobile() + "</b>";
+        mTxtMobile.setText(Html.fromHtml(mobile));
+
+        Map<String, String> queryMap = new HashMap<>();
+        queryMap.put(Constants.ApiKeys.USERNAME, mUsername);
+        queryMap.put(Constants.ApiKeys.PASSWORD, mPassword);
+        queryMap.put(Constants.ApiKeys.AGENTCODE, mAgentCode);
+        queryMap.put(Constants.ApiKeys.REMITTERMOBILE, aMoneyTransferResponse.getMobile());
+        queryMap.put(Constants.ApiKeys.BENTRANSCODE, mTransPassword);
+        queryMap.put(Constants.ApiKeys.CRNO, aMoneyTransferResponse.getCRNo());
+        mBeneficiaryPresenter.getBeneficiaryList(queryMap);
+    }
+
+    @Override
+    public void doCustRegister(CommonRegistrationResponse aMoneyTransferResponse) {
+
+    }
+
+    @Override
+    public void doDeactivateBeneficiary(DeactiveBeneficiaryResponse aDeactiveBeneficiaryResponse) {
+
+    }
+
+    @Override
+    public void doValidateDeactivateBeneficiary(DeactiveBeneficiaryResponse aDeactiveBeneficiaryResponse) {
+    }
+
+    @Override
+    public void invalidMobile(String aMobile) {
+        mServiceHolder.mMobileNumber.setError(getString(R.string.invalide_mobile));
+    }
+
+    /**
+     * Verify Beneficiary Dialog
+     */
+    @Override
+    public void doVerifyBeneficiary(int aObject) {
+        mBeneficiaryPresenter.getAlertConformation(mUsername, mPassword);
+        clickPosition = (int) aObject;
+    }
+
+    @Override
+    public void callFundActivity(final int position) {
+        View fundView = getLayoutInflater().inflate(R.layout.fund_transfer_dialog, null);
+        mFundHolder = new FundHolder(fundView);
+
+        mBottomSheetDialog = new Dialog(BeneficiaryActivity.this,
+                R.style.MaterialDialogSheet);
+        mBottomSheetDialog.setContentView(fundView);
+        mBottomSheetDialog.getWindow().setLayout(getResources().getDimensionPixelSize(R.dimen.dialog_width), LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        mBottomSheetDialog.getWindow().setGravity(Gravity.CENTER);
+        mBottomSheetDialog.setCanceledOnTouchOutside(true);
+        mBottomSheetDialog.show();
+        mFundHolder.mOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBottomSheetDialog.dismiss();
+                Intent redirectFundTransfer = new Intent(getApplicationContext(), FundTransferActivity.class);
+                redirectFundTransfer.putExtra("BenCode", mBeneficiaryListBeen.get(position).getBeneficiaryCode());
+                redirectFundTransfer.putExtra("BenName", mBeneficiaryListBeen.get(position).getName());
+                redirectFundTransfer.putExtra("BenAC", mBeneficiaryListBeen.get(position).getBankAccountNumber());
+                redirectFundTransfer.putExtra("BenIFSC", mBeneficiaryListBeen.get(position).getBankIfscode());
+                redirectFundTransfer.putExtra("BenBankDetails", mBeneficiaryListBeen.get(position).getBankName());
+                redirectFundTransfer.putExtra("BenRemitterMobile", mBeneficiaryListBeen.get(position).getRemitterMobile());
+                redirectFundTransfer.putExtra("BenCRNo", mBeneficiaryListBeen.get(position).getCRNo());
+                startActivityForResult(redirectFundTransfer, FUND_TRANSFER_RESULT);
+            }
+        });
+        mBottomSheetDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                mBottomSheetDialog.dismiss();
+            }
+        });
+        mFundHolder.mCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBottomSheetDialog.dismiss();
+            }
+        });
+    }
+
+    @Override
+    public void getAlertConformation(BaseResponse aBaseResponse) {
+        View view = getLayoutInflater().inflate(R.layout.verify_beneficiary, null);
+        mViewHolder = new ViewHolder(view);
+
+        mValidateBottomSheetDialog = new Dialog(BeneficiaryActivity.this,
+                R.style.MaterialDialogSheet);
+        mValidateBottomSheetDialog.setContentView(view);
+        mValidateBottomSheetDialog.getWindow().setLayout(getResources().getDimensionPixelSize(R.dimen.dialog_width), LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        mValidateBottomSheetDialog.getWindow().setGravity(Gravity.CENTER);
+        mValidateBottomSheetDialog.setCanceledOnTouchOutside(false);
+        mValidateBottomSheetDialog.show();
+        mViewHolder.mAlertMessage.setText(aBaseResponse.getMsg());
+        mViewHolder.mOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mValidateBottomSheetDialog.dismiss();
+                View view = getLayoutInflater().inflate(R.layout.validation_bottomdialog, null);
+                mValidationHolder = new ValidationHolder(view);
+
+                mBottomSheetDialog = new Dialog(BeneficiaryActivity.this,
+                        R.style.MaterialDialogSheet);
+                mBottomSheetDialog.setContentView(view);
+                if (mBottomSheetDialog.getWindow() != null) {
+                    mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    mBottomSheetDialog.getWindow().setGravity(Gravity.BOTTOM);
+                }
+                mBottomSheetDialog.setCancelable(false);
+                mBottomSheetDialog.show();
+
+                mValidationHolder.mSubmit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                        inputMethodManager.hideSoftInputFromWindow(mValidationHolder.mSubmit.getWindowToken(), 0);
+
+                        if (!TextUtils.isEmpty(mValidationHolder.mValidateTransactionCode.getText().toString()) && !TextUtils.isEmpty(mValidationHolder.mValidateMobile.getText().toString())) {
+                            Map<String, String> queryMap = new HashMap<>();
+                            queryMap.put(Constants.ApiKeys.USERNAME, mUsername);
+                            queryMap.put(Constants.ApiKeys.PASSWORD, mPassword);
+                            queryMap.put(Constants.ApiKeys.AGENTCODE, mAgentCode);
+                            queryMap.put(Constants.ApiKeys.REMITTERMOBILE, mBeneficiaryListBeen.get(clickPosition).getRemitterMobile());
+                            queryMap.put(Constants.ApiKeys.BENNAME, mBeneficiaryListBeen.get(clickPosition).getName());
+                            queryMap.put(Constants.ApiKeys.BENMOBILENO, mValidationHolder.mValidateMobile.getText().toString());
+                            queryMap.put(Constants.ApiKeys.BANKIFSC, mBeneficiaryListBeen.get(clickPosition).getBankIfscode());
+                            queryMap.put(Constants.ApiKeys.BANKACCOUNTNO, mBeneficiaryListBeen.get(clickPosition).getBankAccountNumber());
+                            queryMap.put(Constants.ApiKeys.BENTRANSCODE, mValidationHolder.mValidateTransactionCode.getText().toString());
+                            mBeneficiaryPresenter.doBeneficiaryValidation(queryMap);
+                        } else {
+                            Toast.makeText(BeneficiaryActivity.this, getResources().getString(R.string.error_field_required), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                mValidationHolder.mCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mBeneficiaryAdapter.notifyDataSetChanged();
+                        mBottomSheetDialog.dismiss();
+                    }
+                });
+            }
+        });
+        mValidateBottomSheetDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                mBeneficiaryAdapter.notifyDataSetChanged();
+                mBottomSheetDialog.dismiss();
+            }
+        });
+        mViewHolder.mCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBeneficiaryAdapter.notifyDataSetChanged();
+                mValidateBottomSheetDialog.dismiss();
+            }
+        });
+    }
+
+    @Override
+    public void doBeneficiaryValidation(BeneficiaryValidationResponse aBeneficiaryValidationResponse) {
+        mBottomSheetDialog.dismiss();
+        mValidateBottomSheetDialog.dismiss();
+        DialogUtils.getSingleButtonDialog(this, R.drawable.ic_success, getResources().getString(R.string.unverified), aBeneficiaryValidationResponse.getMsg(), getString(R.string.lbl_ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == DialogInterface.BUTTON_POSITIVE) {
+                    Map<String, String> queryMap = new HashMap<>();
+                    queryMap.put(Constants.ApiKeys.USERNAME, mUsername);
+                    queryMap.put(Constants.ApiKeys.PASSWORD, mPassword);
+                    queryMap.put(Constants.ApiKeys.AGENTCODE, mAgentCode);
+                    queryMap.put(Constants.ApiKeys.REMITTERMOBILE, mMoneyTransferResponses.getMobile());
+                    queryMap.put(Constants.ApiKeys.BENTRANSCODE, mTransPassword);
+                    queryMap.put(Constants.ApiKeys.CRNO, mMoneyTransferResponses.getCRNo());
+                    mBeneficiaryPresenter.getBeneficiaryList(queryMap);
+                }
+            }
+        }, false).show();
+    }
+
+    @Override
+    public void userAlreadyRegistered() {
+        mBottomSheetDialog.dismiss();
+        String mMobileNo = SharedPrefUtils.getString(this, Constants.SharedPref.USER_DETAIL, Constants.SharedPref.KEY_MOBILE_NO, "");
+        if (!TextUtils.isEmpty(mUsername) && !TextUtils.isEmpty(mPassword) && !TextUtils.isEmpty(mAgentCode) && !TextUtils.isEmpty(mMobileNo)) {
+            Map<String, String> queryMap = new HashMap<>();
+            queryMap.put(Constants.ApiKeys.USERNAME, mUsername);
+            queryMap.put(Constants.ApiKeys.PASSWORD, mPassword);
+            queryMap.put(Constants.ApiKeys.AGENTCODE, mAgentCode);
+            queryMap.put(Constants.ApiKeys.MOBILENO, mMobileNo);
+            mBeneficiaryPresenter.doQueryRegister(queryMap);
+        } else {
+
+        }
+    }
+
+    @Override
+    public void getBeneficiaryList(ArrayList<BeneficiaryListBean> aBeneficiaryListBeen) {
+        mSwipeRefreshLayout.setRefreshing(false);
+        mListError.setVisibility(View.GONE);
+        mTxtDeleteMessage.setVisibility(View.VISIBLE);
+        mBeneficiaryListBeen.clear();
+        mBeneficiaryAdapter.notifyDataSetChanged();
+        if (aBeneficiaryListBeen.isEmpty() && aBeneficiaryListBeen != null) {
+            mSwipeRefreshLayout.setRefreshing(false);
+            mListError.setVisibility(View.VISIBLE);
+            mTxtDeleteMessage.setVisibility(View.GONE);
+            mListError.setImage(R.drawable.ic_content_paste_black_24dp);
+            mListError.setTitle(R.string.beneficiary_list_empty_title);
+            mListError.setSubtitle(R.string.beneficiary_load_subtitle);
+            mListError.setRetryButtonText("Retry");
+            mListError.showRetryButton(true);
+        } else {
+            mBeneficiaryListBeen.addAll(aBeneficiaryListBeen);
+            mBeneficiaryAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mBeneficiaryAdapter.notifyDataSetChanged();
+            }
+        });
+        super.onResume();
+    }
+
+    static class ServiceHolder {
+
+        @BindView(R.id.customer_txtReset)
+        TextView mReset;
+        @BindView(R.id.customer_txtSubmit)
+        TextView mSubmit;
+        @BindView(R.id.customer_edtMobile)
+        EditText mMobileNumber;
+        @BindView(R.id.custom_llService)
+        FrameLayout mCustomView;
+
+        ServiceHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
+    }
+
+    static class DeleteHolder {
+
+        @BindView(R.id.delete_txtCancel)
+        TextView mCancel;
+        @BindView(R.id.delete_txtOk)
+        TextView mOk;
+
+        DeleteHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
+    }
+
+    static class ViewHolder {
+
+        @BindView(R.id.verify_txtOk)
+        TextView mOk;
+        @BindView(R.id.verify_txtCancel)
+        TextView mCancel;
+        @BindView(R.id.verify_txtMsg)
+        TextView mAlertMessage;
+        @BindView(R.id.alert_flDialog)
+        FrameLayout mAlertDialogView;
+
+        ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
+    }
+
+    static class ValidationHolder {
+
+        @BindView(R.id.validation_txtCancel)
+        TextView mCancel;
+        @BindView(R.id.validation_txtSubmit)
+        TextView mSubmit;
+        @BindView(R.id.validation_edtMobileNo)
+        EditText mValidateMobile;
+        @BindView(R.id.validation_edtTransCode)
+        EditText mValidateTransactionCode;
+
+        ValidationHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
+    }
+
+    static class FundHolder {
+
+        @BindView(R.id.fund_txtOk)
+        TextView mOk;
+        @BindView(R.id.fund_txtCancel)
+        TextView mCancel;
+        @BindView(R.id.fund_txtMsg)
+        TextView mAlertMessage;
+
+        FundHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
+    }
+}

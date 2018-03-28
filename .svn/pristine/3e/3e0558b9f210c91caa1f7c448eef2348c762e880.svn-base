@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2016 GoldenmMace IT Solutions
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.atishay.online">
+
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <application
+        android:name=".AtishayOnlineApp"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:screenOrientation="portrait"
+        android:supportsRtl="true"
+        tools:replace="android:icon"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".SplashActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            >
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+
+        </activity>
+        <activity
+            android:name=".login.LoginActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.ColdStart">
+
+        </activity>
+        <activity
+            android:name=".menu.MenuActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".mobilerecharge.MobileRechargeActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".dth.DTHActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".profile.ProfileActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".changepassword.TabChngPassActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".about.AboutActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".postpaid.PostpaidActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".utility.UtilityActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".benefiaciary.BeneficiaryActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".addbenefiaciary.AddBeneficiaryActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".moneytransfer.FundTransferActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".history.HistoryActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".moneytransfer.CustomerRegistrationActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".myaccountrecharge.AccountRechargeActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".myaccountrecharge.AccountRechargeReportActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".aadhaar.AadhaarVerificationActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".aadhaar.AadhaarVerificationHistoryActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".addbenefiaciary.MasterIFSCActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".searchifsc.SearchIFSCActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".benefiaciary.RemoveBeneficiaryActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".moneytransfer.FundTransferHistoryActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".moneytransfer.SinglePDFPrintActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"></activity>
+
+        <activity
+            android:name=".postpaid.PostpaidNewActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+        </activity>
+
+
+        <activity
+            android:name=".postpaid.PostpaidMobilePayment"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".postpaid.Fetch_Bill"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+        </activity>
+
+    <activity
+        android:name=".utility.UtilityNewActivity"
+        android:configChanges="orientation|keyboardHidden|screenSize"
+        android:label="@string/app_name"
+        android:screenOrientation="portrait">
+    </activity>
+
+        <activity
+            android:name=".utility.Fetch_UtilityBill"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <service
+            android:name=".WalletBalanceService"
+            android:exported="false">
+        </service>
+        <service
+            android:name=".NotificationService"
+            android:exported="false">
+        </service>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="ed2b3e8bc5db18515ffa63d038830281b1b3d6a3" />
+    </application>
+
+</manifest>

@@ -1,0 +1,313 @@
+package com.atishay.online.utility;
+
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.atishay.online.AppBaseActivity;
+import com.atishay.online.R;
+import com.atishay.online.postpaid.BillerCoverge;
+import com.atishay.online.postpaid.PostpaidResponse;
+import com.atishay.online.utils.Constants;
+
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
+import static com.atishay.online.R.id.mobile_txtProceed;
+
+/**
+ * Created by Atishay on 09-02-2018.
+ */
+
+public class Fetch_UtilityBill extends AppBaseActivity implements UtiltiyoperatorView {
+
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.mobile_rlMain)
+    RelativeLayout mMobileMainView;
+    @BindView(R.id.mobile_txtProceed)
+    TextView mView;
+    @BindView(R.id.Location)
+    TextView mlocation;
+    @BindView(R.id.service)
+    TextView mservice;
+    @BindView(R.id.consnumber)
+    TextView mconsnumber;
+    @BindView(R.id.smsnumber)
+    TextView msmsnumber;
+    @BindView(R.id.amount)
+    TextView mamount;
+    @BindView(R.id.convfee)
+    TextView mconvfee;
+    @BindView(R.id.total)
+    TextView mtotal;
+    @BindView(R.id.date)
+    TextView mdate;
+    private String billerid,mobileno,param,location,servname,transid,convfee;
+    private UtilityOperatorPresenter operatorPresenter;
+
+    private Context context = Fetch_UtilityBill.this;
+    private ProgressDialog progressDialog;
+    private SweetAlertDialog pDialog;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.bill_conformation);
+        ButterKnife.bind(this);
+        setToolbar(mToolbar);
+        ButterKnife.<TextView>findById(this, R.id.toolbar_txtTitle).setText(getString(R.string.utility));
+
+        operatorPresenter = new UtilityOperatorPresenter(this);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Please wait");
+        progressDialog.setCancelable(false);
+
+        pDialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
+        pDialog.getProgressHelper().setBarColor(Color.parseColor("#00668E"));
+        pDialog.setTitleText("Loading");
+        pDialog.setCancelable(false);
+
+
+
+        if (getIntent().getExtras() != null) {
+
+
+            billerid = getIntent().getExtras().getString("BillerId");
+            mobileno = getIntent().getExtras().getString("MobNo");
+            param = getIntent().getExtras().getString("Parm");
+            location = getIntent().getExtras().getString("Loc");
+            servname = getIntent().getExtras().getString("Serv");
+
+
+            operatorPresenter.getBillDetails(mUsername,mPassword,billerid,mobileno,param);
+
+        }
+
+
+    }
+
+    @OnClick(mobile_txtProceed)
+    public void doProceedRecharge() {
+
+        Toast.makeText(context,"CLick",Toast.LENGTH_SHORT).show();
+
+        operatorPresenter.getBillPayment(mUsername,mPassword,mobileno,mtotal.getText().toString(),param,transid,convfee, Constants.BBPSTYPE,servname);
+
+    }
+
+    @Override
+    public void showFErrorMeassage(String msg) {
+
+        Toast.makeText(context,msg,Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void showFLoginSuccessMsg(String msg, List<PostpaidResponse> postpaidResponseList) {
+
+    }
+
+    @Override
+    public void showCovergeSuccessMsg(String msg, List<BillerCoverge> billerCoverges) {
+
+    }
+
+    @Override
+    public void showCovergeFailedMeassage(String msg) {
+
+    }
+
+    @Override
+    public void showBillSuccessMsg(String msg,List<MainDetailPojo> mainDetailPojos, List<AdditionalDetailPojo> additionalDetailPojos, List<CustomerParamsDetail> customerParamsDetails, List<BillDetailPojo> billDetailPojos) {
+
+        Toast.makeText(context,msg,Toast.LENGTH_SHORT).show();
+        mlocation.setText(location);
+        mservice.setText(servname);
+        mconsnumber.setText(customerParamsDetails.get(0).getValue());
+        msmsnumber.setText(mobileno);
+        mconvfee.setText(additionalDetailPojos.get(4).getConvFee());
+
+        transid = mainDetailPojos.get(0).getTransactionId();
+        convfee = String.valueOf(additionalDetailPojos.get(4).getConvFee());
+
+        String s1 = additionalDetailPojos.get(4).getFinalBillAmount();
+
+
+        if(s1.equals("0")) {
+
+            double d =  Double.parseDouble(additionalDetailPojos.get(4).getConvFee());
+            int i = (int) d;
+
+            double d1 = Double.parseDouble(mainDetailPojos.get(0).getBillAmount());
+
+            int i2 = (int)d1;
+
+            double i1 = d + d1;
+
+            mamount.setText(mainDetailPojos.get(0).getBillAmount());
+            mtotal.setText(String.valueOf(i1));
+
+            Log.d("Msg1:",String.valueOf(i1));
+
+        }
+        else {
+
+
+            mamount.setText(additionalDetailPojos.get(4).getFinalBillAmount());
+            mtotal.setText(additionalDetailPojos.get(4).getFinalTotalAmount());
+
+
+        }
+
+
+
+        mdate.setText(mainDetailPojos.get(0).getBillDueDate());
+
+        String s = "Proceed To Pay ₹ "+ mtotal.getText().toString();
+
+        mView.setText(s);
+
+
+    }
+
+    @Override
+    public void showFinalBillPayment(String msg) {
+
+        if(msg.equals("Payment Successful")) {
+            pDialog = new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE);
+            pDialog.setCancelable(false);
+            pDialog
+                    .setTitleText(msg)
+                    .setConfirmText("Ok")
+                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sDialog) {
+                            sDialog.dismissWithAnimation();
+                            finish();
+                        }
+                    })
+                    .show();
+        }
+
+        else if(msg.equals("Payment Pending")){
+
+            pDialog = new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE);
+            pDialog.setCancelable(false);
+            pDialog
+                    .setTitleText(msg)
+                    .setConfirmText("Ok")
+                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sDialog) {
+                            sDialog.dismissWithAnimation();
+                            finish();
+                        }
+                    })
+                    .show();
+
+        }
+        else if(msg.equals("Transaction Failed")){
+
+            pDialog = new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE);
+            pDialog.setCancelable(false);
+            pDialog
+                    .setTitleText(msg)
+                    .setContentText("Please try again")
+                    .setConfirmText("Ok")
+                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sDialog) {
+                            sDialog.dismissWithAnimation();
+                        }
+                    })
+                    .show();
+
+        }
+        else if(msg.equals("You have already paid this payment")){
+
+            pDialog = new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE);
+            pDialog.setCancelable(false);
+            pDialog
+                    .setTitleText(msg)
+                    .setConfirmText("Ok")
+                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sDialog) {
+                            sDialog.dismissWithAnimation();
+                            finish();
+                        }
+                    })
+                    .show();
+        }
+        else {
+
+            pDialog = new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE);
+            pDialog.setCancelable(false);
+            pDialog
+                    .setTitleText(msg)
+                    .setContentText("Please try again")
+                    .setConfirmText("Ok")
+                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sDialog) {
+                            sDialog.dismissWithAnimation();
+                            finish();
+                        }
+                    })
+                    .show();
+        }
+
+    }
+
+    @Override
+    public void showBillFailedMeassage(String msg) {
+
+        Toast.makeText(context,msg,Toast.LENGTH_SHORT).show();
+
+        pDialog = new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE);
+        pDialog.setCancelable(false);
+        pDialog
+                .setTitleText(msg)
+                .setConfirmText("Ok")
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        sDialog.dismissWithAnimation();
+                        finish();
+                    }
+                })
+                .show();
+
+    }
+
+    @Override
+    public void showFailedMeassage(String msg) {
+
+    }
+
+    @Override
+    public void showprogress() {
+
+        progressDialog.show();
+    }
+
+    @Override
+    public void hideprogress() {
+
+        progressDialog.dismiss();
+    }
+}

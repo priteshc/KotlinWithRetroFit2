@@ -1,0 +1,235 @@
+/*
+ * Copyright 2016 Goldenmace IT Solutions
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+package com.atishay.online.history;
+
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
+
+import com.atishay.online.Interface.ComplainCallback;
+import com.atishay.online.R;
+import com.atishay.online.utils.Constants;
+import com.atishay.online.utils.network.ApiError;
+import com.atishay.online.utils.network.RestApiCallback;
+import com.goldenmace.framework.utils.SharedPrefUtils;
+import com.goldenmace.framework.views.widgets.DividerItemDecoration;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
+/**
+ * Created by Vishal Patel on 3,December,2016.
+ * AtishayOnline
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public class UtilityHistoryFragment extends Fragment implements ComplainCallback,UtilityComplainView,RestApiCallback<Object, ApiError<Object>> {
+
+    @BindView(R.id.history_rvHistory)
+    RecyclerView mHistoryList;
+    HistoryUtilityAdapter mHistoryAdapter;
+    List<UtitlityResponse> mHistoryBeen;
+    Context context;
+    FragmentManager fm ;
+    public static final int DATEPICKER_FRAGMENT=1; // adding this line
+    private  String id,mUsername,mPassword;
+
+    private UtilityComplainPresenter utilityComplainPresenter;
+    private SweetAlertDialog pDialog;
+    private ProgressDialog progressDialog;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("Please wait");
+        progressDialog.setCancelable(false);
+
+
+        mUsername = SharedPrefUtils.getString(getContext(), Constants.SharedPref.USER_DETAIL, Constants.SharedPref.KEY_USER_NAME, "");
+        mPassword = SharedPrefUtils.getString(getContext(), Constants.SharedPref.USER_DETAIL, Constants.SharedPref.KEY_PASSWORD, "");
+
+
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.tab_history, container, false);
+        ButterKnife.bind(this, rootView);
+
+        fm = getFragmentManager();
+
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
+        context = getActivity().getApplicationContext();
+        mHistoryBeen = new ArrayList<>();
+        mHistoryAdapter = new HistoryUtilityAdapter(context, mHistoryBeen,this);
+
+        mHistoryList.setLayoutManager(mLayoutManager);
+        mHistoryList.setAdapter(mHistoryAdapter);
+
+     //   mHistoryList.setNestedScrollingEnabled(false);
+
+        utilityComplainPresenter = new UtilityComplainPresenter(this,this);
+
+        return rootView;
+    }
+
+    public void onDataFetched(List<UtitlityResponse> aHistoryBeen) {
+
+        mHistoryBeen.clear();
+        mHistoryBeen.addAll(aHistoryBeen);
+        mHistoryAdapter.notifyDataSetChanged();
+
+    }
+
+    public void onDataReload() {
+        if (mHistoryBeen != null) {
+            mHistoryBeen.clear();
+            mHistoryAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onMethodCallback(String tid) {
+
+     //  Toast.makeText(context,tid,Toast.LENGTH_SHORT).show();
+
+       id = tid;
+
+        DFragment dFragment = new DFragment();
+        // Show DialogFragment
+        dFragment.setTargetFragment(UtilityHistoryFragment.this, DATEPICKER_FRAGMENT);
+        dFragment.show(getFragmentManager().beginTransaction(), "Date Picker");
+
+    //    dFragment.show(fm, "Dialog Fragment");
+
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch(requestCode) {
+            case DATEPICKER_FRAGMENT:
+                if (resultCode == Activity.RESULT_OK) {
+                    // here the part where I get my selected date from the saved variable in the intent and the displaying it.
+                    Bundle bundle = data.getExtras();
+                    String resultmobno = bundle.getString("MobNo", "error");
+                    String resultDesc = bundle.getString("Desc", "error");
+                    String resultPos = bundle.getString("Pos", "error");
+
+                   utilityComplainPresenter.getUtilityHistory(mUsername,mPassword,id,resultmobno,resultPos,resultDesc);
+
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void showFErrorMeassage(String msg) {
+
+        Toast.makeText(context,msg,Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void showUtilitySuccessMsg(String msg) {
+
+       // Toast.makeText(context,msg,Toast.LENGTH_SHORT).show();
+
+        pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.SUCCESS_TYPE);
+        pDialog.setCancelable(false);
+        pDialog
+                .setTitleText(msg)
+                .setContentText("Your complain registered successfully")
+                .setConfirmText("Ok")
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        sDialog.dismissWithAnimation();
+                    }
+                })
+                .show();
+
+    }
+
+    @Override
+    public void showUtilityfailedMsg(String msg) {
+
+     //   Toast.makeText(context,msg,Toast.LENGTH_SHORT).show();
+
+        pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.SUCCESS_TYPE);
+        pDialog.setCancelable(false);
+        pDialog
+                .setTitleText(msg)
+                .setContentText("Failed to registered your request")
+                .setConfirmText("Ok")
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        sDialog.dismissWithAnimation();
+                    }
+                })
+                .show();
+
+    }
+
+    @Override
+    public void showprogress() {
+
+        progressDialog.show();
+    }
+
+    @Override
+    public void hideprogress() {
+
+        progressDialog.dismiss();
+    }
+
+    @Override
+    public void onSuccess(int aApiCode, Object aSuccessResponse) {
+
+    }
+
+    @Override
+    public void onApiError(int aApiCode, ApiError<Object> aFailureResponse) {
+
+        Toast.makeText(context,R.string.error_network_server_errors,Toast.LENGTH_SHORT).show();
+
+
+    }
+}

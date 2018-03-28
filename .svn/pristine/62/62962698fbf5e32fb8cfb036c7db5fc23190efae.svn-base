@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/group_bg"
+    android:orientation="vertical"
+    android:padding="@dimen/spacing_standard">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/print"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_print_black_24dp"
+            android:tint="@color/colorAccent" />
+
+        <TextView
+            android:id="@+id/group_txtID"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/spacing_control"
+            android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
+            android:text="Tans ID"
+            android:textColor="@color/textColorPrimary"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/group_txtAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/group_txtID"
+            android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
+            android:text="Amount"
+            android:textColor="@color/textColorSecondary" />
+
+    </RelativeLayout>
+
+</FrameLayout>

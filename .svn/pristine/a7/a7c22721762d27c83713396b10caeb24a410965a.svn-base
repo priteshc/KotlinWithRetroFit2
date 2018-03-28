@@ -1,0 +1,28 @@
+package com.atishay.online.benefiaciary;
+
+import com.atishay.online.BaseResponse;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
+
+/**
+ * Created by Vishal Patel on 27,December,2016.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public class BeneficiaryListResponse extends BaseResponse {
+    @SerializedName("Response")
+    @Expose
+    private List<BeneficiaryListBean> mBeneficiaryListBeen = null;
+
+    public List<BeneficiaryListBean> getBeneficiaryListBeen() {
+        return mBeneficiaryListBeen;
+    }
+
+    public void setBeneficiaryListBeen(List<BeneficiaryListBean> aBeneficiaryListBeen) {
+        mBeneficiaryListBeen = aBeneficiaryListBeen;
+    }
+}

@@ -1,0 +1,74 @@
+// Generated code from Butter Knife. Do not modify!
+package com.atishay.online.benefiaciary;
+
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import butterknife.Unbinder;
+import butterknife.internal.DebouncingOnClickListener;
+import butterknife.internal.Finder;
+import com.atishay.online.R;
+import com.atishay.online.utils.Loader;
+import com.goldenmace.framework.views.widgets.errorview.ErrorView;
+import java.lang.IllegalStateException;
+import java.lang.Object;
+import java.lang.Override;
+
+public class BeneficiaryActivity_ViewBinding<T extends BeneficiaryActivity> implements Unbinder {
+  protected T target;
+
+  private View view2131230962;
+
+  public BeneficiaryActivity_ViewBinding(final T target, Finder finder, Object source) {
+    this.target = target;
+
+    View view;
+    target.mCoordinatorLayout = finder.findRequiredViewAsType(source, R.id.money_mainView, "field 'mCoordinatorLayout'", RelativeLayout.class);
+    target.mBeneficiaryAdd = finder.findRequiredViewAsType(source, R.id.beneficiary_fbAdd, "field 'mBeneficiaryAdd'", FloatingActionButton.class);
+    target.mToolbar = finder.findRequiredViewAsType(source, R.id.toolbar, "field 'mToolbar'", Toolbar.class);
+    target.mBeneficiaryList = finder.findRequiredViewAsType(source, R.id.beneficiary_rvList, "field 'mBeneficiaryList'", RecyclerView.class);
+    target.mSwipeRefreshLayout = finder.findRequiredViewAsType(source, R.id.swipe_refresh_layout, "field 'mSwipeRefreshLayout'", SwipeRefreshLayout.class);
+    target.mLoader = finder.findRequiredViewAsType(source, R.id.loader, "field 'mLoader'", Loader.class);
+    target.mTxtName = finder.findRequiredViewAsType(source, R.id.name, "field 'mTxtName'", TextView.class);
+    target.mTxtMobile = finder.findRequiredViewAsType(source, R.id.mobile, "field 'mTxtMobile'", TextView.class);
+    view = finder.findRequiredView(source, R.id.fund_ivHistory, "field 'mFundHistoryNavigator' and method 'FundHistory'");
+    target.mFundHistoryNavigator = finder.castView(view, R.id.fund_ivHistory, "field 'mFundHistoryNavigator'", ImageView.class);
+    view2131230962 = view;
+    view.setOnClickListener(new DebouncingOnClickListener() {
+      @Override
+      public void doClick(View p0) {
+        target.FundHistory();
+      }
+    });
+    target.mTxtDeleteMessage = finder.findRequiredViewAsType(source, R.id.delete_msg, "field 'mTxtDeleteMessage'", TextView.class);
+    target.mListError = finder.findRequiredViewAsType(source, R.id.beneficiary_errorView, "field 'mListError'", ErrorView.class);
+  }
+
+  @Override
+  public void unbind() {
+    T target = this.target;
+    if (target == null) throw new IllegalStateException("Bindings already cleared.");
+
+    target.mCoordinatorLayout = null;
+    target.mBeneficiaryAdd = null;
+    target.mToolbar = null;
+    target.mBeneficiaryList = null;
+    target.mSwipeRefreshLayout = null;
+    target.mLoader = null;
+    target.mTxtName = null;
+    target.mTxtMobile = null;
+    target.mFundHistoryNavigator = null;
+    target.mTxtDeleteMessage = null;
+    target.mListError = null;
+
+    view2131230962.setOnClickListener(null);
+    view2131230962 = null;
+
+    this.target = null;
+  }
+}

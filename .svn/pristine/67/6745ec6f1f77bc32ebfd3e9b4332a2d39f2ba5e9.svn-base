@@ -1,0 +1,92 @@
+package com.atishay.online.postpaid;
+
+import com.atishay.online.AtishayOnlineApp;
+import com.atishay.online.R;
+import com.atishay.online.utils.Constants;
+import com.atishay.online.utils.RestApis;
+import com.atishay.online.utils.RetrofitClientFactory;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+/**
+ * Created by Atishay on 19-01-2018.
+ */
+
+public class ConvesPresenter {
+
+    private ConvesView convesView;
+
+    private RetrofitClientFactory clientFactory;
+
+    private RestApis mRestApis;
+
+
+
+
+    public ConvesPresenter(ConvesView convesView) {
+
+
+        this.convesView =convesView;
+
+        clientFactory = new RetrofitClientFactory();
+
+        mRestApis = RetrofitClientFactory.get();
+
+
+
+    }
+
+
+    public void getConves(String amount,String provider){
+
+
+        convesView.showprogress();
+
+        Call<ConvesPojo> pojoCall = mRestApis.getConves(amount, provider);
+
+        pojoCall.enqueue(new Callback<ConvesPojo>() {
+            @Override
+            public void onResponse(Call<ConvesPojo> call, Response<ConvesPojo> response) {
+
+
+                convesView.hideprogress();
+
+                if(response.isSuccessful()) {
+
+
+                    if (response.body().getStrOutMEssage().equals(Constants.SUCCESS)) {
+
+                        convesView.showBSuccessMsg(response.body().getStrOutMEssage(),response.body().getResponse());
+
+
+                    } else
+                        {
+
+
+                            if (response.body().getStrOutMEssage().equals(Constants.FAILED)) {
+
+                                convesView.showBfailedMeassage(response.body().getStrOutMEssage());
+                        }
+
+                    }
+                }
+
+
+                }
+
+            @Override
+            public void onFailure(Call<ConvesPojo> call, Throwable t) {
+
+                convesView.hideprogress();
+
+                convesView.showFErrorMeassage(AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error));
+
+            }
+        });
+
+
+    }
+
+}

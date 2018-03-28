@@ -1,0 +1,118 @@
+package com.atishay.online.searchifsc;
+
+import com.atishay.online.AtishayOnlineApp;
+import com.atishay.online.R;
+import com.atishay.online.utils.Constants;
+import com.atishay.online.utils.network.ApiError;
+import com.atishay.online.utils.network.RestApiCallback;
+import com.goldenmace.framework.mvp.presenters.Presenter;
+import com.goldenmace.framework.utils.NetworkUtils;
+
+import java.net.HttpURLConnection;
+import java.util.ArrayList;
+
+/**
+ * Created by Vishal Patel on 17,December,2016.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public class SearchIFSCPresenter implements Presenter, RestApiCallback<Object, ApiError<Object>> {
+    private SearchIFSCView mSearchIFSCView;
+    private SearchIFSCController mSearchIFSCController;
+    private ArrayList<Integer> mApiList;
+
+    public SearchIFSCPresenter(SearchIFSCView aSearchIFSCView) {
+        mSearchIFSCView = aSearchIFSCView;
+        mSearchIFSCController = new SearchIFSCController(this);
+        mApiList = new ArrayList<>();
+    }
+
+    public void getBankListIFSC(String username, String password) {
+        if (NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            mSearchIFSCView.showLoader(R.string.please_wait);
+            mApiList.add(Constants.APICODE.BANKLIST_IFSC);
+            mSearchIFSCController.getBankListIFSC(username, password);
+        } else {
+            mSearchIFSCView.hideLoader();
+            mSearchIFSCView.noInternetConnection();
+        }
+    }
+
+    public void getSearchIFSC(String username, String password, String bankname) {
+        if (NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            mSearchIFSCView.showLoader(R.string.please_wait);
+            mApiList.add(Constants.APICODE.SEARCHIFSC);
+            mSearchIFSCController.getSearchIFSC(username, password, bankname);
+        } else {
+            mSearchIFSCView.hideLoader();
+            mSearchIFSCView.noInternetConnection();
+        }
+    }
+
+    @Override
+    public void onSuccess(int aApiCode, Object aSuccessResponse) {
+        if (mSearchIFSCView != null) {
+            mApiList.remove(Integer.valueOf(aApiCode));
+            if (mApiList.size() == 0) {
+                mSearchIFSCView.hideLoader();
+            }
+            if (aSuccessResponse == null) {
+                AtishayOnlineApp.getAppInstance().getString(R.string.error_network_server_errors);
+            } else {
+                switch (aApiCode) {
+                    case Constants.APICODE.BANKLIST_IFSC:
+                        mSearchIFSCView.getBankListIFSC((ArrayList<BankListBean>) aSuccessResponse);
+                        break;
+
+                    case Constants.APICODE.SEARCHIFSC:
+                        mSearchIFSCView.getSearchIFSC((ArrayList<SearchIFSCBean>) aSuccessResponse);
+                        break;
+                }
+            }
+        } else {
+
+        }
+    }
+
+    @Override
+    public void onApiError(int aApiCode, ApiError<Object> aFailureResponse) {
+        if (mSearchIFSCView != null) {
+            mApiList.remove(Integer.valueOf(aApiCode));
+            if (mApiList.size() == 0) {
+                mSearchIFSCView.hideLoader();
+            }
+            if (aFailureResponse.getApiErrorCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                mSearchIFSCView.onUserUnAuthorized((String) aFailureResponse.getError());
+                return;
+            }
+            if (aFailureResponse.getApiErrorCode() == -1) {
+                mSearchIFSCView.apiError(aApiCode, (String) aFailureResponse.getError());
+                return;
+            }
+            if (aFailureResponse.getError() instanceof String) {
+                mSearchIFSCView.apiError((String) aFailureResponse.getError());
+                return;
+            }
+            mSearchIFSCView.apiError((String) AtishayOnlineApp.getAppInstance().getString(R.string.error_network_server_errors));
+        } else {
+
+        }
+    }
+
+    @Override
+    public void registerBus() {
+
+    }
+
+    @Override
+    public void unRegisterBus() {
+
+    }
+
+    @Override
+    public void clearReferences() {
+        mSearchIFSCView = null;
+    }
+}

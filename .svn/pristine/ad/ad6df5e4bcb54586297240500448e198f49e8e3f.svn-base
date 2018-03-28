@@ -1,0 +1,80 @@
+package com.atishay.online.utility;
+
+/**
+ * Created by Atishay on 10-02-2018.
+ */
+
+import java.util.List;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+public class BillFetchPojo {
+
+    @SerializedName("ResponseCode")
+    @Expose
+    private String responseCode;
+    @SerializedName("ResponseMessage")
+    @Expose
+    private String responseMessage;
+    @SerializedName("MainDetails")
+    @Expose
+    private List<MainDetailPojo> mainDetails = null;
+    @SerializedName("CustomerParamsDetails")
+    @Expose
+    private List<CustomerParamsDetail> customerParamsDetails = null;
+    @SerializedName("BillDetails")
+    @Expose
+    private List<BillDetailPojo> billDetails = null;
+    @SerializedName("AdditionalDetails")
+    @Expose
+    private List<AdditionalDetailPojo> additionalDetails = null;
+
+    public String getResponseCode() {
+        return responseCode;
+    }
+
+    public void setResponseCode(String responseCode) {
+        this.responseCode = responseCode;
+    }
+
+    public String getResponseMessage() {
+        return responseMessage;
+    }
+
+    public void setResponseMessage(String responseMessage) {
+        this.responseMessage = responseMessage;
+    }
+
+    public List<MainDetailPojo> getMainDetails() {
+        return mainDetails;
+    }
+
+    public void setMainDetails(List<MainDetailPojo> mainDetails) {
+        this.mainDetails = mainDetails;
+    }
+
+    public List<CustomerParamsDetail> getCustomerParamsDetails() {
+        return customerParamsDetails;
+    }
+
+    public void setCustomerParamsDetails(List<CustomerParamsDetail> customerParamsDetails) {
+        this.customerParamsDetails = customerParamsDetails;
+    }
+
+    public List<BillDetailPojo> getBillDetails() {
+        return billDetails;
+    }
+
+    public void setBillDetails(List<BillDetailPojo> billDetails) {
+        this.billDetails = billDetails;
+    }
+
+    public List<AdditionalDetailPojo> getAdditionalDetails() {
+        return additionalDetails;
+    }
+
+    public void setAdditionalDetails(List<AdditionalDetailPojo> additionalDetails) {
+        this.additionalDetails = additionalDetails;
+    }
+
+}

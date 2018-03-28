@@ -1,0 +1,33 @@
+package com.atishay.online.moneytransfer;
+
+import com.atishay.online.AppBaseView;
+
+/**
+ * Created by Vishal Patel on 03,January,2017.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public interface FundTransferView extends AppBaseView {
+
+    void doRemittanceTransaction(ServiceResponse aServiceResponse);
+
+    //Fund Transaction Call View
+    void doFundTransaction(FundServiceChargeResponse aFundServiceChargeResponse);
+
+    //Fund Transfer Transaction History Fetch View
+    void onFundSingleHistoryFetched(FundTransferHistoryResponse aHistoryBeen);
+
+    void doQueryRemittanceTransaction(FundServiceChargeResponse aFundServiceChargeResponse);
+
+    //Refund Transaction Call View
+    void doRefundTransaction(RefundTransactionResponse aFundServiceChargeResponse);
+
+    //Refund Transaction OTP View
+    void doValidateRefundTransaction(QueryRefundTransactionResponse aQueryRefundTransactionResponse);
+
+    void showDialogLoader(String aResId);
+
+    void hideDialogLoader();
+}

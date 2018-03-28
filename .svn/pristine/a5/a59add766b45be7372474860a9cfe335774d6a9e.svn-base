@@ -1,0 +1,17 @@
+package com.atishay.online.aadhaar;
+
+import java.util.Map;
+
+/**
+ * Created by Vishal Patel on 01,December,2016.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public interface AadhaarVerificationUsecase {
+
+    void loadAadhaarVerificationDetails(String aUsername, String aPassword);
+
+    void doAadhaarVerication(Map<String, String> aQueryMap);
+}

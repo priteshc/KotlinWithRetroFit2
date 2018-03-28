@@ -1,0 +1,41 @@
+// Generated code from Butter Knife. Do not modify!
+package com.atishay.online.benefiaciary;
+
+import android.support.v7.widget.CardView;
+import android.widget.TextView;
+import butterknife.Unbinder;
+import butterknife.internal.Finder;
+import com.atishay.online.R;
+import java.lang.IllegalStateException;
+import java.lang.Object;
+import java.lang.Override;
+
+public class BeneficiaryAdapter$BeneficiaryHolder_ViewBinding<T extends BeneficiaryAdapter.BeneficiaryHolder> implements Unbinder {
+  protected T target;
+
+  public BeneficiaryAdapter$BeneficiaryHolder_ViewBinding(T target, Finder finder, Object source) {
+    this.target = target;
+
+    target.mBeneficiaryTitle = finder.findRequiredViewAsType(source, R.id.item_txtbeneficiary, "field 'mBeneficiaryTitle'", TextView.class);
+    target.mBeneficiaryName = finder.findRequiredViewAsType(source, R.id.item_txtbeneficiaryname, "field 'mBeneficiaryName'", TextView.class);
+    target.mBeneficiaryBank = finder.findRequiredViewAsType(source, R.id.item_txtbank, "field 'mBeneficiaryBank'", TextView.class);
+    target.mBeneficiaryAccount = finder.findRequiredViewAsType(source, R.id.item_txtaccount, "field 'mBeneficiaryAccount'", TextView.class);
+    target.mBeneficiaryValidation = finder.findRequiredViewAsType(source, R.id.item_txtvalidation, "field 'mBeneficiaryValidation'", TextView.class);
+    target.mProfileCardView = finder.findRequiredViewAsType(source, R.id.item_cvBeneficiaryView, "field 'mProfileCardView'", CardView.class);
+  }
+
+  @Override
+  public void unbind() {
+    T target = this.target;
+    if (target == null) throw new IllegalStateException("Bindings already cleared.");
+
+    target.mBeneficiaryTitle = null;
+    target.mBeneficiaryName = null;
+    target.mBeneficiaryBank = null;
+    target.mBeneficiaryAccount = null;
+    target.mBeneficiaryValidation = null;
+    target.mProfileCardView = null;
+
+    this.target = null;
+  }
+}

@@ -1,0 +1,219 @@
+package com.atishay.online.moneytransfer;
+
+import com.atishay.online.BaseResponse;
+import com.google.gson.JsonObject;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+public class FundTransferHistoryResponse extends BaseResponse {
+
+    @SerializedName("Response")
+    @Expose
+    private Response response;
+
+    public Response getResponse() {
+        return response;
+    }
+
+    public void setResponse(Response response) {
+        this.response = response;
+    }
+
+    public static class Response implements Serializable {
+
+        @SerializedName("SingleTransaction")
+        @Expose
+        private List<TransactionHistory> singleTransaction = null;
+
+        @SerializedName("GroupTransaction")
+        @Expose
+        private JsonObject groupTransaction;
+
+        private Map<String, ArrayList<TransactionHistory>> groupTransactions;
+
+        public List<TransactionHistory> getSingleTransaction() {
+            return singleTransaction;
+        }
+
+        public void setSingleTransaction(List<TransactionHistory> singleTransaction) {
+            this.singleTransaction = singleTransaction;
+        }
+
+        public String getGroupTransaction() {
+            return groupTransaction == null ? "" : groupTransaction.toString();
+        }
+
+        public Map<String, ArrayList<TransactionHistory>> getGroupTransactions() {
+            return groupTransactions;
+        }
+
+        public void setGroupTransactions(Map<String, ArrayList<TransactionHistory>> groupTransactions) {
+            this.groupTransactions = groupTransactions;
+        }
+    }
+
+    public static class TransactionHistory implements Serializable {
+
+        @SerializedName("UniqueTransID")
+        @Expose
+        private String uniqueTransID;
+        @SerializedName("TransactionId")
+        @Expose
+        private String transactionID;
+        @SerializedName("SenderName")
+        @Expose
+        private String senderName;
+        @SerializedName("SenderMobileNo")
+        @Expose
+        private String senderMobileNo;
+        @SerializedName("BeneficiaryName")
+        @Expose
+        private String beneficiaryName;
+        @SerializedName("BeneficiaryCode")
+        @Expose
+        private String beneficiaryCode;
+        @SerializedName("BenBankAccountNo")
+        @Expose
+        private String benBankAccountNo;
+        @SerializedName("BankName")
+        @Expose
+        private String benBankName;
+        @SerializedName("IFSCCode")
+        @Expose
+        private String IFSCCode;
+        @SerializedName("Amount")
+        @Expose
+        private Double amount;
+        @SerializedName("UTR")
+        @Expose
+        private String uTR;
+        @SerializedName("RechargeStatus")
+        @Expose
+        private String rechargeStatus;
+        @SerializedName("TransactionDate")
+        @Expose
+        private String transactionDate;
+        @SerializedName("PTID")
+        @Expose
+        private String ptid;
+
+        public String getUniqueTransID() {
+            return uniqueTransID;
+        }
+
+        public void setUniqueTransID(String uniqueTransID) {
+            this.uniqueTransID = uniqueTransID;
+        }
+
+        public String getBenBankAccountNo() {
+            return benBankAccountNo;
+        }
+
+        public void setBenBankAccountNo(String benBankAccountNo) {
+            this.benBankAccountNo = benBankAccountNo;
+        }
+
+        public String getSenderMobileNo() {
+            return senderMobileNo;
+        }
+
+        public void setSenderMobileNo(String senderMobileNo) {
+            this.senderMobileNo = senderMobileNo;
+        }
+
+        public String getBeneficiaryName() {
+            return beneficiaryName;
+        }
+
+        public void setBeneficiaryName(String beneficiaryName) {
+            this.beneficiaryName = beneficiaryName;
+        }
+
+        public String getBeneficiaryCode() {
+            return beneficiaryCode;
+        }
+
+        public void setBeneficiaryCode(String beneficiaryCode) {
+            this.beneficiaryCode = beneficiaryCode;
+        }
+
+        public String getBenBankName() {
+            return benBankName;
+        }
+
+        public void setBenBankName(String benBankName) {
+            this.benBankName = benBankName;
+        }
+
+        public String getIFSCCode() {
+            return IFSCCode;
+        }
+
+        public void setIFSCCode(String IFSCCode) {
+            this.IFSCCode = IFSCCode;
+        }
+
+        public String getTransactionID() {
+            return transactionID;
+        }
+
+        public void setTransactionID(String transactionID) {
+            this.transactionID = transactionID;
+        }
+
+        public String getSenderName() {
+            return senderName;
+        }
+
+        public void setSenderName(String senderName) {
+            this.senderName = senderName;
+        }
+
+        public Double getAmount() {
+            return amount;
+        }
+
+        public void setAmount(Double amount) {
+            this.amount = amount;
+        }
+
+        public String getUTR() {
+            return uTR;
+        }
+
+        public void setUTR(String uTR) {
+            this.uTR = uTR;
+        }
+
+        public String getRechargeStatus() {
+            return rechargeStatus;
+        }
+
+        public void setRechargeStatus(String rechargeStatus) {
+            this.rechargeStatus = rechargeStatus;
+        }
+
+        public String getTransactionDate() {
+            return transactionDate;
+        }
+
+        public void setTransactionDate(String transactionDate) {
+            this.transactionDate = transactionDate;
+        }
+
+        public String getPtid() {
+            return ptid;
+        }
+
+        public void setPtid(String ptid) {
+            this.ptid = ptid;
+        }
+    }
+}
+
+

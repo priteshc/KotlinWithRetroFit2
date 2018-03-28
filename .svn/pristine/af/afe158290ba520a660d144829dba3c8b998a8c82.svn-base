@@ -1,0 +1,15 @@
+// Generated code from Butter Knife. Do not modify!
+package com.atishay.online.menu;
+
+import butterknife.Unbinder;
+import butterknife.internal.Finder;
+import butterknife.internal.ViewBinder;
+import java.lang.Object;
+import java.lang.Override;
+
+public final class MenuActivity_ViewBinder implements ViewBinder<MenuActivity> {
+  @Override
+  public Unbinder bind(Finder finder, MenuActivity target, Object source) {
+    return new MenuActivity_ViewBinding<>(target, finder, source);
+  }
+}

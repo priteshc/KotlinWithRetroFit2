@@ -1,0 +1,100 @@
+package com.atishay.online.history;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.atishay.online.R;
+import com.jaredrummler.materialspinner.MaterialSpinner;
+
+import java.util.ArrayList;
+
+/**
+ * Created by Atishay on 13-02-2018.
+ */
+
+public class DFragment extends DialogFragment {
+
+   private Button button;
+   private EditText mobno,description;
+   private MaterialSpinner materialSpinner;
+   private ArrayList<String>complaindesc;
+   private String pos;
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.utility_complain_msg_popup, container,
+                false);
+        getDialog().setTitle("DialogFragment Tutorial");
+
+        button = (Button) rootView.findViewById(R.id.ok);
+        complaindesc = new ArrayList<>();
+        mobno = (EditText) rootView.findViewById(R.id.mobile_no);
+        description = (EditText) rootView.findViewById(R.id.cmsg);
+        materialSpinner = (MaterialSpinner) rootView.findViewById(R.id.complain);
+
+        mobno.setTransformationMethod(null);
+
+
+        complaindesc.add(0,"Select your complain");
+        complaindesc.add(1,"Account not updated");
+        complaindesc.add(2,"Trans id not received");
+        complaindesc.add(3,"account & trans id not received");
+        complaindesc.add(4,"Amount deducted multiple times");
+        complaindesc.add(5,"Double payment updated");
+        complaindesc.add(6,"Paid in wrong account");
+        complaindesc.add(7,"others");
+
+        materialSpinner.setItems(complaindesc);
+
+        materialSpinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
+
+               pos = String.valueOf(position);
+            }
+        });
+
+
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(!mobno.getText().toString().isEmpty() && materialSpinner.getSelectedIndex()!=0 && !description.getText().toString().isEmpty()){
+
+                    if(mobno.getText().toString().length() == 10) {
+
+                        dismiss();
+                        Intent i = new Intent();
+                        i.putExtra("MobNo", mobno.getText().toString());
+                        i.putExtra("Desc", description.getText().toString());
+                        i.putExtra("Pos", pos);
+                        getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, i);
+                    }
+                    else {
+
+                        Toast.makeText(getActivity(),R.string.error_field_phoneno,Toast.LENGTH_SHORT).show();
+
+                    }
+
+                }
+                else {
+
+                    Toast.makeText(getActivity(),R.string.error_field_required,Toast.LENGTH_SHORT).show();
+
+                }
+                }
+        });
+
+        // Do something else
+        return rootView;
+    }
+}

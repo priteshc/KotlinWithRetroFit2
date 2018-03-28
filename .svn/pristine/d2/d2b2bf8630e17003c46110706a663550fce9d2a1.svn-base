@@ -1,0 +1,10 @@
+package com.atishay.online.changepassword;
+
+/**
+ * Created by hrdudhat on 11/22/2016.
+ */
+public interface TabChngPassUsecase {
+    void requestChangePassword(String aUsername, String aOldPassword, String aNewPassword);
+
+    void requestChangeTransactionCode(String aUsername, String aPassword, String aOldTransactionCode, String aNewTransactionCode);
+}

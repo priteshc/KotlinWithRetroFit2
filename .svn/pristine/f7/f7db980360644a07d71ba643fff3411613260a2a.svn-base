@@ -1,0 +1,116 @@
+/*
+ * Copyright 2016 Goldenmace IT Solutions
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+package com.atishay.online.moneytransfer;
+
+import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.atishay.online.R;
+import com.goldenmace.framework.views.widgets.DividerItemDecoration;
+import com.goldenmace.framework.views.widgets.errorview.ErrorView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+/**
+ * Created by Vishal Patel on 3,December,2016.
+ * AtishayOnline
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public class SingleFundHistoryFragment extends Fragment {
+
+    @BindView(R.id.history_rvHistory)
+    RecyclerView mHistoryList;
+    @BindView(R.id.history_errorView)
+    ErrorView mErrorView;
+    FundTransferHistoryAdapter mFundTransferHistoryAdapter;
+    ArrayList<FundTransferHistoryResponse.TransactionHistory> mSingleHistoryBeen;
+    Context context;
+    Bundle bundle;
+    String mIsMainType;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        context = getActivity().getApplicationContext();
+        mSingleHistoryBeen = new ArrayList<>();
+        bundle = this.getArguments();
+        mIsMainType = bundle.getString("isMain");
+
+        if (mIsMainType.equals("1")) {
+            mFundTransferHistoryAdapter = new FundTransferHistoryAdapter(context, mSingleHistoryBeen, true);
+        } else {
+            mFundTransferHistoryAdapter = new FundTransferHistoryAdapter(context, mSingleHistoryBeen);
+        }
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.tab_history, container, false);
+        ButterKnife.bind(this, rootView);
+
+        mErrorView.setOnRetryListener(new ErrorView.RetryListener() {
+            @Override
+            public void onRetry() {
+                mErrorView.setVisibility(View.GONE);
+                ((FundTransferHistoryActivity) getActivity()).fundTransferHistoryCall();
+            }
+        });
+
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
+        mHistoryList.setLayoutManager(mLayoutManager);
+        mHistoryList.setAdapter(mFundTransferHistoryAdapter);
+        mHistoryList.setNestedScrollingEnabled(false);
+        mHistoryList.addItemDecoration(new DividerItemDecoration(context, R.drawable.divider));
+        return rootView;
+    }
+
+    public void onDataFetched(List<FundTransferHistoryResponse.TransactionHistory> aHistoryBeen) {
+        if (aHistoryBeen != null) {
+            mSingleHistoryBeen.clear();
+            mSingleHistoryBeen.addAll(aHistoryBeen);
+            mFundTransferHistoryAdapter.notifyDataSetChanged();
+        } else {
+            mErrorView.setVisibility(View.VISIBLE);
+            mErrorView.setImage(R.drawable.ic_list_200dp);
+            mErrorView.setTitle(getString(R.string.msg_no_record_found));
+            mErrorView.setSubtitle(getString(R.string.single_error_fund_money));
+            mErrorView.setRetryButtonText("Refresh");
+            mErrorView.showRetryButton(true);
+        }
+    }
+
+    public void onDataReload() {
+        if (mSingleHistoryBeen != null) {
+            mSingleHistoryBeen.clear();
+            mFundTransferHistoryAdapter.notifyDataSetChanged();
+        }
+    }
+}

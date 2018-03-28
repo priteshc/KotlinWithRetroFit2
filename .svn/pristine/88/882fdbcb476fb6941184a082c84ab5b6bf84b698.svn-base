@@ -1,0 +1,146 @@
+
+package com.atishay.online.myaccountrecharge;
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+public class AccountRechargeReportBean {
+
+    @SerializedName("DRID")
+    @Expose
+    private Integer dRID;
+    @SerializedName("AtishayVendorID")
+    @Expose
+    private String atishayVendorID;
+    @SerializedName("TransactionType")
+    @Expose
+    private String transactionType;
+    @SerializedName("BankName")
+    @Expose
+    private String bankName;
+    @SerializedName("UTRNo")
+    @Expose
+    private String uTRNo;
+    @SerializedName("Amount")
+    @Expose
+    private Double amount;
+    @SerializedName("MyDate")
+    @Expose
+    private String myDate;
+    @SerializedName("MyStatus")
+    @Expose
+    private String myStatus;
+
+    /**
+     * @return The dRID
+     */
+    public Integer  getDRID() {
+        return dRID;
+    }
+
+    /**
+     * @param dRID The DRID
+     */
+    public void setDRID(Integer dRID) {
+        this.dRID = dRID;
+    }
+
+    /**
+     * @return The atishayVendorID
+     */
+    public String getAtishayVendorID() {
+        return atishayVendorID;
+    }
+
+    /**
+     * @param atishayVendorID The AtishayVendorID
+     */
+    public void setAtishayVendorID(String atishayVendorID) {
+        this.atishayVendorID = atishayVendorID;
+    }
+
+    /**
+     * @return The transactionType
+     */
+    public String getTransactionType() {
+        return transactionType;
+    }
+
+    /**
+     * @param transactionType The TransactionType
+     */
+    public void setTransactionType(String transactionType) {
+        this.transactionType = transactionType;
+    }
+
+    /**
+     * @return The bankName
+     */
+    public String getBankName() {
+        return bankName;
+    }
+
+    /**
+     * @param bankName The BankName
+     */
+    public void setBankName(String bankName) {
+        this.bankName = bankName;
+    }
+
+    /**
+     * @return The uTRNo
+     */
+    public String getUTRNo() {
+        return uTRNo;
+    }
+
+    /**
+     * @param uTRNo The UTRNo
+     */
+    public void setUTRNo(String uTRNo) {
+        this.uTRNo = uTRNo;
+    }
+
+    /**
+     * @return The amount
+     */
+    public Double getAmount() {
+        return amount;
+    }
+
+    /**
+     * @param amount The Amount
+     */
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
+
+    /**
+     * @return The myDate
+     */
+    public String getMyDate() {
+        return myDate;
+    }
+
+    /**
+     * @param myDate The MyDate
+     */
+    public void setMyDate(String myDate) {
+        this.myDate = myDate;
+    }
+
+    /**
+     * @return The myStatus
+     */
+    public String getMyStatus() {
+        return myStatus;
+    }
+
+    /**
+     * @param myStatus The MyStatus
+     */
+    public void setMyStatus(String myStatus) {
+        this.myStatus = myStatus;
+    }
+
+}

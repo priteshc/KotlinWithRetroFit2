@@ -1,0 +1,22 @@
+package com.atishay.online.searchifsc;
+
+/**
+ * Created by Vishal Patel on 24,December,2016.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public class CommonDataBean {
+
+    private String title;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String aTitle) {
+        title = aTitle;
+    }
+
+}

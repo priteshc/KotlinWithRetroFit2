@@ -1,0 +1,81 @@
+package com.atishay.online.utility;
+
+/**
+ * Created by Atishay on 10-02-2018.
+ */
+
+
+    import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+public class AdditionalDetailPojo {
+
+    @SerializedName("Name")
+    @Expose
+    private String name;
+    @SerializedName("Value")
+    @Expose
+    private String value;
+    @SerializedName("ConvFee")
+    @Expose
+    private String convFee;
+    @SerializedName("FinalBillAmount")
+    @Expose
+    private String finalBillAmount;
+    @SerializedName("FinalTotalAmount")
+    @Expose
+    private String finalTotalAmount;
+    @SerializedName("LateFee")
+    @Expose
+    private String lateFee;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public String getConvFee() {
+        return convFee;
+    }
+
+    public void setConvFee(String convFee) {
+        this.convFee = convFee;
+    }
+
+    public String getFinalBillAmount() {
+        return finalBillAmount;
+    }
+
+    public void setFinalBillAmount(String finalBillAmount) {
+        this.finalBillAmount = finalBillAmount;
+    }
+
+    public String getFinalTotalAmount() {
+        return finalTotalAmount;
+    }
+
+    public void setFinalTotalAmount(String finalTotalAmount) {
+        this.finalTotalAmount = finalTotalAmount;
+    }
+
+    public String getLateFee() {
+        return lateFee;
+    }
+
+    public void setLateFee(String lateFee) {
+        this.lateFee = lateFee;
+    }
+
+}
+

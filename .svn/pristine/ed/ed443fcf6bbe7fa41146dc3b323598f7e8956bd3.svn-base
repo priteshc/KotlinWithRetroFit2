@@ -1,0 +1,648 @@
+package com.atishay.online.moneytransfer;
+
+import android.Manifest;
+import android.content.ActivityNotFoundException;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Environment;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.text.Html;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.atishay.online.R;
+import com.atishay.online.common.DisplayLeakConnectorView;
+import com.atishay.online.utils.Constants;
+import com.goldenmace.framework.utils.SharedPrefUtils;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+import static butterknife.ButterKnife.findById;
+
+/**
+ * Created by Vishal Patel on 12,January,2017.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public class GroupFundHistoryAdapter extends BaseExpandableListAdapter {
+
+    private static final int REQUEST_PERMISSIONSG = 106;
+    public static GroupParentBean groupParentBean;
+    public static String mUsername;
+    public static String mPassword;
+    public static String mAgentCode;
+    public static FundTransferHistoryResponse.TransactionHistory data;
+    String fileName;
+    String Name;
+    File pdfFile;
+    private Context context;
+    private boolean aIsMainFundHistory;
+    private ImageView mGroupPrint;
+    private List<GroupParentBean> expandableListTitle;
+    private Map<String, ArrayList<FundTransferHistoryResponse.TransactionHistory>> expandableListDetail;
+
+    public GroupFundHistoryAdapter(Context context,
+                                   Map<String, ArrayList<FundTransferHistoryResponse.TransactionHistory>> expandableListDetail) {
+        this(context, expandableListDetail, false);
+    }
+
+    public GroupFundHistoryAdapter(Context context,
+                                   Map<String, ArrayList<FundTransferHistoryResponse.TransactionHistory>> expandableListDetail, boolean aIsMainFundHistory) {
+        this.context = context;
+        this.aIsMainFundHistory = aIsMainFundHistory;
+        expandableListTitle = new ArrayList<>();
+
+        this.expandableListDetail = expandableListDetail;
+        for (String key : expandableListDetail.keySet()) {
+            groupParentBean = new GroupParentBean();
+            groupParentBean.mTrasId = key;
+            for (FundTransferHistoryResponse.TransactionHistory transactionHistory : expandableListDetail.get(key)) {
+                groupParentBean.mTotalAmount += transactionHistory.getAmount();
+            }
+            expandableListTitle.add(groupParentBean);
+        }
+    }
+
+    public static void groupOTPCallBack(String otp) {
+        Map<String, String> queryMap = new HashMap<>();
+        queryMap.put(Constants.ApiKeys.USERNAME, mUsername);
+        queryMap.put(Constants.ApiKeys.PASSWORD, mPassword);
+        queryMap.put(Constants.ApiKeys.AGENTCODE, mAgentCode);
+        queryMap.put(Constants.ApiKeys.UNIQUETRANSID, groupParentBean.getmTrasId());
+        queryMap.put(Constants.ApiKeys.TRANSACTIONID, data.getTransactionID());
+        queryMap.put(Constants.ApiKeys.PTID, String.valueOf(System.currentTimeMillis()));
+        queryMap.put(Constants.ApiKeys.OTP, otp);
+        FundTransferHistoryActivity.mFundTransferPresenter.doValidateRefundTransaction(queryMap);
+    }
+
+    @Override
+    public FundTransferHistoryResponse.TransactionHistory getChild(int listPosition, int expandedListPosition) {
+        return this.expandableListDetail.get(expandableListTitle.get(listPosition).getmTrasId()).get(expandedListPosition);
+    }
+
+    @Override
+    public long getChildId(int listPosition, int expandedListPosition) {
+        return expandedListPosition;
+    }
+
+    @Override
+    public View getChildView(int listPosition, final int expandedListPosition,
+                             boolean isLastChild, View convertView, ViewGroup parent) {
+        data = getChild(listPosition, expandedListPosition);
+        if (convertView == null) {
+            LayoutInflater layoutInflater = (LayoutInflater) this.context
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = layoutInflater.inflate(R.layout.item_fundtransfer_history_drawer, null);
+        }
+
+        GroupHolder groupHolder = new GroupHolder(convertView);
+        mUsername = SharedPrefUtils.getString(context, Constants.SharedPref.USER_DETAIL, Constants.SharedPref.KEY_USER_NAME, "");
+        mPassword = SharedPrefUtils.getString(context, Constants.SharedPref.USER_DETAIL, Constants.SharedPref.KEY_PASSWORD, "");
+        mAgentCode = SharedPrefUtils.getString(context, Constants.SharedPref.USER_DETAIL, Constants.SharedPref.KEY_AGENT_CODE, "");
+
+        if (!aIsMainFundHistory) {
+            groupHolder.fundtransferHistoryTxtSenderName.setVisibility(View.GONE);
+            groupHolder.fundtransferHistoryTxtBeneCode.setVisibility(View.VISIBLE);
+            groupHolder.fundtransferHistoryTxtUniqueTansID.setVisibility(View.GONE);
+            groupHolder.mArrow.setVisibility(View.VISIBLE);
+            groupHolder.fundtransferHistoryTxtID.setText(Html.fromHtml(String.format("<b>" + context.getResources().getString(R.string.unique_transid) + " :</b> %s", groupParentBean.getmTrasId())));
+        } else {
+            groupHolder.mArrow.setVisibility(View.GONE);
+            groupHolder.fundtransferHistoryTxtQueryTransaction.setVisibility(View.GONE);
+            groupHolder.fundtransferHistoryTxtID.setText(Html.fromHtml(String.format("<b>TRANS ID :</b> %s", data.getTransactionID())));
+        }
+        groupHolder.fundtransferHistoryTxtUniqueTansID.setVisibility(View.GONE);
+        groupHolder.fundtransferHistoryTxtBeneName.setText(Html.fromHtml(String.format("<b>" + context.getResources().getString(R.string.name) + " :</b> %s", data.getBeneficiaryName())));
+        groupHolder.fundtransferHistoryTxtBeneCode.setText(Html.fromHtml(String.format("<b>" + context.getResources().getString(R.string.ben_code) + " :</b> %s", data.getBeneficiaryCode())));
+        groupHolder.fundtransferHistoryTxtDate.setText(data.getTransactionDate());
+        groupHolder.fundtransferHistoryTxtBankNo.setText(Html.fromHtml(String.format("<b>" + context.getResources().getString(R.string.a_c_no) + " :</b> %s", data.getBenBankAccountNo())));
+        groupHolder.fundtransferHistoryTxtSenderName.setText(Html.fromHtml(String.format("<b>" + context.getResources().getString(R.string.sender_name) + " :</b> %s", data.getSenderName())));
+        groupHolder.fundtransferHistoryTxtUTR.setText(Html.fromHtml(String.format("<b>" + context.getResources().getString(R.string.utr) + " :</b> %s", data.getUTR())));
+        groupHolder.fundtransferHistoryTxtMobile.setText(Html.fromHtml(String.format("<b>" + context.getResources().getString(R.string.sender_mobile) + " :</b> %s", data.getSenderMobileNo())));
+        groupHolder.fundtransferHistoryTxtRS.setText(context.getResources().getString(R.string.amount, String.format("%.2f", data.getAmount())));
+
+        if (data.getRechargeStatus().equals("Successful")) {
+            groupHolder.fundtransferHistoryTxtTransStatus.setText(data.getRechargeStatus());
+            groupHolder.fundtransferHistoryTxtQueryTransaction.setVisibility(View.GONE);
+            groupHolder.fundtransferHistoryTxtTransStatus.setTextColor(ContextCompat.getColor(context, R.color.green));
+        } else if (data.getRechargeStatus().equals("Transaction Cancelled / Fail")) {
+            groupHolder.fundtransferHistoryTxtTransStatus.setText(data.getRechargeStatus());
+            groupHolder.fundtransferHistoryTxtTransStatus.setTextColor(ContextCompat.getColor(context, R.color.red));
+            groupHolder.fundtransferHistoryTxtQueryTransaction.setVisibility(View.GONE);
+        } else if (data.getRechargeStatus().equals("Failure")) {
+            groupHolder.fundtransferHistoryTxtTransStatus.setText(data.getRechargeStatus());
+            groupHolder.fundtransferHistoryTxtTransStatus.setTextColor(ContextCompat.getColor(context, R.color.red));
+            groupHolder.fundtransferHistoryTxtQueryTransaction.setText(context.getResources().getString(R.string.query_refund));
+            if (aIsMainFundHistory) {
+                groupHolder.fundtransferHistoryTxtQueryTransaction.setVisibility(View.GONE);
+            } else {
+                groupHolder.fundtransferHistoryTxtQueryTransaction.setVisibility(View.VISIBLE);
+                groupHolder.fundtransferHistoryTxtQueryTransaction.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (TextUtils.isEmpty(data.getPtid())) {
+                            Toast.makeText(context, "Website transaction can't be queried from app.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            refundCallBack(data);
+                        }
+                    }
+                });
+            }
+        } else if (data.getRechargeStatus().equals("Hold(T)")) {
+            groupHolder.fundtransferHistoryTxtTransStatus.setText(data.getRechargeStatus());
+            groupHolder.fundtransferHistoryTxtTransStatus.setTextColor(ContextCompat.getColor(context, R.color.orange));
+            if (aIsMainFundHistory) {
+                groupHolder.fundtransferHistoryTxtQueryTransaction.setVisibility(View.GONE);
+            } else {
+                groupHolder.fundtransferHistoryTxtQueryTransaction.setVisibility(View.VISIBLE);
+                groupHolder.fundtransferHistoryTxtQueryTransaction.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        doRequestParam(data);
+                    }
+                });
+            }
+        } else if (data.getRechargeStatus().equals("Transaction Cancelled and Refunded")) {
+            groupHolder.fundtransferHistoryTxtTransStatus.setText(data.getRechargeStatus());
+            groupHolder.fundtransferHistoryTxtQueryTransaction.setVisibility(View.GONE);
+            groupHolder.fundtransferHistoryTxtTransStatus.setTextColor(ContextCompat.getColor(context, R.color.red));
+        } else if (data.getRechargeStatus().equals("Processed")) { //Processed
+            groupHolder.fundtransferHistoryTxtTransStatus.setText(data.getRechargeStatus());
+            groupHolder.fundtransferHistoryTxtTransStatus.setTextColor(ContextCompat.getColor(context, R.color.green));
+            if (aIsMainFundHistory) {
+                groupHolder.fundtransferHistoryTxtQueryTransaction.setVisibility(View.GONE);
+            } else {
+                groupHolder.fundtransferHistoryTxtQueryTransaction.setVisibility(View.VISIBLE);
+                groupHolder.fundtransferHistoryTxtQueryTransaction.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        doRequestParam(data);
+                    }
+                });
+            }
+        } else {
+            groupHolder.fundtransferHistoryTxtQueryTransaction.setVisibility(View.GONE);
+            groupHolder.fundtransferHistoryTxtTransStatus.setText(data.getRechargeStatus());
+            groupHolder.fundtransferHistoryTxtTransStatus.setTextColor(ContextCompat.getColor(context, R.color.black_overlay));
+        }
+
+        DisplayLeakConnectorView connector = findById(convertView, R.id.leak_canary_row_connector);
+        if (expandedListPosition == 0) {
+            connector.setType(DisplayLeakConnectorView.Type.START);
+        } else {
+            if (expandedListPosition == getChildrenCount(listPosition) - 1) {
+                connector.setType(DisplayLeakConnectorView.Type.END);
+            } else {
+                connector.setType(DisplayLeakConnectorView.Type.NODE);
+            }
+        }
+        return convertView;
+    }
+
+    private void doRequestParam(FundTransferHistoryResponse.TransactionHistory data) {
+        Map<String, String> queryMap = new HashMap<>();
+        queryMap.put(Constants.ApiKeys.USERNAME, mUsername);
+        queryMap.put(Constants.ApiKeys.PASSWORD, mPassword);
+        queryMap.put(Constants.ApiKeys.AGENTCODE, mAgentCode);
+        queryMap.put(Constants.ApiKeys.UNIQUETRANSID, groupParentBean.getmTrasId());
+        queryMap.put(Constants.ApiKeys.TRANSACTIONID, data.getTransactionID());
+        queryMap.put(Constants.ApiKeys.PTID, String.valueOf(System.currentTimeMillis()));
+        FundTransferHistoryActivity.mFundTransferPresenter.doQueryRemittanceTransaction(queryMap);
+    }
+
+    private void refundCallBack(FundTransferHistoryResponse.TransactionHistory data) {
+        Map<String, String> queryMap = new HashMap<>();
+        queryMap.put(Constants.ApiKeys.USERNAME, mUsername);
+        queryMap.put(Constants.ApiKeys.PASSWORD, mPassword);
+        queryMap.put(Constants.ApiKeys.AGENTCODE, mAgentCode);
+        queryMap.put(Constants.ApiKeys.UNIQUETRANSID, groupParentBean.getmTrasId());
+        queryMap.put(Constants.ApiKeys.TRANSACTIONID, data.getTransactionID());
+        queryMap.put(Constants.ApiKeys.PTID, String.valueOf(System.currentTimeMillis()));
+        FundTransferHistoryActivity.mFundTransferPresenter.doRefundTransaction(queryMap);
+    }
+
+    @Override
+    public int getChildrenCount(int listPosition) {
+        return this.expandableListDetail.get(this.expandableListTitle.get(listPosition).getmTrasId())
+                .size();
+    }
+
+    @Override
+    public GroupParentBean getGroup(int listPosition) {
+        return expandableListTitle.get(listPosition);
+    }
+
+    @Override
+    public int getGroupCount() {
+        return this.expandableListTitle.size();
+    }
+
+    @Override
+    public long getGroupId(int listPosition) {
+        return listPosition;
+    }
+
+    @Override
+    public View getGroupView(final int listPosition, boolean isExpanded,
+                             View convertView, ViewGroup parent) {
+        if (convertView == null) {
+            LayoutInflater layoutInflater = (LayoutInflater) this.context.
+                    getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = layoutInflater.inflate(R.layout.group_fund_history_group, null);
+        }
+        groupParentBean = getGroup(listPosition);
+        TextView mGroupTransID = (TextView) convertView
+                .findViewById(R.id.group_txtID);
+        TextView mGroupTransTotalAmount = (TextView) convertView
+                .findViewById(R.id.group_txtAmount);
+        mGroupPrint = (ImageView) convertView.findViewById(R.id.print);
+        mGroupPrint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                externalStoragePermission(listPosition);
+            }
+        });
+        if (!aIsMainFundHistory) {
+            mGroupPrint.setVisibility(View.VISIBLE);
+        } else {
+            mGroupPrint.setVisibility(View.GONE);
+        }
+        mGroupTransID.setText(groupParentBean.getmTrasId());
+        mGroupTransTotalAmount.setText(context.getResources().getString(R.string.amount, String.format("%.2f", groupParentBean.getmTotalAmount())));
+        return convertView;
+    }
+
+    public void externalStoragePermission(int listPosition) {
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale((FundTransferHistoryActivity) context, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                Snackbar.make(((FundTransferHistoryActivity) context).findViewById(android.R.id.content),
+                        "Please Grant Permissions",
+                        Snackbar.LENGTH_INDEFINITE).setAction("ENABLE",
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                ActivityCompat.requestPermissions((FundTransferHistoryActivity) context,
+                                        new String[]{Manifest.permission
+                                                .WRITE_EXTERNAL_STORAGE},
+                                        REQUEST_PERMISSIONSG);
+                            }
+                        }).show();
+            } else {
+                ActivityCompat.requestPermissions((FundTransferHistoryActivity) context, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_PERMISSIONSG);
+            }
+        } else {
+            new CreatePDF().execute(listPosition);
+        }
+    }
+
+    @Override
+    public boolean hasStableIds() {
+        return false;
+    }
+
+    @Override
+    public boolean isChildSelectable(int listPosition, int expandedListPosition) {
+        return true;
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+        expandableListTitle.clear();
+        GroupParentBean groupParentBean;
+        for (String key : expandableListDetail.keySet()) {
+            groupParentBean = new GroupParentBean();
+            groupParentBean.mTrasId = key;
+            for (FundTransferHistoryResponse.TransactionHistory transactionHistory : expandableListDetail.get(key)) {
+                groupParentBean.mTotalAmount += transactionHistory.getAmount();
+            }
+            expandableListTitle.add(groupParentBean);
+        }
+        super.notifyDataSetChanged();
+    }
+
+    public void createPDF(int listPosition) {
+        // Create New Blank Document
+        float pdfMargin = 34.0f;
+        float imageCell = 100f;
+        float fontsize = 8f;
+        Document document = new Document(PageSize.A4, pdfMargin, pdfMargin, pdfMargin, pdfMargin);
+
+        // Create Directory in External Storage
+        String root = Environment.getExternalStorageDirectory().toString();
+        File myDir = new File(root + "/" + context.getResources().getString(R.string.app_name));
+        myDir.mkdirs();
+        try {
+            Calendar localCalendar = Calendar.getInstance();
+            fileName = new SimpleDateFormat("yyyyMMddhhmmss").format(localCalendar.getTime());
+            Name = context.getResources().getString(R.string.app_name) + fileName + ".pdf";
+            pdfFile = new File(myDir, Name);
+            PdfWriter docWriter = PdfWriter.getInstance(document, new FileOutputStream(pdfFile));
+            document.open();
+
+            //Table for Top Information
+            PdfPTable table = new PdfPTable(2);
+            table.getDefaultCell().setBorder(0);
+            table.setWidthPercentage(100);
+            table.setWidths(new float[]{imageCell, document.getPageSize().getWidth() - ((pdfMargin * 2) + imageCell)});
+            PdfPCell pdfPCell = new PdfPCell();
+            pdfPCell.setRowspan(2);
+            Bitmap icon = BitmapFactory.decodeResource(context.getResources(), R.drawable.pdflogo);
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            icon.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byte[] byteArray = stream.toByteArray();
+
+            Image companyLogo = Image.getInstance(byteArray);
+            companyLogo.scaleToFit(50, 50);
+            companyLogo.setBorder(0);
+            pdfPCell.setBorder(0);
+            pdfPCell.setVerticalAlignment(Element.ALIGN_CENTER);
+            pdfPCell.setPadding(8);
+            pdfPCell.addElement(companyLogo);
+            table.addCell(pdfPCell);
+
+            pdfPCell = new PdfPCell();
+            Font f5 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 16);
+            f5.setStyle(Font.BOLD);
+            Phrase elements = new Phrase("Atishay Limited", f5);
+            pdfPCell.addElement(elements);
+            pdfPCell.setBorder(0);
+            table.addCell(pdfPCell);
+
+            pdfPCell = new PdfPCell();
+            elements = new Phrase("Corporate Office: 4B\u00AD05/06, Phoenix Paragon Plaza, Lal Bahadur Shastri" + "Marg, Kurla West, Mumbai, Maharashtra 400 070\n");
+            pdfPCell.addElement(elements);
+            pdfPCell.setBorder(0);
+            table.addCell(pdfPCell);
+
+            document.add(table);
+
+            //Table for Top Single Message
+            PdfPTable tableTopMsg = new PdfPTable(1);
+            tableTopMsg.getDefaultCell().setBorder(0);
+            tableTopMsg.setSpacingBefore(20f);
+            tableTopMsg.setWidths(new float[]{document.getPageSize().getWidth() - ((pdfMargin * 2))});
+            pdfPCell = new PdfPCell();
+            Phrase elementsTopMsg = new Phrase("MONEY TRANSFER RECEIPT");
+            pdfPCell.addElement(elementsTopMsg);
+            tableTopMsg.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
+            tableTopMsg.getDefaultCell().setVerticalAlignment(Element.ALIGN_MIDDLE);
+            tableTopMsg.setHorizontalAlignment(Element.ALIGN_CENTER);
+            tableTopMsg.addCell(elementsTopMsg);
+
+            document.add(tableTopMsg);
+
+            //Table for Details with field
+            float[] columnWidths = {1.5f, 3f, 2f, 2f, 2f, 2f, 3f, 1.5f, 2f};
+
+            PdfPTable tableDetails = new PdfPTable(columnWidths);
+            tableDetails.setSpacingBefore(20f);
+            tableDetails.setWidthPercentage(100);
+
+            Font f1 = new Font();
+            f1.setSize(fontsize);
+            f1.setStyle(Font.BOLD);
+            f1.setColor(BaseColor.BLACK);
+
+            PdfPCell cell = new PdfPCell(new Phrase("Date", f1));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_CENTER);
+            tableDetails.addCell(cell);
+            cell = new PdfPCell(new Phrase("Unique TransID", f1));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_CENTER);
+            tableDetails.addCell(cell);
+            cell = new PdfPCell(new Phrase("UTR No", f1));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_CENTER);
+            tableDetails.addCell(cell);
+            cell = new PdfPCell(new Phrase("Ben Code", f1));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_CENTER);
+            tableDetails.addCell(cell);
+            cell = new PdfPCell(new Phrase("Name", f1));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_CENTER);
+            tableDetails.addCell(cell);
+            cell = new PdfPCell(new Phrase("Bank Name", f1));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_CENTER);
+            tableDetails.addCell(cell);
+            cell = new PdfPCell(new Phrase("A/C No", f1));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_CENTER);
+            tableDetails.addCell(cell);
+            cell = new PdfPCell(new Phrase("Amount", f1));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_CENTER);
+            tableDetails.addCell(cell);
+            cell = new PdfPCell(new Phrase("Status", f1));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_CENTER);
+            tableDetails.addCell(cell);
+
+            Font f3 = new Font();
+            f3.setSize(fontsize);
+            Font f4 = new Font();
+            f4.setSize(fontsize);
+
+            for (int i = 0; i < expandableListDetail.get(expandableListTitle.get(listPosition).getmTrasId()).size(); i++) {
+                tableDetails.addCell(new Phrase(expandableListDetail.get(expandableListTitle.get(listPosition).getmTrasId()).get(i).getTransactionDate(), f4));
+                tableDetails.addCell(new Phrase(expandableListTitle.get(listPosition).getmTrasId(), f4));
+                tableDetails.addCell(new Phrase(expandableListDetail.get(expandableListTitle.get(listPosition).getmTrasId()).get(i).getUTR(), f4));
+                tableDetails.addCell(new Phrase(expandableListDetail.get(expandableListTitle.get(listPosition).getmTrasId()).get(i).getBeneficiaryCode(), f4));
+                tableDetails.addCell(new Phrase(expandableListDetail.get(expandableListTitle.get(listPosition).getmTrasId()).get(i).getBeneficiaryName(), f4));
+                tableDetails.addCell(new Phrase(expandableListDetail.get(expandableListTitle.get(listPosition).getmTrasId()).get(i).getBenBankName(), f4));
+                tableDetails.addCell(new Phrase(expandableListDetail.get(expandableListTitle.get(listPosition).getmTrasId()).get(i).getBenBankAccountNo(), f4));
+                tableDetails.addCell(new Phrase(String.format("%.2f", expandableListDetail.get(expandableListTitle.get(listPosition).getmTrasId()).get(i).getAmount()), f4));
+
+                if (expandableListDetail.get(expandableListTitle.get(listPosition).getmTrasId()).get(i).getRechargeStatus().equals("Successful")) {
+                    f3.setColor(new BaseColor(0, 128, 0));
+                } else if (expandableListDetail.get(expandableListTitle.get(listPosition).getmTrasId()).get(i).getRechargeStatus().equals("Transaction Cancelled / Fail")) {
+                    f3.setColor(BaseColor.RED);
+                } else if (expandableListDetail.get(expandableListTitle.get(listPosition).getmTrasId()).get(i).getRechargeStatus().equals("Failure")) {
+                    f3.setColor(BaseColor.RED);
+                } else if (expandableListDetail.get(expandableListTitle.get(listPosition).getmTrasId()).get(i).getRechargeStatus().equals("Hold(T)")) {
+                    f3.setColor(new BaseColor(255, 165, 0));
+                } else if (expandableListDetail.get(expandableListTitle.get(listPosition).getmTrasId()).get(i).getRechargeStatus().equals("Transaction Cancelled and Refunded")) {
+                    f3.setColor(BaseColor.RED);
+                } else if (expandableListDetail.get(expandableListTitle.get(listPosition).getmTrasId()).get(i).getRechargeStatus().equals("Processed")) {
+                    f3.setColor(new BaseColor(0, 128, 0));
+                } else {
+                    f3.setColor(BaseColor.BLACK);
+                }
+                tableDetails.addCell(new Phrase(expandableListDetail.get(expandableListTitle.get(listPosition).getmTrasId()).get(i).getRechargeStatus(), f3));
+            }
+            Font f6 = new Font();
+            f6.setSize(fontsize);
+            f6.setStyle(Font.BOLD);
+            tableDetails.addCell("");
+            tableDetails.addCell("");
+            tableDetails.addCell("");
+            tableDetails.addCell("");
+            tableDetails.addCell("");
+            tableDetails.addCell("");
+            tableDetails.addCell(new Phrase("Total (Rs).", f6));
+            tableDetails.addCell(new Phrase(String.format("%.2f", expandableListTitle.get(listPosition).getmTotalAmount()), f6));
+            tableDetails.addCell("");
+            document.add(tableDetails);
+
+            //Table for Note
+            PdfPTable tableNote = new PdfPTable(2);
+            tableNote.getDefaultCell().setBorder(0);
+            tableNote.setSpacingBefore(20f);
+            tableNote.setWidths(new float[]{50f, document.getPageSize().getWidth() - ((pdfMargin * 2) + imageCell)});
+            tableNote.setWidthPercentage(100);
+            Font f2 = new Font();
+            f2.setSize(fontsize);
+            f2.setStyle(Font.BOLD);
+            f2.setColor(BaseColor.RED);
+            tableTopMsg.getDefaultCell().setBorder(0);
+            PdfPCell cellNote = new PdfPCell(new Phrase("Note:", f2));
+            cellNote.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cellNote.setVerticalAlignment(Element.ALIGN_CENTER);
+            cellNote.setBorder(Rectangle.NO_BORDER);
+            tableNote.addCell(cellNote);
+            tableNote.addCell("The maximum amount for a single transaction is Rs. 5000/- hence multiple UTR Number may be generated as per transaction value.");
+            document.add(tableNote);
+            document.close();
+        } catch (Exception e) {
+            document.close();
+            e.printStackTrace();
+            Toast.makeText(context, "Pdf not create successfully please recreate again...", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    private void openPDF(File url) {
+
+        Intent target = new Intent(Intent.ACTION_VIEW);
+        target.setDataAndType(Uri.fromFile(url), "application/pdf");
+        target.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+
+        Intent intent = Intent.createChooser(target, "Open File");
+        try {
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(context, "No Pdf reader found please install first...", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    static class GroupHolder {
+        @BindView(R.id.fundtransfer_history_txtID)
+        TextView fundtransferHistoryTxtID;
+        @BindView(R.id.fundtransfer_history_txtDate)
+        TextView fundtransferHistoryTxtDate;
+        @BindView(R.id.fundtransfer_history_txtUniqueTansID)
+        TextView fundtransferHistoryTxtUniqueTansID;
+        @BindView(R.id.fundtransfer_history_txtBeneName)
+        TextView fundtransferHistoryTxtBeneName;
+        @BindView(R.id.fundtransfer_history_txtBankNo)
+        TextView fundtransferHistoryTxtBankNo;
+        @BindView(R.id.fundtransfer_history_txtUTR)
+        TextView fundtransferHistoryTxtUTR;
+        @BindView(R.id.fundtransfer_history_txtSenderName)
+        TextView fundtransferHistoryTxtSenderName;
+        @BindView(R.id.fundtransfer_history_txtMobile)
+        TextView fundtransferHistoryTxtMobile;
+        @BindView(R.id.fundtransfer_history_txtTransStatus)
+        TextView fundtransferHistoryTxtTransStatus;
+        @BindView(R.id.fundtransfer_history_txtQueryTransaction)
+        TextView fundtransferHistoryTxtQueryTransaction;
+        @BindView(R.id.fundtransfer_history_txtRS)
+        TextView fundtransferHistoryTxtRS;
+        @BindView(R.id.fundtransfer_history_txtBeneCode)
+        TextView fundtransferHistoryTxtBeneCode;
+        @BindView(R.id.arrow)
+        ImageView mArrow;
+
+        GroupHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
+    }
+
+    public static class GroupParentBean implements Serializable {
+        private String mTrasId;
+        private float mTotalAmount;
+
+        public String getmTrasId() {
+            return mTrasId;
+        }
+
+        public void setmTrasId(String mTrasId) {
+            this.mTrasId = mTrasId;
+        }
+
+        public float getmTotalAmount() {
+            return mTotalAmount;
+        }
+
+        public void setmTotalAmount(float mTotalAmount) {
+            this.mTotalAmount = mTotalAmount;
+        }
+    }
+
+    public class CreatePDF extends AsyncTask<Integer, Integer, Void> {
+
+        @Override
+        protected Void doInBackground(Integer... params) {
+            int i = params[0];
+            createPDF(i);
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            ((FundTransferHistoryActivity) context).showLoader("Please wait");
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            ((FundTransferHistoryActivity) context).hideLoader();
+            if (!((FundTransferHistoryActivity) context).isFinishing()) {
+                openPDF(pdfFile);
+            }
+        }
+    }
+}

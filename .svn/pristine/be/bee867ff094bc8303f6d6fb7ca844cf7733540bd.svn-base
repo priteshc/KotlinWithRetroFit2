@@ -1,0 +1,49 @@
+package com.atishay.online.moneytransfer;
+
+import com.atishay.online.BaseResponse;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+/**
+ * Created by Vishal Patel on 17,January,2017.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public class RefundTransactionResponse extends BaseResponse {
+
+    @SerializedName("ResponseCode")
+    @Expose
+    private String responseCode;
+    @SerializedName("UniqueTransID")
+    @Expose
+    private String uniqueTransID;
+    @SerializedName("ltlPTID")
+    @Expose
+    private String ltlPTID;
+
+    public String getResponseCode() {
+        return responseCode;
+    }
+
+    public void setResponseCode(String responseCode) {
+        this.responseCode = responseCode;
+    }
+
+    public String getUniqueTransID() {
+        return uniqueTransID;
+    }
+
+    public void setUniqueTransID(String uniqueTransID) {
+        this.uniqueTransID = uniqueTransID;
+    }
+
+    public String getLtlPTID() {
+        return ltlPTID;
+    }
+
+    public void setLtlPTID(String ltlPTID) {
+        this.ltlPTID = ltlPTID;
+    }
+}

@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2016 GoldenMace IT Solutions
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mobile_rlMain"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/mobile_alView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar"/>
+    </android.support.design.widget.AppBarLayout>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_login"
+        android:layout_below="@+id/mobile_alView">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_gravity="center_horizontal"
+            android:background="#00668E">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:gravity="center"
+                    android:text="Your Balance"
+                    android:textColor="@android:color/white"
+                    android:textSize="16dp"
+                    android:textStyle="normal"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center"
+                    android:text="1002"
+                    android:textColor="@android:color/white"
+                    android:textSize="25dp"
+                    android:textStyle="bold"
+                    android:id="@+id/bal"
+
+                    />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/mobile_slMain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="100dp"
+        android:scrollbarAlwaysDrawVerticalTrack="false"
+        android:scrollbarSize="0dip"
+        android:scrollbarThumbVertical="@android:color/white">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+
+            >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="30dp"
+                android:padding="15dp"
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    >
+
+                    <TextView
+                        android:id="@+id/txtMobile"
+                        style="@style/TextStyle"
+                        android:text="@string/mobile_no"
+                        android:visibility="gone"
+                        />
+
+                    <EditText
+                        android:id="@+id/mobile_edtMobile"
+                        style="@style/EditStyle"
+                        android:drawableLeft="@drawable/phone"
+                        android:hint="@string/hint_mobile_no"
+                        android:maxLength="10"
+                        android:inputType="numberPassword"
+                        android:drawablePadding="10dp"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="0dp"
+                    >
+
+                    <ImageView
+                        android:layout_width="65dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/operatoricon"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="5dp"
+                        />
+
+
+                    <com.jaredrummler.materialspinner.MaterialSpinner
+                        app:ms_dropdown_max_height="250dp"
+                        app:ms_dropdown_height="250dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        app:ms_text_color="@color/textColorPrimary1"
+                        app:ms_arrow_tint="@color/colorPrimaryDark"
+                        app:ms_background_color="#f7f8fa"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="3dp"
+                        android:id="@+id/operator"
+                        android:layout_weight="1"
+                        android:typeface="serif"
+                        android:hint="Select Biller"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="20dp"
+                    >
+
+                    <ImageView
+                        android:layout_width="65dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/location"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="5dp"
+                        />
+
+
+                    <com.jaredrummler.materialspinner.MaterialSpinner
+                        app:ms_dropdown_max_height="250dp"
+                        app:ms_dropdown_height="250dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        app:ms_text_color="@color/textColorPrimary1"
+                        app:ms_arrow_tint="@color/colorPrimaryDark"
+                        app:ms_background_color="#f7f8fa"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="3dp"
+                        android:id="@+id/coverage"
+                        android:layout_weight="1"
+                        android:typeface="serif"
+                        android:hint="Select Biller Location"
+                        />
+
+                </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="20dp"
+
+                        >
+
+                        <EditText
+                            android:id="@+id/sms_mobile"
+                            style="@style/EditStyle"
+                            android:hint="@string/sms_mobile_number"
+                            android:inputType="numberPassword"
+                            android:drawableLeft="@drawable/sms"
+                            android:drawablePadding="10dp"
+                            android:maxLength="10"
+
+                            />
+                    </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="20dp"
+
+                    >
+
+                    <EditText
+                        android:id="@+id/mobile_no"
+                        style="@style/EditStyle"
+                        android:hint="@string/enter_mobile_number"
+                        android:inputType="numberPassword"
+                        android:drawableLeft="@drawable/phone"
+                        android:drawablePadding="10dp"
+                        android:maxLength="10"
+                        />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                android:background="#ffffff"
+                android:padding="10dp"
+                >
+            <TextView
+                android:id="@+id/mobile_txtProceed"
+                style="@style/FormStyle1"
+                android:text="@string/proceed_recharge"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:padding="10dp"
+                android:layout_weight="1"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                />
+
+
+            </LinearLayout>
+        </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+    </ScrollView>
+    </FrameLayout>
+
+    <com.atishay.online.utils.Loader
+        android:id="@+id/loader"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+    </com.atishay.online.utils.Loader>
+</RelativeLayout>

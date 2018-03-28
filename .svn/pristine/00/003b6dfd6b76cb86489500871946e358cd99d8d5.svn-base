@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2016 GoldenMace IT Solutions
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<resources>
+    <!--COLOR USED IN APP-->
+    <color name="colorPrimary">#007FB1</color>
+    <color name="colorPrimaryDark">#00668E</color>
+    <color name="textColorPrimary">#000000</color>
+    <color name="textColorSecondary">#A0000000</color>
+    <color name="windowBackground">#F1F3F6</color>
+    <color name="actionbar_title_text">#FFFFFF</color>
+    <color name="navigationBarColor">#000000</color>
+    <color name="colorAccent">#007FB1</color>
+
+    <!-- APP THEME-->
+    <style name="AppTheme" parent="MyMaterialTheme.Base">
+
+    </style>
+
+    <style name="AppTheme.ColdStart" parent="AppTheme">
+        <item name="android:windowBackground">@drawable/splash_bg</item>
+    </style>
+
+    <style name="MyMaterialTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/windowBackground</item>
+        <!-- TextInputLayout text color-->
+        <item name="colorControlActivated">@color/colorPrimary</item>
+        <!-- EditText line color when EditText on-focus-->
+        <item name="colorControlNormal">@color/colorPrimary</item>
+        <item name="colorControlHighlight">@color/colorPrimary</item>
+        <item name="android:textColorHint">@color/colorPrimary</item>
+    </style>
+
+    <!--TOOLBAR/ACTIONBAR-->
+    <style name="ThemeOverlay.ActionBar" parent="MyMaterialTheme.Base">
+        <item name="android:textColorPrimary">@color/actionbar_title_text</item>
+    </style>
+
+    <!--TABVIEW-->
+    <style name="CustomTabWidgetText"
+           parent="@android:style/TextAppearance.Widget.TabWidget">
+        <item name="android:textSize">@dimen/font_large</item>
+    </style>
+
+    <!--MATERIAL BOTTOM DIALOG-->
+    <style name="MaterialDialogSheet" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowAnimationStyle">@style/MaterialDialogSheetAnimation</item>
+    </style>
+
+    <style name="MaterialDialogSheetAnimation">
+        <item name="android:windowEnterAnimation">@anim/popup_show</item>
+        <item name="android:windowExitAnimation">@anim/popup_hide</item>
+    </style>
+
+</resources>

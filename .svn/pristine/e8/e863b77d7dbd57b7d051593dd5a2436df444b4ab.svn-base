@@ -1,0 +1,22 @@
+package com.atishay.online.myaccountrecharge;
+
+import com.atishay.online.AppBaseView;
+import com.atishay.online.BaseResponse;
+
+import java.util.ArrayList;
+
+/**
+ * Created by Vishal Patel on 26,November,2016.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+public interface AccountRechargeView extends AppBaseView {
+    void onAccountReportFetched(ArrayList<AccountRechargeReportBean> aSuccessResponse);
+
+    void onBankListFetched(ArrayList<BankListBean> aList);
+
+    void onTransactionTypeListFetched(ArrayList<TransactionTypeBean> aList);
+
+    void doTransactionCompleteDetails(BaseResponse aList);
+}

@@ -1,0 +1,303 @@
+<!--
+  ~ Copyright 2016 GoldenMace IT Solutions
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<resources>
+    <string name="app_name">Atishay Online</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_username">Username</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">LOGIN</string>
+    <string name="action_forgot_password">FORGOT PASSWORD ?</string>
+    <string name="error_invalid_email">Invalid username</string>
+    <string name="error_invalid_password">Password is too short</string>
+    <string name="error_incorrect_password">Invalid password</string>
+    <string name="error_field_required">All field are mandatory</string>
+    <string name="error_field_phoneno">Enter valid mobile number</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+    <string name="mobile">Mobile</string>
+    <string name="dth">DTH</string>
+    <string name="money">Money Transfer</string>
+    <string name="surcharge">Get Service Charge</string>
+    <string name="ac_recharge">My A/C Recharge</string>
+    <string name="postpaid">PostPaid Bills</string>
+    <string name="utility">Utility Bills</string>
+    <string name="view_plan">View Plan</string>
+    <string name="profile">Profile</string>
+    <string name="save">Save</string>
+    <string name="submit">Submit</string>
+    <string name="change_password">Change Password</string>
+    <string name="change_trans_code">Change Transaction Code</string>
+    <string name="please_wait">Please Wait...</string>
+    <string name="please_mail">Enter Email Address</string>
+    <string name="invalid_transaction_password">Invalid transaction code</string>
+    <string name="invalid_bill_amount">Invalid bill amount</string>
+    <string name="invalid_recharge_amount">Invalid recharge amount</string>
+    <string name="mobile_rcrg">Mobile Recharge</string>
+    <string name="dth_rcrg">DTH Recharge</string>
+    <string name="postpaid_rcrg">Bill Recharge</string>
+    <string name="ac_rcrg">My A/C Recharge</string>
+
+    <!--Mobile-->
+    <string name="operator"><![CDATA[Operator <font color="#ff0000">*</font>]]></string>
+    <string name="select_operator">---Select Operator---</string>
+    <string name="mobile_no"><![CDATA[Mobile Number <font color="#ff0000">*</font>]]></string>
+    <string name="hint_mobile_no">Enter mobile number</string>
+    <string name="phone_no"><![CDATA[Phone Number <font color="#ff0000">*</font>]]></string>
+    <string name="hint_phone_no">Enter Phone Number</string>
+    <string name="circle_nm"><![CDATA[Circle Name <font color="#ff0000">*</font>]]></string>
+    <string name="trans_type"><![CDATA[Transaction Type <font color="#ff0000">*</font>]]></string>
+    <string name="select_circle_nm">---Select Circle---</string>
+    <string name="rchrg_amunt"><![CDATA[Recharge Amount <font color="#ff0000">*</font>]]></string>
+    <string name="hint_rchrg_amunt">Enter amount</string>
+    <string name="trans_code"><![CDATA[Transaction Code <font color="#ff0000">*</font>]]></string>
+    <string name="hint_trans_code">Enter transaction code</string>
+    <string name="proceed_recharge">Proceed to Recharge</string>
+    <string name="amount">₹ %1$s</string>
+    <string name="remember_me">Remember me</string>
+
+    <!--DTH-->
+    <string name="subscrb_id"><![CDATA[Subscriber ID <font color="#ff0000">*</font>]]></string>
+    <string name="hint_subscrb_id">Enter Subscriber ID</string>
+
+    <!--Navigation Menu-->
+    <string name="nav_trans_history">Transfer History</string>
+    <string name="nav_change_password">Change Password</string>
+    <string name="nav_about">About</string>
+    <string name="nav_rate">Rate App</string>
+    <string name="nav_logout">Logout</string>
+
+    <!--Profile-->
+    <string name="company_info">Company Information</string>
+    <string name="company_name">Name</string>
+    <string name="company_address">Address</string>
+    <string name="company_city">City</string>
+    <string name="company_pin">Pin</string>
+
+    <string name="personal_info">Personal Information</string>
+    <string name="personal_first_name">First Name</string>
+    <string name="personal_middle_name">Middle Name</string>
+    <string name="personal_last_name">Last Name</string>
+    <string name="personal_address">Address</string>
+    <string name="personal_mobile">Mobile Number</string>
+    <string name="personal_email">Email ID</string>
+    <string name="personal_setup_charge">Setup Charges</string>
+
+    <!--Change Password-->
+    <string name="fchange_current_pass">Current Password</string>
+    <string name="fchange_new_pass">New Password</string>
+    <string name="fchange_confirm_new_pass">Confirm New Password</string>
+    <string name="fchange_trans_code">Current Transaction Code</string>
+    <string name="hint_new_trans_code">New Transaction Code(4 digits)</string>
+    <string name="fchange_new_trans_code">New Transaction Code</string>
+    <string name="hint_confirm_trans_code">Confirm Transaction Code(4 digits)</string>
+    <string name="fchange_confirm_trans_code">Confirm Transaction Code</string>
+
+    <!--Beneficiary-->
+    <string name="active_beneficiary">Active Beneficiaries</string>
+    <string name="bene_name"><![CDATA[Name <font color="#ff0000">*</font>]]></string>
+    <string name="hint_bene_name">Enter Name</string>
+    <string name="bene_ifsc"><![CDATA[IFSC Code <font color="#ff0000">*</font>]]></string>
+    <string name="hint_bene_ifsc">Enter IFSC Code</string>
+    <string name="bene_bank_no"><![CDATA[Bank Account Number <font color="#ff0000">*</font>]]></string>
+    <string name="hint_bene_bank_no">Enter Bank Account Number</string>
+    <string name="bene_confirm_bank_no"><![CDATA[Confirm Bank Account Number <font color="#ff0000">*</font>]]></string>
+    <string name="hint_bene_confirm_bank_no">Enter Confirm Bank Account Number</string>
+    <string name="search_ifsc"><u>Search IFSC Code</u></string>
+    <string name="master_ifsc"><u>Master IFSC Code</u></string>
+    <string name="next">Next</string>
+    <string name="add_beneficiary">Add Beneficiary</string>
+    <string name="remove_beneficiary">Remove Beneficiary</string>
+    <string name="enter_otp">Enter OTP</string>
+
+    <string name="trans_code_otp">Transaction Code</string>
+    <string name="resend_otp">Resend OTP</string>
+    <string name="confirm_otp">Confirm OTP</string>
+    <string name="title_activity_demo">DemoActivity</string>
+    <string name="customer_service">Customer Services</string>
+    <string name="cancel">Cancel</string>
+    <string name="unverified">Beneficiary Validation</string>
+    <string name="verify_beneficiary">Verified Beneficiary</string>
+    <string name="action_settings">Settings</string>
+    <string name="delete_beneficiary_msg">Are you sure you want to Delete Beneficiary?</string>
+    <string name="transaction_timing">Transaction Timings</string>
+    <string name="transaction_msg">Monday to Saturday(Except 2nd &amp; 4th Saturday &amp; Bank Holidays)</string>
+    <string name="transaction_imps">IMPS : 24 * 7</string>
+    <string name="transaction_neft">NEFT : 8:00 to 6:30 PM</string>
+    <string name="ok">Ok</string>
+    <string name="error_field_bankno">Bank account number mismatch</string>
+    <string name="beneficiary_delete_msg">Swip left to delete beneficiary</string>
+    <string name="beneficiary_list_empty_title">Beneficiary list empty</string>
+    <string name="beneficiary_load_subtitle">You do not have any beneficiary</string>
+
+    <!--Money Transfer-->
+    <string name="money_bene_code">Beneficiary Code</string>
+    <string name="money_bene_nickname">Beneficiary Name</string>
+    <string name="money_bene_accountno">Beneficiary Account Number</string>
+    <string name="money_bene_bankaccountno">Bank Account Number</string>
+    <string name="money_ifsc">IFSC Code</string>
+    <string name="money_bankdetails">Bank Details</string>
+    <string name="money_amount"><![CDATA[Amount <font color="#ff0000">*</font>]]></string>
+    <string name="hint_amount">Enter Amount</string>
+    <string name="money_servicecharge">Service Charge</string>
+    <string name="money_totalamount">Total Amount(Amount + Service Charge)</string>
+    <string name="money_transfer">Money Transfer</string>
+    <string name="invalide_mobile">10 Digit Number</string>
+    <string name="invalide_username">Invalid Username or Password</string>
+    <string name="txt_name">Name :</string>
+    <string name="txt_mobile">Mobile Number :</string>
+    <string name="invalide_data">Invalid InputData</string>
+    <string name="money_bankname">Bank Name</string>
+    <string name="money_ifsccode">IFSC Code</string>
+    <string name="money_bankbranch">Branch Name</string>
+    <string name="master_ifsc_list">Master IFSC List</string>
+    <string name="search_ifsc_list">Search IFSC List</string>
+    <string name="bank"><![CDATA[<b>Bank :</b> %s]]></string>
+    <string name="ifsc"><![CDATA[<b>IFSC :</b> %s]]></string>
+    <string name="branch"><![CDATA[<b>Branch :</b> %s]]></string>
+    <string name="address"><![CDATA[<b>Address : <br /></b> %s]]></string>
+    <string name="search_bank">Bank</string>
+    <string name="search_state">State</string>
+    <string name="search_district">District</string>
+    <string name="search_city">City</string>
+    <string name="search_branch">Branch</string>
+    <string name="fund_transfer_msg">Are you sure you want to Remit Money ?</string>
+    <string name="amount_nil">Amount Nil</string>
+    <string name="money_msg"><![CDATA[<font color="#FF0000">Min Rs.100 and Max Rs.25000 Per Transaction)</font>]]></string>
+
+    <!--Transaction History-->
+    <string name="trans_history">Recharge History</string>
+    <string name="my_ac_history">My A/C History</string>
+    <string name="fund_ac_history">Fund History</string>
+    <string name="history_Id">TRANS ID</string>
+    <string name="history_rs">RS.</string>
+    <string name="prepaid_history">Prepaid History</string>
+    <string name="postpaid_history">Postpaid History</string>
+    <string name="dth_history">DTH History</string>
+    <string name="utility_history">UTILITY History</string>
+    <string name="single_history">Single Transaction</string>
+    <string name="group_history">Group Transaction</string>
+    <string name="fund_transfer">Fund Transfer</string>
+
+    <!--Customer Registration-->
+    <string name="cust_register">Customer Registration</string>
+    <string name="cust_first_name"><![CDATA[First Name <font color="#ff0000">*</font>]]></string>
+    <string name="hint_cust_fname">Enter First Name</string>
+    <string name="cust_last_name"><![CDATA[Last Name <font color="#ff0000">*</font>]]></string>
+    <string name="hint_cust_lname">Enter Last Name</string>
+    <string name="cust_otpcode"><![CDATA[OTP Code <font color="#ff0000">*</font>]]></string>
+    <string name="hint_cust_otpcode">Enter OTP Code</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="gender"><![CDATA[Gender <font color="#ff0000">*</font>]]></string>
+
+    <!--Postpaid-->
+    <string name="notice_msg"><![CDATA[<font color="#FF0000">Available only in (Chennai / Rest Of Tamil nadu / Karnataka / Andhra Pradesh / Kerala)</font>]]></string>
+    <string name="bill_amount"><![CDATA[Bill Amount <font color="#ff0000">*</font>]]></string>
+    <string name="hint_bill_amount">Enter Bill Amount</string>
+    <string name="landline_number"><![CDATA[Landline Number <font color="#ff0000">*</font>]]></string>
+    <string name="hint_landline_number">Enter Landline Number</string>
+    <string name="account_number"><![CDATA[Account Number <font color="#ff0000">*</font>]]></string>
+    <string name="hint_account_number">Enter Account Number</string>
+    <string name="service_type"><![CDATA[Service Type <font color="#ff0000">*</font>]]></string>
+    <string name="proceed_pay">Proceed to Pay</string>
+    <!--<string name="total_amount"><![CDATA[Total Amount <font color="#ff0000">*</font>]]></string>-->
+    <string name="total_amount">Total Amount</string>
+
+    <!--Utility-->
+    <string name="subscriber_number"><![CDATA[Subscriber Number <font color="#ff0000">*</font>]]></string>
+    <string name="hint_subscriber_number">Enter Subscriber Number</string>
+    <string name="consumer_number"><![CDATA[Consumer Number <font color="#ff0000">*</font>]]></string>
+    <string name="hint_consumer_number">Enter Consumer Number</string>
+    <string name="customer_mobile_number"><![CDATA[Customer Mobile Number <font color="#ff0000">*</font>]]></string>
+    <string name="hint_customer_mobile_number">Enter Customer Mobile Number</string>
+    <string name="bill_unit"><![CDATA[Billing Unit <font color="#ff0000">*</font>]]></string>
+    <string name="hint_bill_unit">Enter Billing Unit</string>
+    <string name="pc_number"><![CDATA[Processing Cycle Number <font color="#ff0000">*</font>]]></string>
+    <string name="hint_pc_number">Enter PC Number</string>
+    <string name="cycle_number"><![CDATA[Cycle Number <font color="#ff0000">*</font>]]></string>
+    <string name="hint_cycle_number">Enter Cycle Number</string>
+    <string name="service_number"><![CDATA[Service Number <font color="#ff0000">*</font>]]></string>
+    <string name="hint_service_number">Enter Service Number</string>
+    <string name="city"><![CDATA[City <font color="#ff0000">*</font>]]></string>
+    <string name="hint_city">Enter City</string>
+    <string name="policy_number"><![CDATA[Policy Number <font color="#ff0000">*</font>]]></string>
+    <string name="hint_policy_number">Enter Policy Number</string>
+    <string name="date_of_birth"><![CDATA[Date Of Birth <font color="#ff0000">*</font>]]></string>
+    <string name="hint_date_of_birth">Enter Date Of Birth</string>
+    <string name="bill_number"><![CDATA[Bill Number <font color="#ff0000">*</font>]]></string>
+    <string name="hint_bill_number">Enter Bill Number</string>
+    <string name="bill_group_number"><![CDATA[Bill Group Number <font color="#ff0000">*</font>]]></string>
+    <string name="hint_bill_group_number">Enter Bill Group Number</string>
+    <string name="error_transaction_length_to_short">Transaction code should be of 4 digits.</string>
+    <string name="error_transaction_not_matched">These Transaction codes don\'t match.</string>
+    <string name="error_password_not_matched">These passwords don\'t match.</string>
+    <string name="error_no_internet_subtitle">Please check your internet settings</string>
+    <string name="msg_no_record_found">No records found</string>
+
+    <!--My Account Recharge-->
+    <string name="bank_name"><![CDATA[Bank Name <font color="#ff0000">*</font>]]></string>
+    <string name="utr_no"><![CDATA[UTR No <font color="#ff0000">*</font>]]></string>
+    <string name="hint_utr_no">Enter UTR No</string>
+    <string name="drid"><![CDATA[<b>DRID :</b> %s]]></string>
+    <string name="atishay_vender_id"><![CDATA[<b>Atishay Vendor ID :</b> %s]]></string>
+    <string name="transactiontype"><![CDATA[<b>Transaction Type :</b> %s]]></string>
+    <string name="bankname"><![CDATA[<b>Bank Name :</b> %s]]></string>
+    <string name="utrno"><![CDATA[<b>UTR No :</b> %s]]></string>
+    <string name="mystatus"><![CDATA[%s]]></string>
+    <string name="recharge_ac">Recharge Account</string>
+    <string name="view_report">View Recharge Account</string>
+
+    <!--Aadhaar-->
+    <string name="aadhaar_verification">Aadhaar Verification</string>
+    <string name="aadhaar_number"><![CDATA[Aadhaar Number <font color="#ff0000">*</font>]]></string>
+    <string name="hint_aadhaar_number">Enter 12 Digit Aadhaar No.</string>
+    <string name="aadhaar_name"><![CDATA[Name as on Aadhaar Card <font color="#ff0000">*</font>]]></string>
+    <string name="hint_aadhaar_name">Enter name as on Aadhaar</string>
+    <string name="aadhaar_check_details">I have no objection to provide my Aadhaar details</string>
+    <string name="aadhaar_authenticate">Authenticate</string>
+    <string name="aadhaar_transactionhistory">Aadhaar Verification History</string>
+    <string name="verification_history">Verification History</string>
+
+    <!--Remove Beneficiary-->
+    <string name="request_opt">Request OPT</string>
+    <string name="click_to_select_ifsc_code">Tap to select IFSC code</string>
+    <string name="reset">Reset</string>
+    <string name="unique_transid">Unique TransID</string>
+    <string name="name">Name</string>
+    <string name="ben_code">Ben Code</string>
+    <string name="a_c_no">A/C No</string>
+    <string name="utr">UTR</string>
+    <string name="sender_name">Sender Name</string>
+    <string name="sender_mobile">Sender Mobile</string>
+    <string name="query_transaction">Query Transaction</string>
+    <string name="query_refund">Query Refund</string>
+    <string name="refund_transaction">Refund Transaction</string>
+    <string name="transaction_timing_str"><![CDATA[<u>Transaction Timing</u>]]></string>
+    <string name="surcharge_calculate"><![CDATA[<u>Get Service Change</u>]]></string>
+    <string name="service_charge_fetch_msg">Service charge doesn\'t fetch, Please get service charge first</string>
+    <string name="amount_fetch_issue">Amount updated, Please get service charge first</string>
+    <string name="amount_check_msg">Amount Min Rs.100 and Max Rs.25000 Per Transaction</string>
+    <string name="print_amount">Amount</string>
+    <string name="date_time">Date And Time</string>
+    <string name="status"><![CDATA[<b>Status :</b>]]></string>
+    <string name="money_title_str">Money Transfer Receipt</string>
+    <string name="single_error_fund_money">Seems like you haven\'t done any single transaction yet.</string>
+    <string name="grp_error_fund_money">Seems like you haven\'t done any group transaction yet.</string>
+    <string name="enter_mobile_number">Enter mobile number</string>
+    <string name="sms_mobile_number">Sms mobile number</string>
+</resources>

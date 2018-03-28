@@ -1,0 +1,28 @@
+{
+    "logs": [
+        {
+            "outputFile": "C:\\StudioProject\\AtishayOnline\\app\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-v16\\values-v16.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\Atishay\\.gradle\\caches\\transforms-1\\files-1.1\\materialdatetimepicker-2.3.0.aar\\45b6e370ce11135c4847c2d78394e442\\res\\values-v16\\values-v16.xml",
+                    "from": {
+                        "startLines": "4,7,10,13",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "214,470,603,722",
+                        "endLines": "4,9,12,15",
+                        "endColumns": "97,12,12,12",
+                        "endOffsets": "307,598,717,834"
+                    },
+                    "to": {
+                        "startLines": "2,3,6,9",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,153,286,405",
+                        "endLines": "2,5,8,11",
+                        "endColumns": "97,12,12,12",
+                        "endOffsets": "148,281,400,517"
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,90 @@
+/*
+ * Copyright 2016 GoldenMace IT Solutions
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+package com.atishay.online.searchifsc;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
+
+import com.atishay.online.R;
+
+import java.util.List;
+
+/**
+ * Created by Vishal Patel on 12,November,2016.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+public class SearchIFSCAdapter extends ArrayAdapter<CommonDataBean> {
+
+    public Context mContext;
+    TextView mSpinnerText;
+    private List<CommonDataBean> mCommonInterfaceArrayList;
+    private LayoutInflater li;
+    private int layoutId;
+
+    public SearchIFSCAdapter(Context context, int resource, List<CommonDataBean> objects) {
+        super(context, resource, objects);
+        this.mContext = context;
+        this.mCommonInterfaceArrayList = objects;
+        layoutId = resource;
+        li = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    public SearchIFSCAdapter(Context aContext, List<CommonDataBean> aCommonInterfaceArrayList) {
+        this(aContext, R.layout.simple_spinner_item, aCommonInterfaceArrayList);
+    }
+
+    @Override
+    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+        return getView(position, convertView, parent);
+    }
+
+    @Override
+    public int getCount() {
+        return mCommonInterfaceArrayList.size();
+    }
+
+    @Override
+    public CommonDataBean getItem(int position) {
+        return mCommonInterfaceArrayList.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return 0;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        convertView = li.inflate(layoutId, null);
+        mSpinnerText = (TextView) convertView.findViewById(R.id.spinnerText);
+        mSpinnerText.setText(mCommonInterfaceArrayList.get(position).getTitle());
+        return convertView;
+    }
+
+
+    @Override
+    public void setDropDownViewResource(int resource) {
+        super.setDropDownViewResource(R.layout.spinner_item);
+    }
+}
+

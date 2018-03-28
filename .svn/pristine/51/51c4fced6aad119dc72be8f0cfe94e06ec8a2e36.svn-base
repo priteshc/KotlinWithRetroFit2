@@ -1,0 +1,98 @@
+package com.atishay.online.postpaid;
+
+import com.atishay.online.AtishayOnlineApp;
+import com.atishay.online.BaseResponse;
+import com.atishay.online.R;
+import com.atishay.online.utils.Constants;
+import com.atishay.online.utils.RestApis;
+import com.atishay.online.utils.RetrofitClientFactory;
+import com.atishay.online.utils.network.ApiError;
+import com.atishay.online.utils.network.RestApiCallback;
+import com.goldenmace.framework.utils.NetworkUtils;
+
+import java.io.IOException;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+/**
+ * Created by Atishay on 19-01-2018.
+ */
+
+public class BillerPresenter {
+
+    private BillerView billerView;
+
+    private RetrofitClientFactory clientFactory;
+
+    private RestApis mRestApis;
+
+
+
+
+    public BillerPresenter(BillerView billerView) {
+
+
+        this.billerView = billerView;
+
+        clientFactory = new RetrofitClientFactory();
+
+        mRestApis = RetrofitClientFactory.get();
+
+
+
+    }
+
+
+    public void getBiller(String coverid,String catid,String billername){
+
+
+        billerView.showprogress();
+
+        Call<BIllerInfoPojo> pojoCall = mRestApis.getbillerbyCateggory(coverid, catid, billername);
+
+        pojoCall.enqueue(new Callback<BIllerInfoPojo>() {
+            @Override
+            public void onResponse(Call<BIllerInfoPojo> call, Response<BIllerInfoPojo> response) {
+
+
+                billerView.hideprogress();
+
+                if(response.isSuccessful()) {
+
+
+                    if (response.body().getResponseMessage().equals(Constants.SUCCESSFUL)) {
+
+                        billerView.showBSuccessMsg(response.body().getResponseMessage(),response.body().getResponse());
+
+
+                    } else
+                        {
+
+
+                            if (response.body().getResponseMessage().equals(Constants.FAILED)) {
+
+                                billerView.showBfailedMeassage(response.body().getResponseMessage());
+                        }
+
+                    }
+                }
+
+
+                }
+
+            @Override
+            public void onFailure(Call<BIllerInfoPojo> call, Throwable t) {
+
+                billerView.hideprogress();
+
+                billerView.showFErrorMeassage(AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error));
+
+            }
+        });
+
+
+    }
+
+}

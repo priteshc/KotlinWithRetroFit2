@@ -1,0 +1,47 @@
+package com.atishay.online.myaccountrecharge;
+
+import com.atishay.online.AtishayOnlineApp;
+import com.atishay.online.utils.network.ApiError;
+import com.atishay.online.utils.network.RestApiCallback;
+
+import java.util.Map;
+
+/**
+ * Created by Vishal Patel on 25,November,2016.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+public class AccountRechargeController implements AccountRechargeUsecase {
+    private RestApiCallback<Object, ApiError<Object>> mApiCallback;
+
+    public AccountRechargeController(RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+        mApiCallback = aApiCallback;
+    }
+
+    @Override
+    public void loadMyAccountReport(String aUserName, String aPassword) {
+        AtishayOnlineApp.getAppInstance().getRestApis().loadMyAccountHistory(aUserName, aPassword, mApiCallback);
+    }
+
+    @Override
+    public void doBankList(String aUserName, String aPassword) {
+        AtishayOnlineApp.getAppInstance().getRestApis().getBankList(aUserName, aPassword, mApiCallback);
+    }
+
+    @Override
+    public void doTransactionTypeList(String aUserName, String aPassword) {
+        AtishayOnlineApp.getAppInstance().getRestApis().getTransactionType(aUserName, aPassword, mApiCallback);
+    }
+
+    @Override
+    public void doAccountRechargeOnline(Map<String, String> aQueryMap) {
+        AtishayOnlineApp.getAppInstance().getRestApis().getAccountRecharge(aQueryMap, mApiCallback);
+    }
+
+    @Override
+    public void doAccountRechargeCash(Map<String, String> aQueryMap) {
+        AtishayOnlineApp.getAppInstance().getRestApis().getAccountRecharge(aQueryMap, mApiCallback);
+    }
+
+}

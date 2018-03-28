@@ -1,0 +1,30 @@
+// Generated code from Butter Knife. Do not modify!
+package com.atishay.online.history;
+
+import android.support.v7.widget.RecyclerView;
+import butterknife.Unbinder;
+import butterknife.internal.Finder;
+import com.atishay.online.R;
+import java.lang.IllegalStateException;
+import java.lang.Object;
+import java.lang.Override;
+
+public class PrepaidHistoryFragment_ViewBinding<T extends PrepaidHistoryFragment> implements Unbinder {
+  protected T target;
+
+  public PrepaidHistoryFragment_ViewBinding(T target, Finder finder, Object source) {
+    this.target = target;
+
+    target.mHistoryList = finder.findRequiredViewAsType(source, R.id.history_rvHistory, "field 'mHistoryList'", RecyclerView.class);
+  }
+
+  @Override
+  public void unbind() {
+    T target = this.target;
+    if (target == null) throw new IllegalStateException("Bindings already cleared.");
+
+    target.mHistoryList = null;
+
+    this.target = null;
+  }
+}

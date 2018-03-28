@@ -1,0 +1,90 @@
+package com.atishay.online.utility;
+
+/**
+ * Created by Atishay on 12-02-2018.
+ */
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+public class MainDetailPojo {
+
+    @SerializedName("TransactionId")
+    @Expose
+    private String transactionId;
+    @SerializedName("CustomerName")
+    @Expose
+    private String customerName;
+    @SerializedName("BillNumber")
+    @Expose
+    private String billNumber;
+    @SerializedName("BillPeriod")
+    @Expose
+    private String billPeriod;
+    @SerializedName("BillDate")
+    @Expose
+    private String billDate;
+    @SerializedName("BillDueDate")
+    @Expose
+    private String billDueDate;
+    @SerializedName("BillAmount")
+    @Expose
+    private String billAmount;
+
+    public String getTransactionId() {
+        return transactionId;
+    }
+
+    public void setTransactionId(String transactionId) {
+        this.transactionId = transactionId;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public String getBillNumber() {
+        return billNumber;
+    }
+
+    public void setBillNumber(String billNumber) {
+        this.billNumber = billNumber;
+    }
+
+    public String getBillPeriod() {
+        return billPeriod;
+    }
+
+    public void setBillPeriod(String billPeriod) {
+        this.billPeriod = billPeriod;
+    }
+
+    public String getBillDate() {
+        return billDate;
+    }
+
+    public void setBillDate(String billDate) {
+        this.billDate = billDate;
+    }
+
+    public String getBillDueDate() {
+        return billDueDate;
+    }
+
+    public void setBillDueDate(String billDueDate) {
+        this.billDueDate = billDueDate;
+    }
+
+    public String getBillAmount() {
+        return billAmount;
+    }
+
+    public void setBillAmount(String billAmount) {
+        this.billAmount = billAmount;
+    }
+
+}

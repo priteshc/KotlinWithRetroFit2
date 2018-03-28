@@ -1,0 +1,94 @@
+
+package com.atishay.online.aadhaar;
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+public class AadhaarVerificationBean {
+
+    @SerializedName("Aadhaarnumber")
+    @Expose
+    private String aadhaarnumber;
+    @SerializedName("Name")
+    @Expose
+    private String name;
+    @SerializedName("Status")
+    @Expose
+    private String status;
+    @SerializedName("CreditAmount")
+    @Expose
+    private Double creditAmount;
+    @SerializedName("VerificationDate")
+    @Expose
+    private String verificationDate;
+
+    /**
+     * @return The aadhaarnumber
+     */
+    public String getAadhaarnumber() {
+        return aadhaarnumber;
+    }
+
+    /**
+     * @param aadhaarnumber The Aadhaarnumber
+     */
+    public void setAadhaarnumber(String aadhaarnumber) {
+        this.aadhaarnumber = aadhaarnumber;
+    }
+
+    /**
+     * @return The name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @param name The Name
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * @return The status
+     */
+    public String getStatus() {
+        return status;
+    }
+
+    /**
+     * @param status The Status
+     */
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    /**
+     * @return The creditAmount
+     */
+    public Double getCreditAmount() {
+        return creditAmount;
+    }
+
+    /**
+     * @param creditAmount The CreditAmount
+     */
+    public void setCreditAmount(Double creditAmount) {
+        this.creditAmount = creditAmount;
+    }
+
+    /**
+     * @return The verificationDate
+     */
+    public String getVerificationDate() {
+        return verificationDate;
+    }
+
+    /**
+     * @param verificationDate The VerificationDate
+     */
+    public void setVerificationDate(String verificationDate) {
+        this.verificationDate = verificationDate;
+    }
+}

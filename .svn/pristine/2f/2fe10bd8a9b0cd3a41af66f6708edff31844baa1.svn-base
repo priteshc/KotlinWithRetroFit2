@@ -1,0 +1,133 @@
+<!--
+  ~ Copyright 2016 GoldenMace IT Solutions
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<resources>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+    <style name="Widget.CardContent" parent="android:Widget">
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:paddingTop">24dp</item>
+        <item name="android:paddingBottom">24dp</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <!--COMMON TEXTVIEW-->
+    <style name="TextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/textColorPrimary</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">@dimen/font_large</item>
+        <item name="android:paddingLeft">@dimen/spacing_control</item>
+        <item name="android:layout_marginLeft">@dimen/spacing_standard</item>
+        <item name="android:layout_marginRight">@dimen/spacing_standard</item>
+        <item name="android:layout_marginTop">@dimen/spacing_activity_container</item>
+    </style>
+
+    <!--COMMON EDITEXT-->
+    <style name="EditStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/textColorPrimary1</item>
+        <item name="android:textSize">@dimen/font_normal</item>
+        <item name="android:focusable">true</item>
+        <item name="android:focusableInTouchMode">true</item>
+        <item name="android:layout_marginLeft">@dimen/spacing_standard</item>
+        <item name="android:layout_marginRight">@dimen/spacing_standard</item>
+        <item name="colorControlNormal">@color/textColorPrimary</item>
+        <item name="colorControlActivated">@color/textColorPrimary</item>
+        <item name="colorControlHighlight">@color/textColorPrimary</item>
+        <item name="android:textColorHint">@color/textColorPrimary1</item>
+    </style>
+
+    <!--COMMON SPINNER-->
+    <style name="SpinnerStyle" parent="Widget.AppCompat.Spinner.Underlined">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/textColorSecondary</item>
+        <item name="android:textSize">@dimen/font_normal</item>
+        <item name="android:paddingStart">@dimen/spacing_control</item>
+        <item name="android:paddingEnd">@dimen/spacing_standard</item>
+        <item name="android:layout_marginLeft">@dimen/spacing_standard</item>
+        <item name="android:layout_marginRight">@dimen/spacing_standard</item>
+        <item name="colorControlNormal">@color/textColorPrimary</item>
+        <item name="colorControlActivated">@color/textColorPrimary</item>
+        <item name="colorControlHighlight">@color/textColorPrimary</item>
+        <item name="android:textColorHint">@color/textColorSecondary</item>
+    </style>
+
+    <!--TEXTVIEW-->
+    <style name="FormStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/standard_control_height</item>
+        <item name="android:textColor">@color/windowBackground</item>
+        <item name="android:layout_margin">@dimen/spacing_standard</item>
+        <item name="android:background">@drawable/btn_border</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">@dimen/font_large</item>
+    </style>
+
+    <style name="FormStyle1">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/standard_control_height</item>
+        <item name="android:textColor">@color/windowBackground</item>
+        <item name="android:background">@drawable/btn_border</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">@dimen/font_large</item>
+    </style>
+
+
+
+    <style name="AppAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <!-- Used for the buttons -->
+        <item name="colorAccent">@color/colorAccent</item>
+        <!-- Used for the title and text -->
+        <item name="android:textColorPrimary">@color/textColorPrimary</item>
+        <!-- Used for the background -->
+        <item name="android:background">@color/windowBackground</item>
+    </style>
+
+    <style name="Card">
+
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">150dp</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">5dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+        <item name="android:clickable">true</item>
+
+    </style>
+
+
+
+    <style name="Card1">
+
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">150dp</item>
+        <item name="android:layout_marginLeft">5dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+        <item name="android:clickable">true</item>
+
+    </style>
+
+</resources>

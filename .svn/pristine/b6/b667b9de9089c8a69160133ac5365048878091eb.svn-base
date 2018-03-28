@@ -1,0 +1,78 @@
+/*
+ * Copyright 2016 GoldenMace IT Solutions
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+package com.atishay.online.benefiaciary;
+
+import com.atishay.online.AtishayOnlineApp;
+import com.atishay.online.utils.network.ApiError;
+import com.atishay.online.utils.network.RestApiCallback;
+
+import java.util.Map;
+
+/**
+ * Created by Vishal Patel on 18,October,2016.
+ * AtishayOnline
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+public class BeneficiaryController implements BeneficiaryUsecase {
+
+    RestApiCallback<Object, ApiError<Object>> mApiCallback;
+
+    public BeneficiaryController(RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+        mApiCallback = aApiCallback;
+    }
+
+    @Override
+    public void getBeneficiaryList(Map<String, String> aQueryMap) {
+        AtishayOnlineApp.getAppInstance().getRestApis().getBeneficiaryList(aQueryMap, mApiCallback);
+    }
+
+    @Override
+    public void getOTP(String aUsername, String aPassword, String aMobile) {
+        AtishayOnlineApp.getAppInstance().getRestApis().getOTP(aUsername, aPassword, aMobile, mApiCallback);
+    }
+
+    @Override
+    public void doQueryRegister(Map<String, String> aQueryMap) {
+        AtishayOnlineApp.getAppInstance().getRestApis().doQueryRegister(aQueryMap, mApiCallback);
+    }
+
+    @Override
+    public void doCustRegister(Map<String, String> aQueryMap) {
+        AtishayOnlineApp.getAppInstance().getRestApis().doCustRegister(aQueryMap, mApiCallback);
+    }
+
+    @Override
+    public void doDeactivateBeneficiary(Map<String, String> aQueryMap) {
+        AtishayOnlineApp.getAppInstance().getRestApis().doDeactiveBeneficiary(aQueryMap, mApiCallback);
+    }
+
+    @Override
+    public void doValidateDeactivateBeneficiary(Map<String, String> aQueryMap) {
+        AtishayOnlineApp.getAppInstance().getRestApis().doValidateDeactivateBeneficiary(aQueryMap, mApiCallback);
+    }
+
+    @Override
+    public void getAlertConformation(String aUsername, String aPassword) {
+        AtishayOnlineApp.getAppInstance().getRestApis().getAlertConformation(aUsername, aPassword, mApiCallback);
+    }
+
+    @Override
+    public void doBeneficiaryValidation(Map<String, String> aQueryMap) {
+        AtishayOnlineApp.getAppInstance().getRestApis().doBeneficiaryValidation(aQueryMap, mApiCallback);
+    }
+}

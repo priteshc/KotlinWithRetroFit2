@@ -1,0 +1,360 @@
+/*
+ * Copyright 2016 GoldenMace IT Solutions
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+package com.atishay.online.moneytransfer;
+
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.TextUtils;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.atishay.online.AppBaseActivity;
+import com.atishay.online.AtishayOnlineApp;
+import com.atishay.online.R;
+import com.atishay.online.utils.Constants;
+import com.atishay.online.utils.DialogUtils;
+import com.atishay.online.utils.Loader;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+/**
+ * Created by Vishal Patel on 18,October,2016.
+ * AtishayOnline
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public class FundTransferActivity extends AppBaseActivity implements FundTransferView, View.OnFocusChangeListener {
+
+    @BindView(R.id.money_rlMain)
+    RelativeLayout mMoneyMainView;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.money_edtCode)
+    EditText mBeneficiaryCode;
+    @BindView(R.id.money_edtNickName)
+    EditText mBeneficiaryNickName;
+    @BindView(R.id.money_edtBeneAcntNo)
+    EditText mBeneficiaryAccountNo;
+    @BindView(R.id.money_txtTranType)
+    TextView mTransactionType;
+    @BindView(R.id.money_spTranType)
+    Spinner mSPTransactionType;
+    @BindView(R.id.money_txtTranTiming)
+    TextView mTransactionTiming;
+    @BindView(R.id.money_txtIfdcCode)
+    TextView mTxtIFSCCode;
+    @BindView(R.id.money_edtIfscCode)
+    EditText mBeneficiaryIFSCCode;
+    @BindView(R.id.money_txtBankDetails)
+    TextView mTxtBankDetails;
+    @BindView(R.id.money_edtBankDetails)
+    EditText mBankDetails;
+    @BindView(R.id.money_txtAmount)
+    TextView mTxtAmount;
+    @BindView(R.id.money_edtAmount)
+    EditText mAmount;
+    @BindView(R.id.money_edtServicechrg)
+    EditText mServiceCharge;
+    @BindView(R.id.money_edtTotalAmunt)
+    EditText mTotalAmount;
+    @BindView(R.id.money_txtTransCode)
+    TextView mTxtTransactionCode;
+    @BindView(R.id.money_edtTransCode)
+    EditText mTransactionCode;
+    @BindView(R.id.loader)
+    Loader mLoader;
+    @BindView(R.id.money_txtNote)
+    TextView mMoneyNote;
+    @BindView(R.id.money_txtGetSurcharge)
+    TextView mMoneySurcharge;
+
+    Dialog mBottomSheetDialog;
+    FundTransferPresenter mFundTransferPresenter;
+    List<String> categories;
+    double tempAmount = 0;
+    double amount = 0;
+    private String mRemitterMobile;
+    private String mCRNo;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_moneytransfer);
+
+        ButterKnife.bind(this);
+        setToolbar(mToolbar);
+
+        initDataFromOther();
+        mFundTransferPresenter = new FundTransferPresenter(this);
+        /**
+         * Custom Toolbar with amount view
+         */
+        ButterKnife.<TextView>findById(this, R.id.toolbar_txtAmount).setText(getString(R.string.amount, AtishayOnlineApp.getAppInstance().getBalance()));
+        ButterKnife.<TextView>findById(this, R.id.toolbar_txtTitle).setText(getString(R.string.money_transfer));
+
+
+        mTransactionTiming.setText(Html.fromHtml(getString(R.string.transaction_timing_str)));
+        mMoneySurcharge.setText(Html.fromHtml(getString(R.string.surcharge)));
+        mTransactionType.setText(Html.fromHtml(getString(R.string.trans_type)), TextView.BufferType.SPANNABLE);
+        mTxtAmount.setText(Html.fromHtml(getString(R.string.money_amount)), TextView.BufferType.SPANNABLE);
+        mTxtTransactionCode.setText(Html.fromHtml(getString(R.string.trans_code)), TextView.BufferType.SPANNABLE);
+        mMoneyNote.setText(Html.fromHtml(getString(R.string.money_msg)), TextView.BufferType.SPANNABLE);
+        mMoneyNote.setSelected(true);
+        mAmount.setOnFocusChangeListener(this);
+        // Spinner Drop down elements
+        categories = new ArrayList<String>();
+        categories.add("IMPS");
+        categories.add("NEFT");
+
+        // Creating adapter for spinner
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, R.layout.simple_spinner_item, categories);
+
+        // attaching data adapter to spinner
+        mSPTransactionType.setAdapter(dataAdapter);
+
+        mSPTransactionType.setPadding(0, mSPTransactionType.getPaddingTop(), mSPTransactionType.getPaddingRight(), mSPTransactionType.getPaddingBottom());
+        mTransactionTiming.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                View view = getLayoutInflater().inflate(R.layout.transaction_timing, null);
+                mBottomSheetDialog = new Dialog(FundTransferActivity.this,
+                        R.style.MaterialDialogSheet);
+                mBottomSheetDialog.setContentView(view);
+                mBottomSheetDialog.getWindow().setLayout(getResources().getDimensionPixelSize(R.dimen.dialog_width), LinearLayout.LayoutParams.WRAP_CONTENT);
+
+                mBottomSheetDialog.getWindow().setGravity(Gravity.CENTER);
+                mBottomSheetDialog.show();
+
+            }
+        });
+    }
+
+    @OnClick(R.id.money_txtProceed)
+    public void getSubmitProcess() {
+        try {
+            amount = Double.parseDouble(mAmount.getText().toString());
+        } catch (NumberFormatException e) {
+        }
+        if (!TextUtils.isEmpty(mBeneficiaryCode.getText().toString())
+                && !TextUtils.isEmpty(mBeneficiaryNickName.getText().toString())
+                && !TextUtils.isEmpty(mBeneficiaryAccountNo.getText().toString())
+                && !TextUtils.isEmpty(mBeneficiaryIFSCCode.getText().toString())
+                && !TextUtils.isEmpty(mBankDetails.getText().toString())
+                && !TextUtils.isEmpty(mAmount.getText().toString())
+                && mSPTransactionType != null
+                && mSPTransactionType.getSelectedItem() != null
+                && !TextUtils.isEmpty(mTransactionCode.getText().toString())) {
+            if (amount < 100.0 || amount > 25000.0) {
+                Toast.makeText(this, R.string.amount_check_msg, Toast.LENGTH_SHORT).show();
+            } else {
+                if (TextUtils.isEmpty(mTotalAmount.getText().toString())) {
+                    Snackbar.make(mMoneyMainView, R.string.service_charge_fetch_msg, Snackbar.LENGTH_INDEFINITE).setAction(R.string.lbl_ok, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            getSurcharge();
+                        }
+                    }).show();
+
+                } else if (tempAmount != amount) {
+                    Snackbar.make(mMoneyMainView, R.string.amount_fetch_issue, Snackbar.LENGTH_INDEFINITE).setAction(R.string.lbl_ok, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            getSurcharge();
+                        }
+                    }).show();
+                } else {
+                    Map<String, String> queryMap = new HashMap<>();
+                    queryMap.put(Constants.ApiKeys.USERNAME, mUsername);
+                    queryMap.put(Constants.ApiKeys.PASSWORD, mPassword);
+                    queryMap.put(Constants.ApiKeys.AGENTCODE, mAgentCode);
+                    queryMap.put(Constants.ApiKeys.REMITTERMOBILE, mRemitterMobile);
+                    queryMap.put(Constants.ApiKeys.CRNO, mCRNo);
+                    queryMap.put(Constants.ApiKeys.PTID, String.valueOf(System.currentTimeMillis()));
+                    queryMap.put(Constants.ApiKeys.BENEFICIARY_CODE, mBeneficiaryCode.getText().toString());
+                    queryMap.put(Constants.ApiKeys.AMOUNT, mAmount.getText().toString());
+                    queryMap.put(Constants.ApiKeys.REMITTANCETYPE, categories.get(mSPTransactionType.getSelectedItemPosition()));
+                    queryMap.put(Constants.ApiKeys.BENTRANSCODE, mTransactionCode.getText().toString());
+                    mFundTransferPresenter.doFundTransaction(queryMap);
+                }
+            }
+        } else {
+            Snackbar.make(mMoneyMainView, getResources().getString(R.string.error_field_required), Snackbar.LENGTH_SHORT).show();
+        }
+    }
+
+    @OnClick(R.id.money_txtGetSurcharge)
+    public void getSurcharge() {
+        try {
+            amount = Double.parseDouble(mAmount.getText().toString());
+        } catch (NumberFormatException e) {
+        }
+        if (!TextUtils.isEmpty(mAmount.getText().toString())) {
+            if (amount < 100.0 || amount > 25000.0) {
+                Toast.makeText(this, "Amount Min Rs.100 and Max Rs.25000 Per Transaction", Toast.LENGTH_SHORT).show();
+            } else {
+                Map<String, String> queryMap = new HashMap<>();
+                queryMap.put(Constants.ApiKeys.USERNAME, mUsername);
+                queryMap.put(Constants.ApiKeys.PASSWORD, mPassword);
+                queryMap.put(Constants.ApiKeys.AMOUNT, mAmount.getText().toString());
+                mFundTransferPresenter.doRemittanceTransaction(queryMap);
+            }
+        } else {
+            Snackbar.make(mMoneyMainView, getResources().getString(R.string.amount_nil), Snackbar.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if (!hasFocus) {
+            getSurcharge();
+        }
+    }
+
+    private void initDataFromOther() {
+        Bundle mBundle = getIntent().getExtras();
+        mBeneficiaryCode.setText(mBundle.getString("BenCode"));
+        mBeneficiaryNickName.setText(mBundle.getString("BenName"));
+        mBeneficiaryAccountNo.setText(mBundle.getString("BenAC"));
+        mBeneficiaryIFSCCode.setText(mBundle.getString("BenIFSC"));
+        mBankDetails.setText(mBundle.getString("BenBankDetails"));
+        mRemitterMobile = mBundle.getString("BenRemitterMobile");
+        mCRNo = mBundle.getString("BenCRNo");
+    }
+
+    @Override
+    public void doRemittanceTransaction(ServiceResponse aServiceResponse) {
+        mServiceCharge.setText(aServiceResponse.getTransactionFee());
+        mTotalAmount.setText(aServiceResponse.getTotalAmount());
+        tempAmount = amount;
+    }
+
+    @Override
+    public void doFundTransaction(FundServiceChargeResponse aFundServiceChargeResponse) {
+        DialogUtils.getSingleButtonDialog(this, R.drawable.ic_success, getResources().getString(R.string.fund_transfer), aFundServiceChargeResponse.getMsg(), getString(R.string.lbl_ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == DialogInterface.BUTTON_POSITIVE) {
+                    finish();
+                }
+            }
+        }, false).show();
+    }
+
+    @Override
+    public void onFundSingleHistoryFetched(FundTransferHistoryResponse aHistoryBeen) {
+
+    }
+
+    @Override
+    public void doQueryRemittanceTransaction(FundServiceChargeResponse aFundServiceChargeResponse) {
+
+    }
+
+    @Override
+    public void doRefundTransaction(RefundTransactionResponse aRefundTransactionResponse) {
+    }
+
+    @Override
+    public void doValidateRefundTransaction(QueryRefundTransactionResponse aQueryRefundTransactionResponse) {
+
+    }
+
+    @Override
+    public void showDialogLoader(String aResId) {
+    }
+
+    @Override
+    public void hideDialogLoader() {
+    }
+
+    @Override
+    public void showLoader(String aMessage) {
+        if (aMessage != null) {
+            mLoader.setText(aMessage);
+        }
+        mLoader.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showLoader(int aResId) {
+        if (aResId > 0) {
+            mLoader.setText(getString(aResId));
+        }
+        mLoader.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideLoader() {
+        mLoader.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void noInternetConnection() {
+        Snackbar.make(mMoneyMainView, getString(R.string.error_network_no_internet), Snackbar.LENGTH_LONG).show();
+        hideLoader();
+    }
+
+    @Override
+    public void apiError(int aApiCode, String aError) {
+        switch (aApiCode) {
+            case Constants.APICODE.REMITTANCEVALIDATION:
+                Snackbar.make(mMoneyMainView, aError, Snackbar.LENGTH_LONG).show();
+                break;
+            case Constants.APICODE.FUNDTRANSFER:
+                DialogUtils.getSingleButtonDialog(this, R.drawable.ic_fail, getResources().getString(R.string.fund_transfer), aError, getString(R.string.lbl_ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which == DialogInterface.BUTTON_POSITIVE) {
+                            finish();
+                        }
+                    }
+                }, false).show();
+                break;
+            default:
+                Snackbar.make(mMoneyMainView, aError, Snackbar.LENGTH_LONG).show();
+                break;
+        }
+        super.apiError(aApiCode, aError);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mFundTransferPresenter.clearReferences();
+    }
+}

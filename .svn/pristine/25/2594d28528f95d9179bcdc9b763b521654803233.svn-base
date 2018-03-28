@@ -1,0 +1,386 @@
+/*
+ * Copyright 2016 Goldenmace IT Solutions
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+package com.atishay.online.mobilerecharge;
+
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.res.Configuration;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.customtabs.CustomTabsIntent;
+import android.support.design.widget.Snackbar;
+import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.atishay.online.AppBaseActivity;
+import com.atishay.online.AtishayOnlineApp;
+import com.atishay.online.R;
+import com.atishay.online.common.CommonAdapter;
+import com.atishay.online.common.CommonBean;
+import com.atishay.online.common.CommonInterface;
+import com.atishay.online.common.CommonRechargeResponse;
+import com.atishay.online.utils.Constants;
+import com.atishay.online.utils.DialogUtils;
+import com.atishay.online.utils.Loader;
+import com.jaredrummler.materialspinner.MaterialSpinner;
+
+import java.util.ArrayList;
+import java.util.regex.Pattern;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+import static com.atishay.online.R.id.mobile_txtProceed;
+import static com.atishay.online.utils.Constants.MOBILERECHARGE;
+import static com.atishay.online.utils.Constants.PENDING;
+import static com.atishay.online.utils.Constants.REGX_AMOUNT;
+import static com.atishay.online.utils.Constants.SUCCESS;
+
+/**
+ * Created by Vishal Patel on 12,October,2016.
+ * AtishayOnline
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public class MobileRechargeActivity extends AppBaseActivity implements MobileRechargeView {
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.mobile_rlMain)
+    RelativeLayout mMobileMainView;
+    @BindView(R.id.mobile_spOperator)
+    Spinner mOperator;
+    @BindView(R.id.mobile_edtMobile)
+    EditText mMobileNumber;
+    @BindView(R.id.mobile_spCircle)
+    Spinner mCircle;
+    @BindView(R.id.mobile_spTransType)
+    Spinner mTransactionType;
+    @BindView(R.id.mobile_edtAmount)
+    EditText mAmount;
+    @BindView(R.id.mobile_edtTransaction)
+    EditText mTransactionCode;
+    @BindView(R.id.txtOperator)
+    TextView mtxtOperator;
+    @BindView(R.id.txtMobile)
+    TextView mtxtMobile;
+    @BindView(R.id.txtCircle)
+    TextView mtxtCircle;
+    @BindView(R.id.txtAmount)
+    TextView mtxtAmount;
+    @BindView(R.id.txtTranCode)
+    TextView mtxtTranCode;
+    @BindView(R.id.txtTransaction)
+    TextView mtxtTransaction;
+    @BindView(R.id.loader)
+    Loader mLoader;
+    @BindView(R.id.mobile_txtProceed)
+    TextView mView;
+
+    ArrayList<CommonBean> mCommonBeanArrayList;
+    int statusImg;
+    private MobileRechargePresenter mMobileRechargePresenter;
+    private ArrayList<CommonInterface> mMobileOperatorList;
+    private ArrayList<CommonInterface> mCircleList;
+    private CommonAdapter mMobileOperatorAdapter;
+    private CommonAdapter mCircleAdapter;
+
+    private MaterialSpinner materialSpinner;
+
+    ArrayList<String>operatorStrings;
+    ArrayList<Integer>operatorid;
+
+
+    private Context  context = MobileRechargeActivity.this;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_mobile);
+        ButterKnife.bind(this);
+        setToolbar(mToolbar);
+        mMobileRechargePresenter = new MobileRechargePresenter(this);
+        mMobileOperatorList = new ArrayList<>();
+        mCircleList = new ArrayList<>();
+        operatorStrings = new ArrayList<>();
+        operatorid = new ArrayList<>();
+
+        materialSpinner = (MaterialSpinner) findViewById(R.id.mob_operator);
+
+
+        mMobileNumber.setTransformationMethod(null);
+        mAmount.setTransformationMethod(null);
+
+
+        /**
+         * Custom Toolbar with amount view
+         */
+      //  ButterKnife.<TextView>findById(this, R.id.toolbar_txtAmount).setText(getString(R.string.amount, AtishayOnlineApp.getAppInstance().getBalance()));
+        ButterKnife.<TextView>findById(this, R.id.toolbar_txtAmount).setVisibility(View.VISIBLE);
+        ButterKnife.<TextView>findById(this, R.id.toolbar_txtTitle).setText(getString(R.string.mobile));
+
+        ButterKnife.<TextView>findById(this, R.id.bal).setText(getString(R.string.amount, AtishayOnlineApp.getAppInstance().getBalance()));
+
+
+        mtxtOperator.setText(Html.fromHtml(getString(R.string.operator)), TextView.BufferType.SPANNABLE);
+        mtxtMobile.setText(Html.fromHtml(getString(R.string.mobile_no)), TextView.BufferType.SPANNABLE);
+        mtxtCircle.setText(Html.fromHtml(getString(R.string.circle_nm)), TextView.BufferType.SPANNABLE);
+        mtxtTransaction.setText(Html.fromHtml(getString(R.string.trans_type)), TextView.BufferType.SPANNABLE);
+        mtxtAmount.setText(Html.fromHtml(getString(R.string.rchrg_amunt)), TextView.BufferType.SPANNABLE);
+        mtxtTranCode.setText(Html.fromHtml(getString(R.string.trans_code)), TextView.BufferType.SPANNABLE);
+        mOperator.setPrompt("Pick One");
+
+
+
+        /**
+         * Mobile Operator Adapter
+         */
+
+
+
+        mMobileOperatorAdapter = new CommonAdapter(this, mMobileOperatorList);
+
+        /**
+         * Operator Circle Adapter
+         */
+        mCircleAdapter = new CommonAdapter(this, mCircleList);
+
+        mMobileRechargePresenter.doMobileOperator(mUsername, mPassword);
+        mMobileRechargePresenter.doMobileCircle(mUsername, mPassword);
+        mOperator.setAdapter(mMobileOperatorAdapter);
+        mCircle.setAdapter(mCircleAdapter);
+    }
+
+    /**
+     * View particular operator and circlewise plan
+     *
+     * @param v
+     */
+    @OnClick(R.id.mobile_txtViewPlan)
+    public void doViewPlan(View v) {
+        String url = "http://www.airtel.in/mobile/prepaid/recharge-online";
+        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+        CustomTabsIntent customTabsIntent = builder.build();
+        customTabsIntent.launchUrl(this, Uri.parse(url));
+    }
+
+    @OnClick(mobile_txtProceed)
+    public void doProceedRecharge() {
+        hideKeyboard();
+
+
+        if(!mMobileNumber.getText().toString().isEmpty()&& materialSpinner.getSelectedIndex()!=0 &&!mAmount.getText().toString().isEmpty()){
+
+          //  Toast.makeText(context,"success",Toast.LENGTH_SHORT).show();
+            if (!Pattern.matches(REGX_AMOUNT, mAmount.getText().toString())) {
+                Snackbar.make(mMobileMainView, getResources().getString(R.string.invalid_recharge_amount), Snackbar.LENGTH_LONG).show();
+            } else if (Float.parseFloat(mAmount.getText().toString()) <= 0) {
+                Snackbar.make(mMobileMainView, getResources().getString(R.string.invalid_recharge_amount), Snackbar.LENGTH_LONG).show();
+            }
+            else {
+
+
+                mCommonBeanArrayList = new ArrayList<>();
+                mCommonBeanArrayList.add(new CommonBean(mUsername, mPassword, "0",
+                        "0",
+                        String.valueOf(operatorid.get(materialSpinner.getSelectedIndex())),
+                        mMobileNumber.getText().toString(), mAmount.getText().toString(), "", MOBILERECHARGE, "", ""));
+                mMobileRechargePresenter.doMobileRecharge(mCommonBeanArrayList);
+                mView.setEnabled(false);
+            //    Toast.makeText(context,"success",Toast.LENGTH_SHORT).show();
+            }
+
+        }
+        else {
+
+            Snackbar.make(mMobileMainView, getResources().getString(R.string.error_field_required), Snackbar.LENGTH_SHORT).show();
+
+        }
+
+       // System.out.println("Id:" + materialSpinner.getId());
+
+      /*  if (mOperator != null && mOperator.getSelectedItem() != null
+                && mCircle != null && mCircle.getSelectedItem() != null
+                && !mMobileNumber.getText().toString().isEmpty()
+                && !mAmount.getText().toString().isEmpty()
+                && !mTransactionCode.getText().toString().isEmpty()) {
+            if (!Pattern.matches(REGX_AMOUNT, mAmount.getText().toString())) {
+                Snackbar.make(mMobileMainView, getResources().getString(R.string.invalid_recharge_amount), Snackbar.LENGTH_LONG).show();
+            } else if (Float.parseFloat(mAmount.getText().toString()) <= 0) {
+                Snackbar.make(mMobileMainView, getResources().getString(R.string.invalid_recharge_amount), Snackbar.LENGTH_LONG).show();
+            } else if (mTransPassword.equals(mTransactionCode.getText().toString())) {
+                mCommonBeanArrayList = new ArrayList<>();
+                mCommonBeanArrayList.add(new CommonBean(mUsername, mPassword, mTransPassword,
+                        String.valueOf(mCircleList.get(mCircle.getSelectedItemPosition()).getID()),
+                        String.valueOf(mMobileOperatorList.get(mOperator.getSelectedItemPosition()).getID()),
+                        mMobileNumber.getText().toString(), mAmount.getText().toString(), "", MOBILERECHARGE, "", ""));
+                mMobileRechargePresenter.doMobileRecharge(mCommonBeanArrayList);
+                mView.setEnabled(false);
+            } else {
+                Snackbar.make(mMobileMainView, getResources().getString(R.string.invalid_transaction_password), Snackbar.LENGTH_SHORT).show();
+            }
+        } else {
+            Snackbar.make(mMobileMainView, getResources().getString(R.string.error_field_required), Snackbar.LENGTH_SHORT).show();
+        }*/
+    }
+
+    @Override
+    public void showLoader(String aMessage) {
+        if (aMessage != null) {
+            mLoader.setText(aMessage);
+        }
+        mLoader.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showLoader(int aResId) {
+        if (aResId > 0) {
+            mLoader.setText(getString(aResId));
+        }
+        mLoader.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideLoader() {
+        mLoader.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void noInternetConnection() {
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //Do something after 100ms
+                mView.setEnabled(true);
+            }
+        }, 10);
+        Snackbar.make(mMobileMainView, getString(R.string.error_network_no_internet), Snackbar.LENGTH_LONG).show();
+        hideLoader();
+    }
+
+    @Override
+    public void apiError(String aError) {
+        hideLoader();
+        Snackbar.make(mMobileMainView, aError, Snackbar.LENGTH_INDEFINITE).setAction(R.string.error_view_retry, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mMobileRechargePresenter.doMobileOperator(mUsername, mPassword);
+                mMobileRechargePresenter.doMobileCircle(mUsername, mPassword);
+            }
+        }).show();
+    }
+
+    @Override
+    public void apiError(int aApiCode, String aError) {
+        switch (aApiCode) {
+            case Constants.APICODE.MOBILE_OPERATOR:
+            case Constants.APICODE.CIRCLE:
+                Snackbar.make(mMobileMainView, aError, Snackbar.LENGTH_INDEFINITE).setAction(R.string.error_view_retry, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mMobileRechargePresenter.doMobileOperator(mUsername, mPassword);
+                        mMobileRechargePresenter.doMobileCircle(mUsername, mPassword);
+                    }
+                }).show();
+                break;
+            case Constants.APICODE.MOBILERECHARGE:
+                DialogUtils.getSingleButtonDialog(this, R.drawable.ic_fail, getResources().getString(R.string.mobile_rcrg), aError, getString(R.string.lbl_ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which == DialogInterface.BUTTON_POSITIVE) {
+                            finish();
+                        }
+                    }
+                }, false).show();
+                break;
+            default:
+                Snackbar.make(mMobileMainView, aError, Snackbar.LENGTH_LONG).show();
+                break;
+        }
+        super.apiError(aApiCode, aError);
+    }
+
+    @Override
+    public void doFetchMobileOperator(ArrayList<MobileOperatorBean> aList) {
+        mMobileOperatorList.clear();
+
+        operatorStrings.clear();
+        operatorid.clear();
+
+        for(int i=0;i< aList.size();i++){
+           operatorStrings.add(aList.get(i).getTitle());
+           operatorid.add(aList.get(i).getID());
+
+        }
+
+        operatorid.add(0,-1);
+        operatorStrings.add(0,"Select operator");
+
+     /*   ArrayAdapter<String> locationAdapter = new ArrayAdapter<String>(this, R.layout.simple_dropdown, operatorStrings);
+
+        materialSpinner.setAdapter(locationAdapter);*/
+        materialSpinner.setItems(operatorStrings);
+        mMobileOperatorList.addAll(aList);
+        mMobileOperatorAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void doFetchMobileCircle(ArrayList<CircleBean> aList) {
+        mCircleList.clear();
+        mCircleList.addAll(aList);
+        mCircleAdapter.notifyDataSetChanged();
+        /**
+         * TODO set selection position
+         */
+        //mCircle.setSelection(2);
+    }
+
+    @Override
+    public void doMobileRechargeDetails(CommonRechargeResponse aList) {
+        if (aList.getStatus().equals(SUCCESS)) {
+            statusImg = R.drawable.ic_success;
+        } else if (aList.getStatus().equals(PENDING)) {
+            statusImg = R.drawable.ic_warning_orange_24dp;
+        } else {
+            statusImg = R.drawable.ic_fail;
+        }
+        DialogUtils.getSingleButtonDialog(this, statusImg, getResources().getString(R.string.mobile_rcrg), aList.getMsg(), getString(R.string.lbl_ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == DialogInterface.BUTTON_POSITIVE) {
+                    finish();
+                }
+            }
+        }, false).show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mMobileRechargePresenter.clearReferences();
+    }
+}

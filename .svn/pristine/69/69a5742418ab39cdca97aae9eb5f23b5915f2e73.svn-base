@@ -1,0 +1,5 @@
+<resources>
+    <declare-styleable name="Loader">
+        <attr name="text" format="string"/>
+    </declare-styleable>
+</resources>

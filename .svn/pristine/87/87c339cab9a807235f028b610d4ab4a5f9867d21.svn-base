@@ -1,0 +1,353 @@
+/*
+ * Copyright 2016 GoldenMace IT Solutions
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+package com.atishay.online.history;
+
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.atishay.online.AppBaseActivity;
+import com.atishay.online.AtishayOnlineApp;
+import com.atishay.online.R;
+import com.atishay.online.common.ViewPagerAdapter;
+import com.atishay.online.utils.Constants;
+import com.atishay.online.utils.Loader;
+import com.atishay.online.utils.network.ApiError;
+import com.atishay.online.utils.network.RestApiCallback;
+import com.goldenmace.framework.utils.NetworkUtils;
+import com.goldenmace.framework.views.widgets.errorview.ErrorView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+import static android.support.design.widget.Snackbar.make;
+
+
+/**
+ * Created by Vishal Patel on 18,October,2016.
+ * AtishayOnline
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public class HistoryActivity extends AppBaseActivity implements HistoryView,UtilityHView,RestApiCallback<Object, ApiError<Object>> {
+
+    @BindView(R.id.tabRLContainer)
+    View mRLContainer;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.tab_tlTab)
+    TabLayout mTabLayout;
+    @BindView(R.id.history_errorView)
+    ErrorView mErrorView;
+    @BindView(R.id.tab_vpViewPager)
+    ViewPager mViewPager;
+    @BindView(R.id.tab_loader)
+    Loader mLoader;
+    ArrayList<HistoryBean> mPrepaidHistoryBeen;
+    ArrayList<HistoryBean> mPostpaidHistoryBeen;
+    ArrayList<HistoryBean> mDTHHistoryBeen;
+    ViewPagerAdapter adapter;
+    Snackbar snackbar;
+    private HistoryPresenter mHistoryPresenter;
+    private PrepaidHistoryFragment mPrepaidHistoryFragment;
+    private PostpaidHistoryFragment mPostpaidHistoryFragment;
+    private DTHHistoryFragment mDTHHistoryFragment;
+    private UtilityHistoryFragment mutilityHistoryFragment;
+
+    private UtilityHistoryPresenter utilityHistoryPresenter;
+
+    ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            switch (position) {
+                case 0:
+                    mPrepaidHistoryBeen.clear();
+                    if (NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+                        mHistoryPresenter.loadPrepaidHistory(mUsername, mPassword);
+                    } else {
+                        mPrepaidHistoryFragment.onDataReload();
+                        noInternetConnection();
+                    }
+                    break;
+                case 1:
+                    mPostpaidHistoryBeen.clear();
+                    if (NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+                        mHistoryPresenter.loadPostpaidHistory(mUsername, mPassword);
+                    } else {
+                        mPostpaidHistoryFragment.onDataReload();
+                        noInternetConnection();
+                    }
+                    break;
+                case 2:
+                    mDTHHistoryBeen.clear();
+                    if (NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+                        mHistoryPresenter.loadDTHHistory(mUsername, mPassword);
+                    } else {
+                        mDTHHistoryFragment.onDataReload();
+                        noInternetConnection();
+                    }
+                    break;
+                case 3:
+                    mDTHHistoryBeen.clear();
+                    if (NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+                        utilityHistoryPresenter.getUtilityHistory(mUsername, mPassword);
+                    } else {
+                        mutilityHistoryFragment.onDataReload();
+                        noInternetConnection();
+                    }
+                    break;
+
+            }
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
+    };
+    private ProgressDialog progressDialog;
+    private Context context = HistoryActivity.this;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_transhistory);
+
+        ButterKnife.bind(this);
+        setToolbar(mToolbar);
+        mHistoryPresenter = new HistoryPresenter(this);
+        mTabLayout.setupWithViewPager(mViewPager);
+
+        utilityHistoryPresenter = new UtilityHistoryPresenter(this,this);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Please wait");
+        progressDialog.setCancelable(false);
+
+
+        /**
+         * Custom Toolbar with amount view
+         */
+        ButterKnife.<TextView>findById(this, R.id.toolbar_txtAmount).setText(getString(R.string.amount, AtishayOnlineApp.getAppInstance().getBalance()));
+        ButterKnife.<TextView>findById(this, R.id.toolbar_txtTitle).setText(getString(R.string.my_ac_history));
+
+        mPrepaidHistoryBeen = new ArrayList<>();
+        mPostpaidHistoryBeen = new ArrayList<>();
+        mDTHHistoryBeen = new ArrayList<>();
+
+        mErrorView.setOnRetryListener(new ErrorView.RetryListener() {
+            @Override
+            public void onRetry() {
+                mErrorView.setVisibility(View.GONE);
+                mHistoryPresenter.loadPrepaidHistory(mUsername, mPassword);
+                mHistoryPresenter.loadPostpaidHistory(mUsername, mPassword);
+                mHistoryPresenter.loadDTHHistory(mUsername, mPassword);
+            }
+        });
+        setupViewPager(mViewPager);
+
+        mViewPager.setOnPageChangeListener(pageChangeListener);
+        mViewPager.post(new Runnable() {
+            @Override
+            public void run() {
+                pageChangeListener.onPageSelected(mViewPager.getCurrentItem());
+            }
+        });
+    }
+
+    private void setupViewPager(ViewPager aViewPager) {
+        adapter = new ViewPagerAdapter(getSupportFragmentManager());
+
+        mPrepaidHistoryFragment = new PrepaidHistoryFragment();
+        adapter.addFragment(mPrepaidHistoryFragment, getResources().getString(R.string.prepaid_history));
+
+        mPostpaidHistoryFragment = new PostpaidHistoryFragment();
+        adapter.addFragment(mPostpaidHistoryFragment, getResources().getString(R.string.postpaid_history));
+
+        mDTHHistoryFragment = new DTHHistoryFragment();
+        adapter.addFragment(mDTHHistoryFragment, getResources().getString(R.string.dth_history));
+
+        mutilityHistoryFragment = new UtilityHistoryFragment();
+        adapter.addFragment(mutilityHistoryFragment, getResources().getString(R.string.utility_history));
+
+        aViewPager.setAdapter(adapter);
+    }
+
+    @Override
+    public void apiError(String aError) {
+        snackbar = Snackbar.make(mRLContainer, aError, Snackbar.LENGTH_LONG);
+        snackbar.show();
+        super.apiError(aError);
+    }
+
+    @Override
+    public void apiError(int aApiCode, String aError) {
+        switch (aApiCode) {
+            case Constants.APICODE.PREPAID_HISTORY:
+                make(mRLContainer, aError, Snackbar.LENGTH_INDEFINITE).setAction(R.string.error_view_retry, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mPrepaidHistoryBeen.clear();
+                        mHistoryPresenter.loadPrepaidHistory(mUsername, mPassword);
+                    }
+                }).show();
+                break;
+            case Constants.APICODE.POSTPAID_HISTORY:
+                make(mRLContainer, aError, Snackbar.LENGTH_INDEFINITE).setAction(R.string.error_view_retry, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mPostpaidHistoryBeen.clear();
+                        mHistoryPresenter.loadPostpaidHistory(mUsername, mPassword);
+                    }
+                }).show();
+                break;
+            case Constants.APICODE.DTH_HISTORY:
+                make(mRLContainer, aError, Snackbar.LENGTH_INDEFINITE).setAction(R.string.error_view_retry, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mDTHHistoryBeen.clear();
+                        mHistoryPresenter.loadDTHHistory(mUsername, mPassword);
+                    }
+                }).show();
+                break;
+            default:
+                make(mRLContainer, aError, Snackbar.LENGTH_LONG).show();
+                break;
+        }
+        super.apiError(aApiCode, aError);
+    }
+
+
+    @Override
+    public void showLoader(String aMessage) {
+        if (aMessage != null) {
+            mLoader.setText(aMessage);
+        }
+        mLoader.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showLoader(int aResId) {
+        if (aResId > 0) {
+            mLoader.setText(getString(aResId));
+        }
+        mLoader.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideLoader() {
+        mLoader.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void noInternetConnection() {
+        mPrepaidHistoryBeen.clear();
+        mPostpaidHistoryBeen.clear();
+        mDTHHistoryBeen.clear();
+        mErrorView.setVisibility(View.VISIBLE);
+        mErrorView.setImage(R.drawable.ic_wifi_200dp);
+        mErrorView.setTitle(R.string.error_network_no_internet);
+        mErrorView.setSubtitle("Please check your internet settings");
+        mErrorView.setRetryButtonText("Retry");
+        mErrorView.showRetryButton(true);
+        hideLoader();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mHistoryPresenter.clearReferences();
+    }
+
+    @Override
+    public void onPrepaidHistoryFetched(ArrayList<HistoryBean> aHistoryBeen) {
+        mPrepaidHistoryFragment.onDataFetched(aHistoryBeen);
+    }
+
+    @Override
+    public void onPostpaidHistoryFetched(ArrayList<HistoryBean> aHistoryBeen) {
+        mPostpaidHistoryFragment.onDataFetched(aHistoryBeen);
+    }
+
+    @Override
+    public void onDTHHistoryFetched(ArrayList<HistoryBean> aHistoryBeen) {
+        mDTHHistoryFragment.onDataFetched(aHistoryBeen);
+    }
+
+    @Override
+    public void showFErrorMeassage(String msg) {
+
+    }
+
+    @Override
+    public void showUtilitySuccessMsg(String msg, List<UtitlityResponse> utitlityResponses) {
+
+      //  Toast.makeText(context,String.valueOf(utitlityResponses.size()),Toast.LENGTH_SHORT).show();
+
+        mutilityHistoryFragment.onDataFetched(utitlityResponses);
+
+    }
+
+    @Override
+    public void showUtilityfailedMsg(String msg) {
+
+        Toast.makeText(context,msg,Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showprogress() {
+
+        progressDialog.show();
+    }
+
+    @Override
+    public void hideprogress() {
+
+        progressDialog.dismiss();
+    }
+
+    @Override
+    public void onSuccess(int aApiCode, Object aSuccessResponse) {
+
+     //   Toast.makeText(context,String.valueOf(aApiCode),Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void onApiError(int aApiCode, ApiError<Object> aFailureResponse) {
+
+        Toast.makeText(context,R.string.error_network_server_errors,Toast.LENGTH_SHORT).show();
+
+
+    }
+}

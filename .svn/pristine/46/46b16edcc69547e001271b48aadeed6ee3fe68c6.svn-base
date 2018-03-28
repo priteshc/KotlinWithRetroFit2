@@ -1,0 +1,538 @@
+-- Merging decision tree log ---
+manifest
+ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:17:1-237:12
+INJECTED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:17:1-237:12
+INJECTED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:17:1-237:12
+INJECTED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:17:1-237:12
+MERGED from [:framework-release] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\framework-release.aar\9020930049f3dd61c4f0794b675f52ea\AndroidManifest.xml:17:1-30:12
+MERGED from [com.jakewharton:butterknife:8.2.0] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\butterknife-8.2.0.aar\ee3cd1f65fc06f449a93fbac5905184c\AndroidManifest.xml:2:1-7:12
+MERGED from [com.android.support:design:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\design-24.2.1.aar\f66ee6e26f243473dc59e54e69795dc8\AndroidManifest.xml:17:1-24:12
+MERGED from [com.android.support.constraint:constraint-layout:1.0.0-alpha9] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\constraint-layout-1.0.0-alpha9.aar\665a9db5982f18cbe1eea70bb3472ca8\AndroidManifest.xml:2:1-11:12
+MERGED from [com.android.support:customtabs:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\customtabs-24.2.1.aar\bc0394255efff99c80957f1dede346e3\AndroidManifest.xml:17:1-24:12
+MERGED from [com.android.support:cardview-v7:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\cardview-v7-24.2.1.aar\44841a2234079379572314475b1efd91\AndroidManifest.xml:17:1-24:12
+MERGED from [com.github.f0ris.sweetalert:library:1.5.2] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\library-1.5.2.aar\c79ad70796cc0068db140a8dbe818842\AndroidManifest.xml:2:1-13:12
+MERGED from [com.pnikosis:materialish-progress:1.0] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\materialish-progress-1.0.aar\49bd446df4727d35e6f9d87b77b2dfc2\AndroidManifest.xml:2:1-17:12
+MERGED from [com.android.support:appcompat-v7:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\appcompat-v7-24.2.1.aar\3ab2c7456c324863624e398303bde312\AndroidManifest.xml:17:1-27:12
+MERGED from [com.wdullaer:materialdatetimepicker:2.3.0] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\materialdatetimepicker-2.3.0.aar\45b6e370ce11135c4847c2d78394e442\AndroidManifest.xml:17:1-30:12
+MERGED from [com.android.support:support-v4:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\support-v4-24.2.1.aar\0f6b98a72eea9b327c5b0534af133451\AndroidManifest.xml:17:1-27:12
+MERGED from [com.android.support:recyclerview-v7:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\recyclerview-v7-24.2.1.aar\0234380899fe06c25774b4e8b011b5a1\AndroidManifest.xml:17:1-22:12
+MERGED from [com.jaredrummler:material-spinner:1.2.4] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\material-spinner-1.2.4.aar\b31e52677717c7f7f63cf2c8378d8ced\AndroidManifest.xml:2:1-10:12
+MERGED from [com.android.support:support-fragment:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\support-fragment-24.2.1.aar\f0be3cb6582fb5202dab97cee6bdc2dd\AndroidManifest.xml:17:1-27:12
+MERGED from [com.android.support:support-core-ui:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\support-core-ui-24.2.1.aar\39b38cec5f5eeb60825565076619d818\AndroidManifest.xml:17:1-27:12
+MERGED from [com.android.support:support-media-compat:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\support-media-compat-24.2.1.aar\d0e8c5aa32e857db2eb441e6a5086fe5\AndroidManifest.xml:17:1-27:12
+MERGED from [com.android.support:support-core-utils:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\support-core-utils-24.2.1.aar\fb4020ac1695eac800a2b6de2d67b000\AndroidManifest.xml:17:1-27:12
+MERGED from [com.android.support:animated-vector-drawable:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\animated-vector-drawable-24.2.1.aar\8b39ebc65d62e995a74f7c7fc8dd5d36\AndroidManifest.xml:17:1-24:12
+MERGED from [com.android.support:support-vector-drawable:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\support-vector-drawable-24.2.1.aar\f828d25eef1ef16662c9f6e670dd5253\AndroidManifest.xml:17:1-25:12
+MERGED from [com.android.support:support-compat:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\support-compat-24.2.1.aar\af967b2aab63e6ba39f2fa91e0cd1203\AndroidManifest.xml:17:1-27:12
+MERGED from [com.squareup.leakcanary:leakcanary-android-no-op:1.3.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\leakcanary-android-no-op-1.3.1.aar\3dcc831fdd8382ef0bf2a01327240e4d\AndroidManifest.xml:17:1-24:12
+MERGED from [com.orhanobut:logger:1.15] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\logger-1.15.aar\4a803777ec4df611421f175cbb78f22c\AndroidManifest.xml:2:1-8:12
+MERGED from [com.android.support:multidex:1.0.2] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\multidex-1.0.2.aar\57da120193a497a09c71aa4b81b27888\AndroidManifest.xml:17:1-22:12
+MERGED from [com.crashlytics.sdk.android:crashlytics:2.6.5] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\crashlytics-2.6.5.aar\6664a528c6d545907f55c15a9f2bae73\AndroidManifest.xml:2:1-13:12
+MERGED from [com.crashlytics.sdk.android:beta:1.2.2] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\beta-1.2.2.aar\89eef92a75c48e5cb46b75fc287867f8\AndroidManifest.xml:2:1-13:12
+MERGED from [com.crashlytics.sdk.android:crashlytics-core:2.3.14] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\crashlytics-core-2.3.14.aar\734e4a0cfaf3e26b16d52c9556709510\AndroidManifest.xml:2:1-13:12
+MERGED from [com.crashlytics.sdk.android:answers:1.3.10] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\answers-1.3.10.aar\0f1debdc7409af30c93573c5648ed3a6\AndroidManifest.xml:2:1-13:12
+MERGED from [io.fabric.sdk.android:fabric:1.3.14] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\fabric-1.3.14.aar\af5d1dbd8db9694f3f16ea6b43388727\AndroidManifest.xml:18:1-29:12
+INJECTED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:17:1-237:12
+INJECTED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:17:1-237:12
+INJECTED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:17:1-237:12
+	package
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:19:5-33
+		INJECTED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml
+		INJECTED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml
+	android:versionName
+		INJECTED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:17:1-237:12
+		INJECTED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml
+	xmlns:tools
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:18:5-51
+	android:versionCode
+		INJECTED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:17:1-237:12
+		INJECTED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:17:11-69
+uses-permission#android.permission.INTERNET
+ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:22:5-66
+MERGED from [com.crashlytics.sdk.android:crashlytics:2.6.5] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\crashlytics-2.6.5.aar\6664a528c6d545907f55c15a9f2bae73\AndroidManifest.xml:9:5-67
+MERGED from [com.crashlytics.sdk.android:crashlytics:2.6.5] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\crashlytics-2.6.5.aar\6664a528c6d545907f55c15a9f2bae73\AndroidManifest.xml:9:5-67
+MERGED from [com.crashlytics.sdk.android:beta:1.2.2] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\beta-1.2.2.aar\89eef92a75c48e5cb46b75fc287867f8\AndroidManifest.xml:9:5-67
+MERGED from [com.crashlytics.sdk.android:beta:1.2.2] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\beta-1.2.2.aar\89eef92a75c48e5cb46b75fc287867f8\AndroidManifest.xml:9:5-67
+MERGED from [com.crashlytics.sdk.android:crashlytics-core:2.3.14] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\crashlytics-core-2.3.14.aar\734e4a0cfaf3e26b16d52c9556709510\AndroidManifest.xml:9:5-67
+MERGED from [com.crashlytics.sdk.android:crashlytics-core:2.3.14] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\crashlytics-core-2.3.14.aar\734e4a0cfaf3e26b16d52c9556709510\AndroidManifest.xml:9:5-67
+MERGED from [com.crashlytics.sdk.android:answers:1.3.10] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\answers-1.3.10.aar\0f1debdc7409af30c93573c5648ed3a6\AndroidManifest.xml:9:5-67
+MERGED from [com.crashlytics.sdk.android:answers:1.3.10] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\answers-1.3.10.aar\0f1debdc7409af30c93573c5648ed3a6\AndroidManifest.xml:9:5-67
+MERGED from [io.fabric.sdk.android:fabric:1.3.14] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\fabric-1.3.14.aar\af5d1dbd8db9694f3f16ea6b43388727\AndroidManifest.xml:25:5-67
+MERGED from [io.fabric.sdk.android:fabric:1.3.14] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\fabric-1.3.14.aar\af5d1dbd8db9694f3f16ea6b43388727\AndroidManifest.xml:25:5-67
+	android:name
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:22:22-64
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:23:5-78
+	android:name
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:23:22-76
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:24:5-81
+	android:name
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:24:22-78
+uses-permission#android.permission.READ_EXTERNAL_STORAGE
+ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:25:5-80
+	android:name
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:25:22-77
+application
+ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:27:5-235:19
+MERGED from [:framework-release] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\framework-release.aar\9020930049f3dd61c4f0794b675f52ea\AndroidManifest.xml:27:5-28:19
+MERGED from [:framework-release] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\framework-release.aar\9020930049f3dd61c4f0794b675f52ea\AndroidManifest.xml:27:5-28:19
+MERGED from [com.android.support:design:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\design-24.2.1.aar\f66ee6e26f243473dc59e54e69795dc8\AndroidManifest.xml:22:5-20
+MERGED from [com.android.support:design:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\design-24.2.1.aar\f66ee6e26f243473dc59e54e69795dc8\AndroidManifest.xml:22:5-20
+MERGED from [com.android.support.constraint:constraint-layout:1.0.0-alpha9] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\constraint-layout-1.0.0-alpha9.aar\665a9db5982f18cbe1eea70bb3472ca8\AndroidManifest.xml:9:5-20
+MERGED from [com.android.support.constraint:constraint-layout:1.0.0-alpha9] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\constraint-layout-1.0.0-alpha9.aar\665a9db5982f18cbe1eea70bb3472ca8\AndroidManifest.xml:9:5-20
+MERGED from [com.android.support:customtabs:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\customtabs-24.2.1.aar\bc0394255efff99c80957f1dede346e3\AndroidManifest.xml:22:5-20
+MERGED from [com.android.support:customtabs:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\customtabs-24.2.1.aar\bc0394255efff99c80957f1dede346e3\AndroidManifest.xml:22:5-20
+MERGED from [com.android.support:cardview-v7:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\cardview-v7-24.2.1.aar\44841a2234079379572314475b1efd91\AndroidManifest.xml:22:5-20
+MERGED from [com.android.support:cardview-v7:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\cardview-v7-24.2.1.aar\44841a2234079379572314475b1efd91\AndroidManifest.xml:22:5-20
+MERGED from [com.github.f0ris.sweetalert:library:1.5.2] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\library-1.5.2.aar\c79ad70796cc0068db140a8dbe818842\AndroidManifest.xml:11:5-20
+MERGED from [com.github.f0ris.sweetalert:library:1.5.2] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\library-1.5.2.aar\c79ad70796cc0068db140a8dbe818842\AndroidManifest.xml:11:5-20
+MERGED from [com.pnikosis:materialish-progress:1.0] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\materialish-progress-1.0.aar\49bd446df4727d35e6f9d87b77b2dfc2\AndroidManifest.xml:11:5-15:19
+MERGED from [com.pnikosis:materialish-progress:1.0] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\materialish-progress-1.0.aar\49bd446df4727d35e6f9d87b77b2dfc2\AndroidManifest.xml:11:5-15:19
+MERGED from [com.android.support:appcompat-v7:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\appcompat-v7-24.2.1.aar\3ab2c7456c324863624e398303bde312\AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:appcompat-v7:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\appcompat-v7-24.2.1.aar\3ab2c7456c324863624e398303bde312\AndroidManifest.xml:25:5-20
+MERGED from [com.wdullaer:materialdatetimepicker:2.3.0] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\materialdatetimepicker-2.3.0.aar\45b6e370ce11135c4847c2d78394e442\AndroidManifest.xml:28:5-20
+MERGED from [com.wdullaer:materialdatetimepicker:2.3.0] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\materialdatetimepicker-2.3.0.aar\45b6e370ce11135c4847c2d78394e442\AndroidManifest.xml:28:5-20
+MERGED from [com.android.support:support-v4:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\support-v4-24.2.1.aar\0f6b98a72eea9b327c5b0534af133451\AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:support-v4:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\support-v4-24.2.1.aar\0f6b98a72eea9b327c5b0534af133451\AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:support-fragment:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\support-fragment-24.2.1.aar\f0be3cb6582fb5202dab97cee6bdc2dd\AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:support-fragment:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\support-fragment-24.2.1.aar\f0be3cb6582fb5202dab97cee6bdc2dd\AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:support-core-ui:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\support-core-ui-24.2.1.aar\39b38cec5f5eeb60825565076619d818\AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:support-core-ui:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\support-core-ui-24.2.1.aar\39b38cec5f5eeb60825565076619d818\AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:support-media-compat:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\support-media-compat-24.2.1.aar\d0e8c5aa32e857db2eb441e6a5086fe5\AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:support-media-compat:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\support-media-compat-24.2.1.aar\d0e8c5aa32e857db2eb441e6a5086fe5\AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:support-core-utils:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\support-core-utils-24.2.1.aar\fb4020ac1695eac800a2b6de2d67b000\AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:support-core-utils:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\support-core-utils-24.2.1.aar\fb4020ac1695eac800a2b6de2d67b000\AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:animated-vector-drawable:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\animated-vector-drawable-24.2.1.aar\8b39ebc65d62e995a74f7c7fc8dd5d36\AndroidManifest.xml:22:5-20
+MERGED from [com.android.support:animated-vector-drawable:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\animated-vector-drawable-24.2.1.aar\8b39ebc65d62e995a74f7c7fc8dd5d36\AndroidManifest.xml:22:5-20
+MERGED from [com.android.support:support-vector-drawable:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\support-vector-drawable-24.2.1.aar\f828d25eef1ef16662c9f6e670dd5253\AndroidManifest.xml:23:5-20
+MERGED from [com.android.support:support-vector-drawable:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\support-vector-drawable-24.2.1.aar\f828d25eef1ef16662c9f6e670dd5253\AndroidManifest.xml:23:5-20
+MERGED from [com.android.support:support-compat:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\support-compat-24.2.1.aar\af967b2aab63e6ba39f2fa91e0cd1203\AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:support-compat:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\support-compat-24.2.1.aar\af967b2aab63e6ba39f2fa91e0cd1203\AndroidManifest.xml:25:5-20
+MERGED from [com.crashlytics.sdk.android:crashlytics:2.6.5] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\crashlytics-2.6.5.aar\6664a528c6d545907f55c15a9f2bae73\AndroidManifest.xml:11:5-20
+MERGED from [com.crashlytics.sdk.android:crashlytics:2.6.5] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\crashlytics-2.6.5.aar\6664a528c6d545907f55c15a9f2bae73\AndroidManifest.xml:11:5-20
+MERGED from [com.crashlytics.sdk.android:beta:1.2.2] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\beta-1.2.2.aar\89eef92a75c48e5cb46b75fc287867f8\AndroidManifest.xml:11:5-20
+MERGED from [com.crashlytics.sdk.android:beta:1.2.2] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\beta-1.2.2.aar\89eef92a75c48e5cb46b75fc287867f8\AndroidManifest.xml:11:5-20
+MERGED from [com.crashlytics.sdk.android:crashlytics-core:2.3.14] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\crashlytics-core-2.3.14.aar\734e4a0cfaf3e26b16d52c9556709510\AndroidManifest.xml:11:5-20
+MERGED from [com.crashlytics.sdk.android:crashlytics-core:2.3.14] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\crashlytics-core-2.3.14.aar\734e4a0cfaf3e26b16d52c9556709510\AndroidManifest.xml:11:5-20
+MERGED from [com.crashlytics.sdk.android:answers:1.3.10] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\answers-1.3.10.aar\0f1debdc7409af30c93573c5648ed3a6\AndroidManifest.xml:11:5-20
+MERGED from [com.crashlytics.sdk.android:answers:1.3.10] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\answers-1.3.10.aar\0f1debdc7409af30c93573c5648ed3a6\AndroidManifest.xml:11:5-20
+MERGED from [io.fabric.sdk.android:fabric:1.3.14] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\fabric-1.3.14.aar\af5d1dbd8db9694f3f16ea6b43388727\AndroidManifest.xml:27:5-20
+MERGED from [io.fabric.sdk.android:fabric:1.3.14] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\fabric-1.3.14.aar\af5d1dbd8db9694f3f16ea6b43388727\AndroidManifest.xml:27:5-20
+	android:screenOrientation
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:32:9-45
+	android:supportsRtl
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:33:9-35
+	android:label
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:31:9-41
+	android:icon
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:30:9-43
+		REJECTED from [com.pnikosis:materialish-progress:1.0] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\materialish-progress-1.0.aar\49bd446df4727d35e6f9d87b77b2dfc2\AndroidManifest.xml:13:9-45
+	android:allowBackup
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:29:9-35
+	android:theme
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:35:9-40
+	tools:replace
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:34:9-37
+	android:name
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:28:9-41
+activity#com.atishay.online.SplashActivity
+ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:36:9-49:20
+	android:screenOrientation
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:40:13-49
+	android:label
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:39:13-45
+	android:configChanges
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:38:13-74
+	android:name
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:37:13-43
+intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
+ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:43:13-47:29
+action#android.intent.action.MAIN
+ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:44:17-68
+	android:name
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:44:25-66
+category#android.intent.category.LAUNCHER
+ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:46:17-76
+	android:name
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:46:27-74
+activity#com.atishay.online.login.LoginActivity
+ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:50:9-57:20
+	android:screenOrientation
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:54:13-49
+	android:label
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:53:13-45
+	android:configChanges
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:52:13-74
+	android:theme
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:55:13-54
+	android:name
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:51:13-48
+activity#com.atishay.online.menu.MenuActivity
+ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:58:9-63:20
+	android:screenOrientation
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:62:13-49
+	android:label
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:61:13-45
+	android:configChanges
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:60:13-74
+	android:name
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:59:13-46
+activity#com.atishay.online.mobilerecharge.MobileRechargeActivity
+ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:64:9-69:20
+	android:screenOrientation
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:68:13-49
+	android:label
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:67:13-45
+	android:configChanges
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:66:13-74
+	android:name
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:65:13-66
+activity#com.atishay.online.dth.DTHActivity
+ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:70:9-75:20
+	android:screenOrientation
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:74:13-49
+	android:label
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:73:13-45
+	android:configChanges
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:72:13-74
+	android:name
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:71:13-44
+activity#com.atishay.online.profile.ProfileActivity
+ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:76:9-81:20
+	android:screenOrientation
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:80:13-49
+	android:label
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:79:13-45
+	android:configChanges
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:78:13-74
+	android:name
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:77:13-52
+activity#com.atishay.online.changepassword.TabChngPassActivity
+ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:82:9-87:20
+	android:screenOrientation
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:86:13-49
+	android:label
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:85:13-45
+	android:configChanges
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:84:13-74
+	android:name
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:83:13-63
+activity#com.atishay.online.about.AboutActivity
+ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:88:9-93:20
+	android:screenOrientation
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:92:13-49
+	android:label
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:91:13-45
+	android:configChanges
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:90:13-74
+	android:name
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:89:13-48
+activity#com.atishay.online.postpaid.PostpaidActivity
+ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:94:9-99:20
+	android:screenOrientation
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:98:13-49
+	android:label
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:97:13-45
+	android:configChanges
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:96:13-74
+	android:name
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:95:13-54
+activity#com.atishay.online.utility.UtilityActivity
+ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:100:9-105:20
+	android:screenOrientation
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:104:13-49
+	android:label
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:103:13-45
+	android:configChanges
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:102:13-74
+	android:name
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:101:13-52
+activity#com.atishay.online.benefiaciary.BeneficiaryActivity
+ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:106:9-111:20
+	android:screenOrientation
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:110:13-49
+	android:label
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:109:13-45
+	android:configChanges
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:108:13-74
+	android:name
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:107:13-61
+activity#com.atishay.online.addbenefiaciary.AddBeneficiaryActivity
+ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:112:9-117:20
+	android:screenOrientation
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:116:13-49
+	android:label
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:115:13-45
+	android:configChanges
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:114:13-74
+	android:name
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:113:13-67
+activity#com.atishay.online.moneytransfer.FundTransferActivity
+ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:118:9-123:20
+	android:screenOrientation
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:122:13-49
+	android:label
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:121:13-45
+	android:configChanges
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:120:13-74
+	android:name
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:119:13-63
+activity#com.atishay.online.history.HistoryActivity
+ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:124:9-129:20
+	android:screenOrientation
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:128:13-49
+	android:label
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:127:13-45
+	android:configChanges
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:126:13-74
+	android:name
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:125:13-52
+activity#com.atishay.online.moneytransfer.CustomerRegistrationActivity
+ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:130:9-135:20
+	android:screenOrientation
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:134:13-49
+	android:label
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:133:13-45
+	android:configChanges
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:132:13-74
+	android:name
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:131:13-71
+activity#com.atishay.online.myaccountrecharge.AccountRechargeActivity
+ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:136:9-141:20
+	android:screenOrientation
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:140:13-49
+	android:label
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:139:13-45
+	android:configChanges
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:138:13-74
+	android:name
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:137:13-70
+activity#com.atishay.online.myaccountrecharge.AccountRechargeReportActivity
+ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:142:9-147:20
+	android:screenOrientation
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:146:13-49
+	android:label
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:145:13-45
+	android:configChanges
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:144:13-74
+	android:name
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:143:13-76
+activity#com.atishay.online.aadhaar.AadhaarVerificationActivity
+ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:148:9-153:20
+	android:screenOrientation
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:152:13-49
+	android:label
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:151:13-45
+	android:configChanges
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:150:13-74
+	android:name
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:149:13-64
+activity#com.atishay.online.aadhaar.AadhaarVerificationHistoryActivity
+ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:154:9-159:20
+	android:screenOrientation
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:158:13-49
+	android:label
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:157:13-45
+	android:configChanges
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:156:13-74
+	android:name
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:155:13-71
+activity#com.atishay.online.addbenefiaciary.MasterIFSCActivity
+ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:160:9-165:20
+	android:screenOrientation
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:164:13-49
+	android:label
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:163:13-45
+	android:configChanges
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:162:13-74
+	android:name
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:161:13-63
+activity#com.atishay.online.searchifsc.SearchIFSCActivity
+ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:166:9-171:20
+	android:screenOrientation
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:170:13-49
+	android:label
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:169:13-45
+	android:configChanges
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:168:13-74
+	android:name
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:167:13-58
+activity#com.atishay.online.benefiaciary.RemoveBeneficiaryActivity
+ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:172:9-177:20
+	android:screenOrientation
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:176:13-49
+	android:label
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:175:13-45
+	android:configChanges
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:174:13-74
+	android:name
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:173:13-67
+activity#com.atishay.online.moneytransfer.FundTransferHistoryActivity
+ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:178:9-182:61
+	android:screenOrientation
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:182:13-49
+	android:label
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:181:13-45
+	android:configChanges
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:180:13-74
+	android:name
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:179:13-70
+activity#com.atishay.online.moneytransfer.SinglePDFPrintActivity
+ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:183:9-187:61
+	android:screenOrientation
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:187:13-49
+	android:label
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:186:13-45
+	android:configChanges
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:185:13-74
+	android:name
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:184:13-65
+activity#com.atishay.online.postpaid.PostpaidNewActivity
+ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:189:9-194:20
+	android:screenOrientation
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:193:13-49
+	android:label
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:192:13-45
+	android:configChanges
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:191:13-74
+	android:name
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:190:13-57
+activity#com.atishay.online.postpaid.PostpaidMobilePayment
+ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:197:9-202:20
+	android:screenOrientation
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:201:13-49
+	android:label
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:200:13-45
+	android:configChanges
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:199:13-74
+	android:name
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:198:13-59
+activity#com.atishay.online.postpaid.Fetch_Bill
+ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:203:9-208:20
+	android:screenOrientation
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:207:13-49
+	android:label
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:206:13-45
+	android:configChanges
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:205:13-74
+	android:name
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:204:13-48
+activity#com.atishay.online.utility.UtilityNewActivity
+ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:210:5-215:16
+	android:screenOrientation
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:214:9-45
+	android:label
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:213:9-41
+	android:configChanges
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:212:9-70
+	android:name
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:211:9-51
+activity#com.atishay.online.utility.Fetch_UtilityBill
+ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:217:9-222:20
+	android:screenOrientation
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:221:13-49
+	android:label
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:220:13-45
+	android:configChanges
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:219:13-74
+	android:name
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:218:13-54
+service#com.atishay.online.WalletBalanceService
+ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:224:9-227:19
+	android:exported
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:226:13-37
+	android:name
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:225:13-49
+service#com.atishay.online.NotificationService
+ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:228:9-231:19
+	android:exported
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:230:13-37
+	android:name
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:229:13-48
+meta-data#io.fabric.ApiKey
+ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:232:9-234:72
+	android:value
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:234:13-69
+	android:name
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml:233:13-44
+uses-sdk
+INJECTED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml
+INJECTED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml
+MERGED from [:framework-release] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\framework-release.aar\9020930049f3dd61c4f0794b675f52ea\AndroidManifest.xml:23:5-25:41
+MERGED from [:framework-release] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\framework-release.aar\9020930049f3dd61c4f0794b675f52ea\AndroidManifest.xml:23:5-25:41
+MERGED from [com.jakewharton:butterknife:8.2.0] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\butterknife-8.2.0.aar\ee3cd1f65fc06f449a93fbac5905184c\AndroidManifest.xml:5:5-43
+MERGED from [com.jakewharton:butterknife:8.2.0] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\butterknife-8.2.0.aar\ee3cd1f65fc06f449a93fbac5905184c\AndroidManifest.xml:5:5-43
+MERGED from [com.android.support:design:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\design-24.2.1.aar\f66ee6e26f243473dc59e54e69795dc8\AndroidManifest.xml:20:5-43
+MERGED from [com.android.support:design:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\design-24.2.1.aar\f66ee6e26f243473dc59e54e69795dc8\AndroidManifest.xml:20:5-43
+MERGED from [com.android.support.constraint:constraint-layout:1.0.0-alpha9] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\constraint-layout-1.0.0-alpha9.aar\665a9db5982f18cbe1eea70bb3472ca8\AndroidManifest.xml:5:5-7:41
+MERGED from [com.android.support.constraint:constraint-layout:1.0.0-alpha9] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\constraint-layout-1.0.0-alpha9.aar\665a9db5982f18cbe1eea70bb3472ca8\AndroidManifest.xml:5:5-7:41
+MERGED from [com.android.support:customtabs:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\customtabs-24.2.1.aar\bc0394255efff99c80957f1dede346e3\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:customtabs:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\customtabs-24.2.1.aar\bc0394255efff99c80957f1dede346e3\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:cardview-v7:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\cardview-v7-24.2.1.aar\44841a2234079379572314475b1efd91\AndroidManifest.xml:20:5-43
+MERGED from [com.android.support:cardview-v7:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\cardview-v7-24.2.1.aar\44841a2234079379572314475b1efd91\AndroidManifest.xml:20:5-43
+MERGED from [com.github.f0ris.sweetalert:library:1.5.2] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\library-1.5.2.aar\c79ad70796cc0068db140a8dbe818842\AndroidManifest.xml:7:5-9:41
+MERGED from [com.github.f0ris.sweetalert:library:1.5.2] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\library-1.5.2.aar\c79ad70796cc0068db140a8dbe818842\AndroidManifest.xml:7:5-9:41
+MERGED from [com.pnikosis:materialish-progress:1.0] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\materialish-progress-1.0.aar\49bd446df4727d35e6f9d87b77b2dfc2\AndroidManifest.xml:7:5-9:41
+MERGED from [com.pnikosis:materialish-progress:1.0] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\materialish-progress-1.0.aar\49bd446df4727d35e6f9d87b77b2dfc2\AndroidManifest.xml:7:5-9:41
+MERGED from [com.android.support:appcompat-v7:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\appcompat-v7-24.2.1.aar\3ab2c7456c324863624e398303bde312\AndroidManifest.xml:21:5-23:78
+MERGED from [com.android.support:appcompat-v7:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\appcompat-v7-24.2.1.aar\3ab2c7456c324863624e398303bde312\AndroidManifest.xml:21:5-23:78
+MERGED from [com.wdullaer:materialdatetimepicker:2.3.0] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\materialdatetimepicker-2.3.0.aar\45b6e370ce11135c4847c2d78394e442\AndroidManifest.xml:22:5-24:41
+MERGED from [com.wdullaer:materialdatetimepicker:2.3.0] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\materialdatetimepicker-2.3.0.aar\45b6e370ce11135c4847c2d78394e442\AndroidManifest.xml:22:5-24:41
+MERGED from [com.android.support:support-v4:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\support-v4-24.2.1.aar\0f6b98a72eea9b327c5b0534af133451\AndroidManifest.xml:21:5-23:54
+MERGED from [com.android.support:support-v4:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\support-v4-24.2.1.aar\0f6b98a72eea9b327c5b0534af133451\AndroidManifest.xml:21:5-23:54
+MERGED from [com.android.support:recyclerview-v7:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\recyclerview-v7-24.2.1.aar\0234380899fe06c25774b4e8b011b5a1\AndroidManifest.xml:20:5-43
+MERGED from [com.android.support:recyclerview-v7:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\recyclerview-v7-24.2.1.aar\0234380899fe06c25774b4e8b011b5a1\AndroidManifest.xml:20:5-43
+MERGED from [com.jaredrummler:material-spinner:1.2.4] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\material-spinner-1.2.4.aar\b31e52677717c7f7f63cf2c8378d8ced\AndroidManifest.xml:6:5-8:41
+MERGED from [com.jaredrummler:material-spinner:1.2.4] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\material-spinner-1.2.4.aar\b31e52677717c7f7f63cf2c8378d8ced\AndroidManifest.xml:6:5-8:41
+MERGED from [com.android.support:support-fragment:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\support-fragment-24.2.1.aar\f0be3cb6582fb5202dab97cee6bdc2dd\AndroidManifest.xml:21:5-23:60
+MERGED from [com.android.support:support-fragment:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\support-fragment-24.2.1.aar\f0be3cb6582fb5202dab97cee6bdc2dd\AndroidManifest.xml:21:5-23:60
+MERGED from [com.android.support:support-core-ui:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\support-core-ui-24.2.1.aar\39b38cec5f5eeb60825565076619d818\AndroidManifest.xml:21:5-23:58
+MERGED from [com.android.support:support-core-ui:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\support-core-ui-24.2.1.aar\39b38cec5f5eeb60825565076619d818\AndroidManifest.xml:21:5-23:58
+MERGED from [com.android.support:support-media-compat:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\support-media-compat-24.2.1.aar\d0e8c5aa32e857db2eb441e6a5086fe5\AndroidManifest.xml:21:5-23:63
+MERGED from [com.android.support:support-media-compat:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\support-media-compat-24.2.1.aar\d0e8c5aa32e857db2eb441e6a5086fe5\AndroidManifest.xml:21:5-23:63
+MERGED from [com.android.support:support-core-utils:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\support-core-utils-24.2.1.aar\fb4020ac1695eac800a2b6de2d67b000\AndroidManifest.xml:21:5-23:61
+MERGED from [com.android.support:support-core-utils:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\support-core-utils-24.2.1.aar\fb4020ac1695eac800a2b6de2d67b000\AndroidManifest.xml:21:5-23:61
+MERGED from [com.android.support:animated-vector-drawable:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\animated-vector-drawable-24.2.1.aar\8b39ebc65d62e995a74f7c7fc8dd5d36\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:animated-vector-drawable:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\animated-vector-drawable-24.2.1.aar\8b39ebc65d62e995a74f7c7fc8dd5d36\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\support-vector-drawable-24.2.1.aar\f828d25eef1ef16662c9f6e670dd5253\AndroidManifest.xml:21:5-43
+MERGED from [com.android.support:support-vector-drawable:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\support-vector-drawable-24.2.1.aar\f828d25eef1ef16662c9f6e670dd5253\AndroidManifest.xml:21:5-43
+MERGED from [com.android.support:support-compat:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\support-compat-24.2.1.aar\af967b2aab63e6ba39f2fa91e0cd1203\AndroidManifest.xml:21:5-23:58
+MERGED from [com.android.support:support-compat:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\support-compat-24.2.1.aar\af967b2aab63e6ba39f2fa91e0cd1203\AndroidManifest.xml:21:5-23:58
+MERGED from [com.squareup.leakcanary:leakcanary-android-no-op:1.3.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\leakcanary-android-no-op-1.3.1.aar\3dcc831fdd8382ef0bf2a01327240e4d\AndroidManifest.xml:20:5-22:41
+MERGED from [com.squareup.leakcanary:leakcanary-android-no-op:1.3.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\leakcanary-android-no-op-1.3.1.aar\3dcc831fdd8382ef0bf2a01327240e4d\AndroidManifest.xml:20:5-22:41
+MERGED from [com.orhanobut:logger:1.15] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\logger-1.15.aar\4a803777ec4df611421f175cbb78f22c\AndroidManifest.xml:6:5-43
+MERGED from [com.orhanobut:logger:1.15] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\logger-1.15.aar\4a803777ec4df611421f175cbb78f22c\AndroidManifest.xml:6:5-43
+MERGED from [com.android.support:multidex:1.0.2] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\multidex-1.0.2.aar\57da120193a497a09c71aa4b81b27888\AndroidManifest.xml:20:5-43
+MERGED from [com.android.support:multidex:1.0.2] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\multidex-1.0.2.aar\57da120193a497a09c71aa4b81b27888\AndroidManifest.xml:20:5-43
+MERGED from [com.crashlytics.sdk.android:crashlytics:2.6.5] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\crashlytics-2.6.5.aar\6664a528c6d545907f55c15a9f2bae73\AndroidManifest.xml:7:5-43
+MERGED from [com.crashlytics.sdk.android:crashlytics:2.6.5] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\crashlytics-2.6.5.aar\6664a528c6d545907f55c15a9f2bae73\AndroidManifest.xml:7:5-43
+MERGED from [com.crashlytics.sdk.android:beta:1.2.2] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\beta-1.2.2.aar\89eef92a75c48e5cb46b75fc287867f8\AndroidManifest.xml:7:5-43
+MERGED from [com.crashlytics.sdk.android:beta:1.2.2] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\beta-1.2.2.aar\89eef92a75c48e5cb46b75fc287867f8\AndroidManifest.xml:7:5-43
+MERGED from [com.crashlytics.sdk.android:crashlytics-core:2.3.14] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\crashlytics-core-2.3.14.aar\734e4a0cfaf3e26b16d52c9556709510\AndroidManifest.xml:7:5-43
+MERGED from [com.crashlytics.sdk.android:crashlytics-core:2.3.14] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\crashlytics-core-2.3.14.aar\734e4a0cfaf3e26b16d52c9556709510\AndroidManifest.xml:7:5-43
+MERGED from [com.crashlytics.sdk.android:answers:1.3.10] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\answers-1.3.10.aar\0f1debdc7409af30c93573c5648ed3a6\AndroidManifest.xml:7:5-43
+MERGED from [com.crashlytics.sdk.android:answers:1.3.10] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\answers-1.3.10.aar\0f1debdc7409af30c93573c5648ed3a6\AndroidManifest.xml:7:5-43
+MERGED from [io.fabric.sdk.android:fabric:1.3.14] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\fabric-1.3.14.aar\af5d1dbd8db9694f3f16ea6b43388727\AndroidManifest.xml:23:5-43
+MERGED from [io.fabric.sdk.android:fabric:1.3.14] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\fabric-1.3.14.aar\af5d1dbd8db9694f3f16ea6b43388727\AndroidManifest.xml:23:5-43
+INJECTED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml
+INJECTED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml
+	tools:overrideLibrary
+		ADDED from [com.android.support:appcompat-v7:24.2.1] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\appcompat-v7-24.2.1.aar\3ab2c7456c324863624e398303bde312\AndroidManifest.xml:23:9-75
+	android:targetSdkVersion
+		INJECTED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml
+		INJECTED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml
+		ADDED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml
+		INJECTED from C:\StudioProject\AtishayOnline\app\src\main\AndroidManifest.xml
+uses-permission#android.permission.VIBRATE
+ADDED from [com.wdullaer:materialdatetimepicker:2.3.0] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\materialdatetimepicker-2.3.0.aar\45b6e370ce11135c4847c2d78394e442\AndroidManifest.xml:26:5-66
+	android:name
+		ADDED from [com.wdullaer:materialdatetimepicker:2.3.0] C:\Users\Atishay\.gradle\caches\transforms-1\files-1.1\materialdatetimepicker-2.3.0.aar\45b6e370ce11135c4847c2d78394e442\AndroidManifest.xml:26:22-63

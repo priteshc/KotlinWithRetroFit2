@@ -1,0 +1,93 @@
+// Generated code from Butter Knife. Do not modify!
+package com.atishay.online.mobilerecharge;
+
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
+import butterknife.Unbinder;
+import butterknife.internal.DebouncingOnClickListener;
+import butterknife.internal.Finder;
+import com.atishay.online.R;
+import com.atishay.online.utils.Loader;
+import java.lang.IllegalStateException;
+import java.lang.Object;
+import java.lang.Override;
+
+public class MobileRechargeActivity_ViewBinding<T extends MobileRechargeActivity> implements Unbinder {
+  protected T target;
+
+  private View view2131231089;
+
+  private View view2131231090;
+
+  public MobileRechargeActivity_ViewBinding(final T target, Finder finder, Object source) {
+    this.target = target;
+
+    View view;
+    target.mToolbar = finder.findRequiredViewAsType(source, R.id.toolbar, "field 'mToolbar'", Toolbar.class);
+    target.mMobileMainView = finder.findRequiredViewAsType(source, R.id.mobile_rlMain, "field 'mMobileMainView'", RelativeLayout.class);
+    target.mOperator = finder.findRequiredViewAsType(source, R.id.mobile_spOperator, "field 'mOperator'", Spinner.class);
+    target.mMobileNumber = finder.findRequiredViewAsType(source, R.id.mobile_edtMobile, "field 'mMobileNumber'", EditText.class);
+    target.mCircle = finder.findRequiredViewAsType(source, R.id.mobile_spCircle, "field 'mCircle'", Spinner.class);
+    target.mTransactionType = finder.findRequiredViewAsType(source, R.id.mobile_spTransType, "field 'mTransactionType'", Spinner.class);
+    target.mAmount = finder.findRequiredViewAsType(source, R.id.mobile_edtAmount, "field 'mAmount'", EditText.class);
+    target.mTransactionCode = finder.findRequiredViewAsType(source, R.id.mobile_edtTransaction, "field 'mTransactionCode'", EditText.class);
+    target.mtxtOperator = finder.findRequiredViewAsType(source, R.id.txtOperator, "field 'mtxtOperator'", TextView.class);
+    target.mtxtMobile = finder.findRequiredViewAsType(source, R.id.txtMobile, "field 'mtxtMobile'", TextView.class);
+    target.mtxtCircle = finder.findRequiredViewAsType(source, R.id.txtCircle, "field 'mtxtCircle'", TextView.class);
+    target.mtxtAmount = finder.findRequiredViewAsType(source, R.id.txtAmount, "field 'mtxtAmount'", TextView.class);
+    target.mtxtTranCode = finder.findRequiredViewAsType(source, R.id.txtTranCode, "field 'mtxtTranCode'", TextView.class);
+    target.mtxtTransaction = finder.findRequiredViewAsType(source, R.id.txtTransaction, "field 'mtxtTransaction'", TextView.class);
+    target.mLoader = finder.findRequiredViewAsType(source, R.id.loader, "field 'mLoader'", Loader.class);
+    view = finder.findRequiredView(source, R.id.mobile_txtProceed, "field 'mView' and method 'doProceedRecharge'");
+    target.mView = finder.castView(view, R.id.mobile_txtProceed, "field 'mView'", TextView.class);
+    view2131231089 = view;
+    view.setOnClickListener(new DebouncingOnClickListener() {
+      @Override
+      public void doClick(View p0) {
+        target.doProceedRecharge();
+      }
+    });
+    view = finder.findRequiredView(source, R.id.mobile_txtViewPlan, "method 'doViewPlan'");
+    view2131231090 = view;
+    view.setOnClickListener(new DebouncingOnClickListener() {
+      @Override
+      public void doClick(View p0) {
+        target.doViewPlan(p0);
+      }
+    });
+  }
+
+  @Override
+  public void unbind() {
+    T target = this.target;
+    if (target == null) throw new IllegalStateException("Bindings already cleared.");
+
+    target.mToolbar = null;
+    target.mMobileMainView = null;
+    target.mOperator = null;
+    target.mMobileNumber = null;
+    target.mCircle = null;
+    target.mTransactionType = null;
+    target.mAmount = null;
+    target.mTransactionCode = null;
+    target.mtxtOperator = null;
+    target.mtxtMobile = null;
+    target.mtxtCircle = null;
+    target.mtxtAmount = null;
+    target.mtxtTranCode = null;
+    target.mtxtTransaction = null;
+    target.mLoader = null;
+    target.mView = null;
+
+    view2131231089.setOnClickListener(null);
+    view2131231089 = null;
+    view2131231090.setOnClickListener(null);
+    view2131231090 = null;
+
+    this.target = null;
+  }
+}

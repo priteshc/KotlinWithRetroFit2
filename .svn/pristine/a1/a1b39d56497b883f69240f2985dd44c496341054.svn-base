@@ -1,0 +1,202 @@
+package com.atishay.online.postpaid;
+
+import android.util.Log;
+
+import com.atishay.online.AtishayOnlineApp;
+import com.atishay.online.BaseResponse;
+import com.atishay.online.R;
+import com.atishay.online.history.ComplainPojo;
+import com.atishay.online.history.ComplainView;
+import com.atishay.online.utils.Constants;
+import com.atishay.online.utils.RestApis;
+import com.atishay.online.utils.RetrofitClientFactory;
+import com.atishay.online.utils.network.ApiError;
+import com.atishay.online.utils.network.RestApiCallback;
+import com.goldenmace.framework.utils.NetworkUtils;
+
+import java.io.IOException;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+/**
+ * Created by Atishay on 19-01-2018.
+ */
+
+public class OperatorPresenter {
+
+
+    private PoperatorView poperatorView;
+
+    private RetrofitClientFactory clientFactory;
+
+    private RestApis mRestApis;
+
+    RestApiCallback<Object, ApiError<Object>> mApiCallback;
+
+
+
+    public OperatorPresenter(PoperatorView poperatorView, RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+
+
+        this.poperatorView = poperatorView;
+
+        clientFactory = new RetrofitClientFactory();
+
+        mRestApis = RetrofitClientFactory.get();
+
+        this.mApiCallback = aApiCallback;
+
+
+    }
+
+
+    public void getTrans(String username,String password){
+
+
+        poperatorView.showprogress();
+
+        Call<PostpaidPojo> pojoCall = mRestApis.getOperator(username,password);
+
+        pojoCall.enqueue(new Callback<PostpaidPojo>() {
+            @Override
+            public void onResponse(Call<PostpaidPojo> call, Response<PostpaidPojo> response) {
+
+
+                if(response.isSuccessful()) {
+
+
+                    if (response.body().getStrOutMEssage().equals(Constants.SUCCESS)) {
+
+                        Log.d("Msg", response.body().getStrOutMEssage());
+
+
+                        poperatorView.showFLoginSuccessMsg(response.body().getStrOutMEssage(),response.body().getResponse());
+
+
+                    } else
+                        {
+
+                            poperatorView.hideprogress();
+
+                            if (response.body().getStrOutMEssage().equals(Constants.FAILED)) {
+
+                            poperatorView.showFailedMeassage(response.body().getStrOutMEssage());
+                        }
+
+                    }
+                }
+
+               else {
+
+                    poperatorView.hideprogress();
+
+                    ApiError apiError;
+
+                    if (response.errorBody() != null) {
+
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+
+                    mApiCallback.onApiError(Constants.APICODE.POSTPAID_OPERATOR,apiError);
+                }
+
+
+                }
+
+            @Override
+            public void onFailure(Call<PostpaidPojo> call, Throwable t) {
+
+                poperatorView.hideprogress();
+
+                poperatorView.showFErrorMeassage(AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error));
+
+            }
+        });
+
+
+        //  clientFactory.get1().doComplain(username,password,id,msg);
+
+
+    }
+
+
+    public void getCoverge(String username,String password){
+
+        Call<BillerCovergePojo> pojoCall = mRestApis.getBillerCoverage(username,password);
+
+        pojoCall.enqueue(new Callback<BillerCovergePojo>() {
+            @Override
+            public void onResponse(Call<BillerCovergePojo> call, Response<BillerCovergePojo> response) {
+
+                poperatorView.hideprogress();
+
+                if(response.isSuccessful()) {
+
+
+                    if (response.body().getResponseMessage().equals("Successful")) {
+
+                        poperatorView.showCovergeSuccessMsg(response.body().getResponseMessage(),response.body().getResponse());
+
+                    } else
+                    {
+
+                        if (response.body().getResponseMessage().equals(Constants.FAILED)) {
+
+                            poperatorView.showCovergeFailedMeassage(response.body().getResponseMessage());
+                        }
+
+                    }
+                }
+
+                else {
+
+                    ApiError apiError;
+
+                    if (response.errorBody() != null) {
+
+                        try {
+                            BaseResponse baseResponse = AtishayOnlineApp.getAppInstance().getGson().fromJson(response.errorBody().string(), BaseResponse.class);
+                            apiError = new ApiError<Object>(response.code(), baseResponse.getMsg());
+                        } catch (IOException aE) {
+                            apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                        }
+                    } else {
+                        apiError = new ApiError<Object>(response.code(), NetworkUtils.getErrorMessageByHttpCode(AtishayOnlineApp.getAppInstance(), response.code()));
+                    }
+
+                    mApiCallback.onApiError(Constants.APICODE.POSTPAID_OPERATOR,apiError);
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<BillerCovergePojo> call, Throwable t) {
+
+                poperatorView.hideprogress();
+
+                poperatorView.showFErrorMeassage(AtishayOnlineApp.getAppInstance().getString(R.string.error_network_client_error));
+
+            }
+        });
+
+
+
+
+
+        //  clientFactory.get1().doComplain(username,password,id,msg);
+
+
+    }
+
+
+}

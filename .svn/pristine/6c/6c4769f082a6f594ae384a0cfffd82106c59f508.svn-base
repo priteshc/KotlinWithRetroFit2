@@ -1,0 +1,54 @@
+
+package com.atishay.online.benefiaciary;
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+public class BankIFSCDetailBean {
+
+    @SerializedName("IFSC")
+    @Expose
+    private String iFSC;
+    @SerializedName("BANK")
+    @Expose
+    private String bANK;
+    @SerializedName("BRANCH")
+    @Expose
+    private String bRANCH;
+    @SerializedName("ADDRESS")
+    @Expose
+    private String aDDRESS;
+
+    public String getIFSC() {
+        return iFSC;
+    }
+
+    public void setIFSC(String iFSC) {
+        this.iFSC = iFSC;
+    }
+
+    public String getBANK() {
+        return bANK;
+    }
+
+    public void setBANK(String bANK) {
+        this.bANK = bANK;
+    }
+
+    public String getBRANCH() {
+        return bRANCH;
+    }
+
+    public void setBRANCH(String bRANCH) {
+        this.bRANCH = bRANCH;
+    }
+
+    public String getADDRESS() {
+        return aDDRESS;
+    }
+
+    public void setADDRESS(String aDDRESS) {
+        this.aDDRESS = aDDRESS;
+    }
+
+}

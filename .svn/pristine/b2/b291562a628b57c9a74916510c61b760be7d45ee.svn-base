@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2016 GoldenMace IT Solutions
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/utility_rlMain"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/utility_alView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar"/>
+    </android.support.design.widget.AppBarLayout>
+
+    <ScrollView
+        android:id="@+id/utility_slMain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/utility_alView"
+        android:scrollbarAlwaysDrawVerticalTrack="false"
+        android:scrollbarSize="0dip"
+        android:scrollbarThumbVertical="@android:color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtOperator"
+                style="@style/TextStyle"
+                android:text="@string/operator"/>
+
+            <Spinner
+                android:id="@+id/utility_spOperator"
+                style="@style/SpinnerStyle"
+                android:spinnerMode="dropdown"/>
+
+            <LinearLayout
+                android:id="@+id/subscribe_llExtraView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/txtSubscribeNo"
+                    style="@style/TextStyle"
+                    android:text="@string/subscriber_number"/>
+
+                <EditText
+                    android:id="@+id/utility_edtSubscribeNo"
+                    style="@style/EditStyle"
+                    android:hint="@string/hint_subscriber_number"
+                    android:inputType="number"
+                    android:maxLength="16"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/service_llExtraView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/txtServiceNo"
+                    style="@style/TextStyle"
+                    android:text="@string/service_number"/>
+
+                <EditText
+                    android:id="@+id/utility_edtServiceNo"
+                    style="@style/EditStyle"
+                    android:hint="@string/hint_service_number"
+                    android:inputType="number"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/bill_llExtraView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/txtBillNo"
+                    style="@style/TextStyle"
+                    android:text="@string/bill_number"/>
+
+                <EditText
+                    android:id="@+id/utility_edtBillNo"
+                    style="@style/EditStyle"
+                    android:hint="@string/hint_bill_number"
+                    android:inputType="number"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/policy_llExtraView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/txtPolicyNo"
+                    style="@style/TextStyle"
+                    android:text="@string/policy_number"/>
+
+                <EditText
+                    android:id="@+id/utility_edtPolicyNo"
+                    style="@style/EditStyle"
+                    android:hint="@string/hint_policy_number"
+                    android:inputType="number"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/consumer_llExtraView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/txtConsumerNo"
+                    style="@style/TextStyle"
+                    android:text="@string/consumer_number"/>
+
+                <EditText
+                    android:id="@+id/utility_edtConsumerNo"
+                    style="@style/EditStyle"
+                    android:hint="@string/hint_consumer_number"
+                    android:inputType="number"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/txtMobile"
+                style="@style/TextStyle"
+                android:text="@string/customer_mobile_number"/>
+
+            <EditText
+                android:id="@+id/utility_edtMobile"
+                style="@style/EditStyle"
+                android:hint="@string/hint_customer_mobile_number"
+                android:inputType="number"
+                android:maxLength="10"/>
+
+            <LinearLayout
+                android:id="@+id/dob_llExtraView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/txtDateOfBirth"
+                    style="@style/TextStyle"
+                    android:text="@string/date_of_birth"/>
+
+                <EditText
+                    android:id="@+id/utility_edtDateOfBirth"
+                    style="@style/EditStyle"
+                    android:hint="@string/hint_date_of_birth"
+                    android:inputType="number"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/billunit_llExtraView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/txtBillUnit"
+                    style="@style/TextStyle"
+                    android:text="@string/bill_unit"/>
+
+                <EditText
+                    android:id="@+id/utility_edtBillUnit"
+                    style="@style/EditStyle"
+                    android:hint="@string/hint_bill_unit"
+                    android:inputType="number"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/pcnumber_llExtraView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/txtPCNumber"
+                    style="@style/TextStyle"
+                    android:text="@string/pc_number"/>
+
+                <EditText
+                    android:id="@+id/utility_edtPCNumber"
+                    style="@style/EditStyle"
+                    android:hint="@string/hint_pc_number"
+                    android:inputType="number"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/cnumber_llExtraView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/txtCNumber"
+                    style="@style/TextStyle"
+                    android:text="@string/cycle_number"/>
+
+                <EditText
+                    android:id="@+id/utility_edtCNumber"
+                    style="@style/EditStyle"
+                    android:hint="@string/hint_cycle_number"
+                    android:inputType="number"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/city_llExtraView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/txtCity"
+                    style="@style/TextStyle"
+                    android:text="@string/city"/>
+
+                <EditText
+                    android:id="@+id/utility_edtCity"
+                    style="@style/EditStyle"
+                    android:hint="@string/hint_city"
+                    android:inputType="text"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/billgroup_llExtraView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/txtBillGroup"
+                    style="@style/TextStyle"
+                    android:text="@string/bill_group_number"/>
+
+                <EditText
+                    android:id="@+id/utility_edtBillGroup"
+                    style="@style/EditStyle"
+                    android:hint="@string/hint_bill_group_number"
+                    android:inputType="number"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/txtAmount"
+                style="@style/TextStyle"
+                android:text="@string/bill_amount"/>
+
+            <EditText
+                android:id="@+id/utility_edtAmount"
+                style="@style/EditStyle"
+                android:hint="@string/hint_bill_amount"
+                android:inputType="numberDecimal"/>
+
+            <TextView
+                android:id="@+id/money_txtTotalAmunt"
+                style="@style/TextStyle"
+                android:text="@string/total_amount"/>
+
+            <EditText
+                android:id="@+id/money_edtTotalAmunt"
+                style="@style/EditStyle"
+                android:enabled="false"/>
+
+            <TextView
+                android:id="@+id/txtTranCode"
+                style="@style/TextStyle"
+                android:text="@string/trans_code"/>
+
+            <EditText
+                android:id="@+id/utility_edtTransaction"
+                style="@style/EditStyle"
+                android:hint="@string/hint_trans_code"
+                android:inputType="numberPassword"
+                android:maxLength="4"/>
+
+            <TextView
+                android:id="@+id/utility_txtProceed"
+                style="@style/FormStyle"
+                android:text="@string/proceed_pay"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <com.atishay.online.utils.Loader
+        android:id="@+id/loader"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:visibility="gone">
+    </com.atishay.online.utils.Loader>
+</RelativeLayout>

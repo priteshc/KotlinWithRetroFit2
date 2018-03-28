@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2016 GoldenMace IT Solutions
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/dth_rlMain"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/dth_alView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar"/>
+    </android.support.design.widget.AppBarLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_login"
+        android:layout_below="@+id/dth_alView">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_gravity="center_horizontal"
+        android:background="#00668E">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:gravity="center"
+                android:text="Your Balance"
+                android:textColor="@android:color/white"
+                android:textSize="16dp"
+                android:textStyle="normal"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:text="1002"
+                android:textColor="@android:color/white"
+                android:textSize="25dp"
+                android:textStyle="bold"
+                android:id="@+id/bal"
+
+                />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/dth_slMain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/dth_alView"
+        android:layout_marginTop="100dp"
+        android:scrollbarAlwaysDrawVerticalTrack="false"
+        android:scrollbarSize="0dip"
+        android:scrollbarThumbVertical="@android:color/white">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+
+            >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="30dp"
+                android:padding="15dp"
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/txtSubscriber"
+                        style="@style/TextStyle"
+                        android:visibility="gone"
+                        android:text="@string/subscrb_id"/>
+
+                    <EditText
+                        android:id="@+id/dth_edtSubscrID"
+                        style="@style/EditStyle"
+                        android:drawableLeft="@drawable/retrotv"
+                        android:hint="@string/hint_subscrb_id"
+                        android:drawablePadding="10dp"
+                        android:inputType="numberPassword"
+                        android:maxLength="15"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="20dp"
+                    >
+
+                    <TextView
+                        android:id="@+id/txtOperator"
+                        style="@style/TextStyle"
+                        android:visibility="gone"
+                        android:text="@string/operator"/>
+                    <ImageView
+                        android:layout_width="65dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/antenna"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="5dp"
+                        />
+
+
+                    <com.jaredrummler.materialspinner.MaterialSpinner
+                        app:ms_dropdown_max_height="250dp"
+                        app:ms_dropdown_height="250dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        app:ms_text_color="@color/textColorPrimary1"
+                        app:ms_arrow_tint="@color/colorPrimaryDark"
+                        app:ms_background_color="#f7f8fa"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="3dp"
+                        android:id="@+id/dth_operator"
+                        android:layout_weight="1"
+                        android:typeface="serif"
+                        />
+
+
+                    <Spinner
+                        android:id="@+id/dth_spOperator"
+                        style="@style/SpinnerStyle"
+                        android:visibility="gone"
+                        android:spinnerMode="dropdown"/>
+                </LinearLayout>
+
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    >
+
+                    <TextView
+                        android:id="@+id/txtCircle"
+                        style="@style/TextStyle"
+                        android:text="@string/circle_nm"/>
+
+                    <Spinner
+                        android:id="@+id/dth_spCircle"
+                        style="@style/SpinnerStyle"
+                        android:spinnerMode="dropdown"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="20dp"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/txtAmount"
+                            style="@style/TextStyle"
+                            android:visibility="gone"
+                            android:text="@string/rchrg_amunt"/>
+
+                        <TextView
+                            android:id="@+id/dth_txtViewPlan"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/spacing_standard"
+                            android:layout_marginTop="@dimen/spacing_activity_container"
+                            android:text="@string/view_plan"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="@dimen/font_large"
+                            android:textStyle="bold"
+                            android:visibility="gone"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <EditText
+                            android:id="@+id/dth_edtAmount"
+                            style="@style/EditStyle"
+                            android:hint="@string/hint_rchrg_amunt"
+                            android:drawableLeft="@drawable/rupee"
+                            android:drawablePadding="10dp"
+                            android:inputType="numberPassword"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    >
+
+                    <TextView
+                        android:id="@+id/txtTranCode"
+                        style="@style/TextStyle"
+                        android:text="@string/trans_code"/>
+
+                    <EditText
+                        android:id="@+id/dth_edtTransaction"
+                        style="@style/EditStyle"
+                        android:hint="@string/hint_trans_code"
+                        android:inputType="numberPassword"
+                        android:maxLength="4"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                android:background="#ffffff"
+                android:padding="10dp"
+                >
+            <TextView
+                android:id="@+id/dth_txtProceed"
+                style="@style/FormStyle1"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:padding="10dp"
+                android:layout_weight="1"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:text="@string/proceed_recharge"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+    </ScrollView>
+    </FrameLayout>
+    <com.atishay.online.utils.Loader
+        android:id="@+id/dht_loader"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</RelativeLayout>

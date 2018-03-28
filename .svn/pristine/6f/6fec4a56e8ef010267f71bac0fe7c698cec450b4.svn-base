@@ -1,0 +1,28 @@
+package com.atishay.online.changepassword;
+
+import com.atishay.online.AtishayOnlineApp;
+import com.atishay.online.utils.network.ApiError;
+import com.atishay.online.utils.network.RestApiCallback;
+
+/**
+ * Created by hrdudhat on 11/22/2016.
+ */
+public class TabChngPassController implements TabChngPassUsecase {
+
+    RestApiCallback<Object, ApiError<Object>> mApiCallback;
+
+    public TabChngPassController(RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+        mApiCallback = aApiCallback;
+    }
+
+
+    @Override
+    public void requestChangePassword(String aUsername, String aOldPassword, String aNewPassword) {
+        AtishayOnlineApp.getAppInstance().getRestApis().changePassword(aUsername, aOldPassword, aNewPassword, mApiCallback);
+    }
+
+    @Override
+    public void requestChangeTransactionCode(String aUsername, String aPassword, String aOldTransactionCode, String aNewTransactionCode) {
+        AtishayOnlineApp.getAppInstance().getRestApis().changeTransactionPassword(aUsername, aPassword, aOldTransactionCode, aNewTransactionCode, mApiCallback);
+    }
+}

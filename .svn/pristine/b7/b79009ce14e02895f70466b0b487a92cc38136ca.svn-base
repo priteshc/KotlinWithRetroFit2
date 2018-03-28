@@ -1,0 +1,410 @@
+/*
+ * Copyright 2016 Goldenmace IT Solutions
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+package com.atishay.online.menu;
+
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.atishay.online.AppBaseActivity;
+import com.atishay.online.AtishayOnlineApp;
+import com.atishay.online.R;
+import com.atishay.online.aadhaar.AadhaarVerificationActivity;
+import com.atishay.online.about.AboutActivity;
+import com.atishay.online.benefiaciary.BeneficiaryActivity;
+import com.atishay.online.changepassword.TabChngPassActivity;
+import com.atishay.online.dth.DTHActivity;
+import com.atishay.online.history.HistoryActivity;
+import com.atishay.online.login.LoginActivity;
+import com.atishay.online.mobilerecharge.MobileRechargeActivity;
+import com.atishay.online.moneytransfer.FundTransferHistoryActivity;
+import com.atishay.online.myaccountrecharge.AccountRechargeActivity;
+import com.atishay.online.postpaid.PostpaidActivity;
+import com.atishay.online.postpaid.PostpaidNewActivity;
+import com.atishay.online.utility.UtilityActivity;
+import com.atishay.online.utility.UtilityNewActivity;
+import com.atishay.online.utils.Constants;
+import com.atishay.online.views.widgets.circlemenu.CircleImageView;
+import com.atishay.online.views.widgets.circlemenu.CircleLayout;
+import com.atishay.online.views.widgets.circlemenu.CircleLayout.OnItemClickListener;
+import com.goldenmace.framework.utils.NetworkUtils;
+import com.goldenmace.framework.utils.SharedPrefUtils;
+import com.goldenmace.framework.utils.StringUtils;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+/**
+ * Created by Vishal Patel on 10,October,2016.
+ * AtishayOnline
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public class MenuActivity extends AppBaseActivity implements OnItemClickListener,View.OnClickListener {
+
+   /* @BindView(R.id.circle_layout)
+    protected CircleLayout circleLayout;*/
+    @BindView(R.id.menu_dlDrawer)
+    DrawerLayout mDrawerLayout;
+    @BindView(R.id.menu_nvNavigation)
+    NavigationView mNavigationView;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.menu_txtNotification)
+    TextView mNotificationMsg;
+    @BindView(R.id.menu_rlView)
+    RelativeLayout mMenuView;
+    boolean isHideMenu;
+    CircleImageView cl;
+
+    ImageView imageView;
+
+    CardView mobile,dth,postpaid,utility,pvc;
+
+    TextView balance;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_menu);
+
+        ButterKnife.bind(this);
+        setToolbar(mToolbar);
+        initNavigationDrawer();
+
+        mobile = (CardView) findViewById(R.id.mobile);
+        dth = (CardView) findViewById(R.id.dth);
+        postpaid = (CardView) findViewById(R.id.postpaid);
+        utility = (CardView) findViewById(R.id.utility);
+        pvc = (CardView) findViewById(R.id.pvc);
+
+
+        balance = (TextView) findViewById(R.id.bal);
+
+
+        isHideMenu = SharedPrefUtils.getBool(this, Constants.SharedPref.USER_DETAIL, Constants.SharedPref.KEY_MONEY_HIDE, false);
+        /**
+         * Custom Toolbar with amount view
+         */
+      //  ButterKnife.<TextView>findById(this, R.id.toolbar_txtAmount).setText(getString(R.string.amount, AtishayOnlineApp.getAppInstance().getBalance()));
+
+        ButterKnife.<TextView>findById(this, R.id.toolbar_txtAmount).setVisibility(View.GONE);
+        ButterKnife.<TextView>findById(this, R.id.toolbar_txtTitle).setText(getString(R.string.app_name));
+
+        balance.setText(getString(R.string.amount, AtishayOnlineApp.getAppInstance().getBalance()));
+
+
+
+
+
+        if (isHideMenu) {
+            cl = new CircleImageView(this);
+            cl.setId(R.id.money_trans_id);
+            cl.setImageResource(R.drawable.ic_mtranc);
+            cl.setBackground(getResources().getDrawable(R.drawable.menu_circle));
+            int size = getResources().getDimensionPixelSize(R.dimen.menu_size);
+            LinearLayout.LayoutParams addParam = new LinearLayout.LayoutParams(size, size);
+           // circleLayout.addView(cl, 2, addParam);
+
+            Menu nav_Menu = mNavigationView.getMenu();
+            nav_Menu.findItem(R.id.nav_money).setVisible(true);
+            nav_Menu.findItem(R.id.nav_fundtransfer_history).setVisible(true);
+        } else {
+            Menu nav_Menu = mNavigationView.getMenu();
+            nav_Menu.findItem(R.id.nav_money).setVisible(false);
+            nav_Menu.findItem(R.id.nav_fundtransfer_history).setVisible(false);
+        }
+      //  circleLayout.setOnItemClickListener(this);
+        mNotificationMsg.setSelected(true);
+      //  mNotificationMsg.setText(AtishayOnlineApp.getAppInstance().getNotification());
+
+          mobile.setOnClickListener(this);
+        dth.setOnClickListener(this);
+        postpaid.setOnClickListener(this);
+        utility.setOnClickListener(this);
+        pvc.setOnClickListener(this);
+
+
+    }
+
+    @Override
+    public void onClick(View view) {
+
+        if (!NetworkUtils.isNetworkAvailable(this)) {
+            Snackbar.make(view, getString(R.string.error_network_no_internet), Snackbar.LENGTH_SHORT).show();
+            return;
+        }
+
+        switch (view.getId()){
+
+            case R.id.mobile:
+                mobileRecharge();
+                break;
+            case R.id.dth:
+                dthRecharge();
+                break;
+            case R.id.postpaid:
+                postpaidRecharge();
+                break;
+            case R.id.pvc:
+                aadhaarpvc();
+                break;
+            case R.id.utility:
+                utilityBill();
+                break;
+
+        }
+
+
+    }
+
+    @Override
+    public void onItemClick(View view) {
+        if (!NetworkUtils.isNetworkAvailable(this)) {
+       //     Snackbar.make(circleLayout, getString(R.string.error_network_no_internet), Snackbar.LENGTH_SHORT).show();
+            return;
+        }
+        switch (view.getId()) {
+            case R.id.main_mobile:
+                mobileRecharge();
+                break;
+            case R.id.main_dth:
+                dthRecharge();
+                break;
+            case R.id.money_trans_id:
+                moneyTransfer();
+                break;
+            case R.id.main_postpaid:
+                postpaidRecharge();
+                break;
+            case R.id.main_utility:
+                utilityBill();
+                break;
+
+
+        }
+    }
+
+    public void mobileRecharge() {
+        Intent redirectMobile = new Intent(getApplicationContext(), MobileRechargeActivity.class);
+        startActivity(redirectMobile);
+    }
+
+    public void dthRecharge() {
+        Intent redirectDth = new Intent(getApplicationContext(), DTHActivity.class);
+        startActivity(redirectDth);
+    }
+
+    public void moneyTransfer() {
+        Intent redirectMoney = new Intent(getApplicationContext(), BeneficiaryActivity.class);
+        startActivity(redirectMoney);
+    }
+
+    public void postpaidRecharge() {
+        Intent redirectPostpaid = new Intent(getApplicationContext(), PostpaidNewActivity.class);
+        startActivity(redirectPostpaid);
+    }
+
+    public void myAccountRecharge() {
+        Intent redirectACRecharge = new Intent(getApplicationContext(), AccountRechargeActivity.class);
+        startActivity(redirectACRecharge);
+    }
+
+    public void utilityBill() {
+        Intent redirectUtility = new Intent(getApplicationContext(), UtilityNewActivity.class);
+        startActivity(redirectUtility);
+    }
+
+    public void aadhaarpvc() {
+        Intent redirectAadhaar = new Intent(getApplicationContext(), AadhaarVerificationActivity.class);
+        startActivity(redirectAadhaar);
+    }
+
+    /**
+     * NavigationDrawer Method
+     */
+    public void initNavigationDrawer() {
+
+        mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+
+                int id = menuItem.getItemId();
+                switch (id) {
+                    case R.id.nav_mobile:
+                        if (!NetworkUtils.isNetworkAvailable(MenuActivity.this)) {
+          //                   Snackbar.make(circleLayout, getString(R.string.error_network_no_internet), Snackbar.LENGTH_SHORT).show();
+                        } else {
+                            mobileRecharge();
+                            mDrawerLayout.closeDrawers();
+                        }
+                        break;
+                    case R.id.nav_dth:
+                        if (!NetworkUtils.isNetworkAvailable(MenuActivity.this)) {
+            //                Snackbar.make(circleLayout, getString(R.string.error_network_no_internet), Snackbar.LENGTH_SHORT).show();
+                        } else {
+                            dthRecharge();
+                            mDrawerLayout.closeDrawers();
+                        }
+                        break;
+                    case R.id.nav_money:
+                        if (!NetworkUtils.isNetworkAvailable(MenuActivity.this)) {
+              //              Snackbar.make(circleLayout, getString(R.string.error_network_no_internet), Snackbar.LENGTH_SHORT).show();
+                        } else {
+                            moneyTransfer();
+                            mDrawerLayout.closeDrawers();
+                        }
+                        break;
+
+                    // TODO uncomment once user profile is enabled
+                    /*case R.id.nav_profile:
+                    if (!NetworkUtils.isNetworkAvailable(MenuActivity.this)) {
+                            Snackbar.make(circleLayout, getString(R.string.error_network_no_internet), Snackbar.LENGTH_SHORT).show();
+                        } else {
+                           Intent redirectProfile = new Intent(getApplicationContext(), ProfileActivity.class);
+                        startActivity(redirectProfile);
+                        mDrawerLayout.closeDrawers();
+                        }
+                        break;*/
+                    case R.id.nav_account_recharge:
+                        if (!NetworkUtils.isNetworkAvailable(MenuActivity.this)) {
+                //            Snackbar.make(circleLayout, getString(R.string.error_network_no_internet), Snackbar.LENGTH_SHORT).show();
+                        } else {
+                            myAccountRecharge();
+                            mDrawerLayout.closeDrawers();
+                        }
+                        break;
+                    /*case R.id.nav_postpaid:
+                        if (!NetworkUtils.isNetworkAvailable(MenuActivity.this)) {
+                  //          Snackbar.make(circleLayout, getString(R.string.error_network_no_internet), Snackbar.LENGTH_SHORT).show();
+                        } else {
+                            postpaidRecharge();
+                            mDrawerLayout.closeDrawers();
+                        }
+                        break;*/
+                /*    case R.id.nav_utility:
+                        if (!NetworkUtils.isNetworkAvailable(MenuActivity.this)) {
+                    //        Snackbar.make(circleLayout, getString(R.string.error_network_no_internet), Snackbar.LENGTH_SHORT).show();
+                        } else {
+                            utilityBill();
+                            mDrawerLayout.closeDrawers();
+                        }
+                        break;*/
+                    case R.id.nav_transfer_history:
+                        Intent redirectHistory = new Intent(getApplicationContext(), HistoryActivity.class);
+                        startActivity(redirectHistory);
+                        mDrawerLayout.closeDrawers();
+                        break;
+                    case R.id.nav_fundtransfer_history:
+                        Intent redirectFundTransferHistory = new Intent(getApplicationContext(), FundTransferHistoryActivity.class);
+                        redirectFundTransferHistory.putExtra("SenderMobile", "0000000000");
+                        redirectFundTransferHistory.putExtra("ReportType", "All");
+                        redirectFundTransferHistory.putExtra("isFundType", "1");
+                        startActivity(redirectFundTransferHistory);
+                        mDrawerLayout.closeDrawers();
+                        break;
+                /*    case R.id.nav_aadhaar_verification:
+                        if (!NetworkUtils.isNetworkAvailable(MenuActivity.this)) {
+                      //      Snackbar.make(circleLayout, getString(R.string.error_network_no_internet), Snackbar.LENGTH_SHORT).show();
+                        } else {
+                            Intent redirectAadhaar = new Intent(getApplicationContext(), AadhaarVerificationActivity.class);
+                            startActivity(redirectAadhaar);
+                            mDrawerLayout.closeDrawers();
+                        }
+                        break;*/
+                    case R.id.nav_change_password:
+                        if (!NetworkUtils.isNetworkAvailable(MenuActivity.this)) {
+                       //     Snackbar.make(circleLayout, getString(R.string.error_network_no_internet), Snackbar.LENGTH_SHORT).show();
+                        } else {
+                            Intent redirectChngPswd = new Intent(getApplicationContext(), TabChngPassActivity.class);
+                            startActivity(redirectChngPswd);
+                            mDrawerLayout.closeDrawers();
+                        }
+                        break;
+                    case R.id.nav_about:
+                        if (!NetworkUtils.isNetworkAvailable(MenuActivity.this)) {
+                       //     Snackbar.make(circleLayout, getString(R.string.error_network_no_internet), Snackbar.LENGTH_SHORT).show();
+                        } else {
+                            Intent redirectAbout = new Intent(getApplicationContext(), AboutActivity.class);
+                            startActivity(redirectAbout);
+                            mDrawerLayout.closeDrawers();
+                        }
+                        break;
+                    case R.id.nav_rate:
+                        rateApp();
+                        mDrawerLayout.closeDrawers();
+                        break;
+                    case R.id.nav_logout:
+                        SharedPrefUtils.getSharedPreferences(MenuActivity.this, Constants.SharedPref.USER_DETAIL).edit().clear().apply();
+                        Intent redirectLogout = new Intent(getApplicationContext(), LoginActivity.class);
+                        redirectLogout.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(redirectLogout);
+                        finish();
+                        break;
+                }
+                return true;
+            }
+        });
+        View header = mNavigationView.getHeaderView(0);
+        ButterKnife.<TextView>findById(header, R.id.drawer_username).setText(SharedPrefUtils.getString(this, Constants.SharedPref.USER_DETAIL, Constants.SharedPref.KEY_NAME, StringUtils.EMPTY));
+        ButterKnife.<TextView>findById(header, R.id.drawer_partner).setText(SharedPrefUtils.getString(this, Constants.SharedPref.USER_DETAIL, Constants.SharedPref.KEY_CHANNELPARTNER, StringUtils.EMPTY));
+        ButterKnife.<TextView>findById(header, R.id.drawer_vendor_id).setText(SharedPrefUtils.getString(this, Constants.SharedPref.USER_DETAIL, Constants.SharedPref.KEY_VENDORID, StringUtils.EMPTY));
+
+        ActionBarDrawerToggle mActionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.drawer_open, R.string.drawer_close) {
+            @Override
+            public void onDrawerClosed(View v) {
+                super.onDrawerClosed(v);
+            }
+
+            @Override
+            public void onDrawerOpened(View v) {
+                super.onDrawerOpened(v);
+            }
+        };
+        mActionBarDrawerToggle.setDrawerIndicatorEnabled(true);
+        mDrawerLayout.addDrawerListener(mActionBarDrawerToggle);
+        mActionBarDrawerToggle.syncState();
+    }
+
+    public void rateApp() {
+        Uri uri = Uri.parse("market://details?id=" + getPackageName());
+        Intent myAppLinkToMarket = new Intent(Intent.ACTION_VIEW, uri);
+        try {
+            startActivity(myAppLinkToMarket);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(this, " unable to find app in google play", Toast.LENGTH_LONG).show();
+        }
+    }
+
+
+}

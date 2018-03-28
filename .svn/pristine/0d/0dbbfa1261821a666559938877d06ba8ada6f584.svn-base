@@ -1,0 +1,167 @@
+package com.atishay.online.aadhaar;
+
+import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.TextView;
+
+import com.atishay.online.AppBaseActivity;
+import com.atishay.online.AtishayOnlineApp;
+import com.atishay.online.BaseResponse;
+import com.atishay.online.R;
+import com.atishay.online.utils.Constants;
+import com.atishay.online.utils.Loader;
+import com.goldenmace.framework.views.widgets.DividerItemDecoration;
+import com.goldenmace.framework.views.widgets.errorview.ErrorView;
+
+import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+/**
+ * Created by Vishal Patel on 25,November,2016.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public class AadhaarVerificationHistoryActivity extends AppBaseActivity implements AadhaarVerificationView {
+
+    @BindView(R.id.aadhaar_rlContainer)
+    View mContainer;
+    @BindView(R.id.aadhaar_loader)
+    Loader mLoader;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.aadhaar_rvTransactionHistory)
+    RecyclerView mrvHistoryList;
+    @BindView(R.id.aadhaar_errorView)
+    ErrorView mErrorView;
+
+    AadhaarVerificationHistoryAdapter mAadhaarVerificationHistoryAdapter;
+    AadhaarVerificationPresenter mAadhaarVerificationPresenter;
+    private ArrayList<AadhaarVerificationBean> mAadhaarVerificationList;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_aadhaar_transhistory);
+        ButterKnife.bind(this);
+        setToolbar(mToolbar);
+        mAadhaarVerificationPresenter = new AadhaarVerificationPresenter(this);
+        mAadhaarVerificationList = new ArrayList<>();
+        /**
+         * Custom Toolbar with amount view
+         */
+        ButterKnife.<TextView>findById(this, R.id.toolbar_txtAmount).setText(getString(R.string.amount, AtishayOnlineApp.getAppInstance().getBalance()));
+        ButterKnife.<TextView>findById(this, R.id.toolbar_txtTitle).setText(R.string.verification_history);
+
+
+        mAadhaarVerificationHistoryAdapter = new AadhaarVerificationHistoryAdapter(this, mAadhaarVerificationList);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        mrvHistoryList.setLayoutManager(mLayoutManager);
+        mrvHistoryList.setAdapter(mAadhaarVerificationHistoryAdapter);
+        mrvHistoryList.setNestedScrollingEnabled(false);
+        mrvHistoryList.addItemDecoration(new DividerItemDecoration(this, R.drawable.divider));
+
+        mAadhaarVerificationPresenter.loadAadhaarVeriHistory(mUsername, mPassword);
+        mErrorView.setOnRetryListener(new ErrorView.RetryListener() {
+            @Override
+            public void onRetry() {
+                mErrorView.setVisibility(View.GONE);
+                mAadhaarVerificationPresenter.loadAadhaarVeriHistory(mUsername, mPassword);
+            }
+        });
+    }
+
+    @Override
+    public void showLoader(String aMessage) {
+        if (aMessage != null) {
+            mLoader.setText(aMessage);
+        }
+        mLoader.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showLoader(int aResId) {
+        if (aResId > 0) {
+            mLoader.setText(getString(aResId));
+        }
+        mLoader.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideLoader() {
+        mLoader.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void noInternetConnection() {
+        hideLoader();
+        mErrorView.setVisibility(View.VISIBLE);
+        mErrorView.setImage(R.drawable.ic_wifi_200dp);
+        mErrorView.setTitle(R.string.error_network_no_internet);
+        mErrorView.setSubtitle("Please check your internet settings");
+        mErrorView.setRetryButtonText("Retry");
+        mErrorView.showRetryButton(true);
+    }
+
+    @Override
+    public void apiError(String aError) {
+        hideLoader();
+        Snackbar.make(mContainer, aError, Snackbar.LENGTH_INDEFINITE).setAction(R.string.error_view_retry, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAadhaarVerificationPresenter.loadAadhaarVeriHistory(mUsername, mPassword);
+            }
+        }).show();
+        super.apiError(aError);
+    }
+
+    @Override
+    public void apiError(int aApiCode, String aError) {
+        switch (aApiCode) {
+            case Constants.APICODE.AADHAARHISTORY:
+                Snackbar.make(mContainer, aError, Snackbar.LENGTH_INDEFINITE).setAction(R.string.error_view_retry, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mAadhaarVerificationPresenter.loadAadhaarVeriHistory(mUsername, mPassword);
+                    }
+                }).show();
+                break;
+            default:
+                Snackbar.make(mContainer, aError, Snackbar.LENGTH_LONG).show();
+                break;
+        }
+        super.apiError(aApiCode, aError);
+    }
+
+    @Override
+    public void doAadhaarVerificationDetails(BaseResponse aBaseResponse) {
+
+    }
+
+    @Override
+    public void onAadhaarVerificationHistoryFetched(ArrayList<AadhaarVerificationBean> aAadhaarVerificationResponses) {
+        mAadhaarVerificationList.clear();
+        mAadhaarVerificationList.addAll(aAadhaarVerificationResponses);
+        mAadhaarVerificationHistoryAdapter.notifyDataSetChanged();
+        if (aAadhaarVerificationResponses.size() == 0) {
+            mErrorView.setVisibility(View.VISIBLE);
+            mErrorView.setImage(R.drawable.ic_list_200dp);
+            mErrorView.setTitle(R.string.msg_no_record_found);
+            mErrorView.setSubtitle("Seems like you haven't done any account recharge payment yet.");
+            mErrorView.showRetryButton(false);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mAadhaarVerificationPresenter.clearReferences();
+    }
+}

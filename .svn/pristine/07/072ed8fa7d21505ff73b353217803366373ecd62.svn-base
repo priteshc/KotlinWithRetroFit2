@@ -1,0 +1,102 @@
+package com.atishay.online.history;
+
+import com.atishay.online.utils.Constants;
+import com.atishay.online.utils.RestApis;
+import com.atishay.online.utils.RetrofitClientFactory;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+/**
+ * Created by Atishay on 19-01-2018.
+ */
+
+public class ComplainPresenter {
+
+    private ComplainView complainView;
+
+    private RetrofitClientFactory clientFactory;
+
+    private RestApis mRestApis;
+
+
+
+    public ComplainPresenter(ComplainView complainView) {
+
+
+        this.complainView = complainView;
+
+        clientFactory = new RetrofitClientFactory();
+
+        mRestApis = RetrofitClientFactory.get();
+
+
+    }
+
+
+    public void getTrans(String username,String password,String id,String msg){
+
+        complainView.showprogress();
+
+        Call<ComplainPojo> pojoCall = clientFactory.get1().regComplain(username,password,id,msg);
+
+        pojoCall.enqueue(new Callback<ComplainPojo>() {
+            @Override
+            public void onResponse(Call<ComplainPojo> call, Response<ComplainPojo> response) {
+
+                complainView.hideprogress();
+
+
+                if(response.isSuccessful()) {
+
+
+                    System.out.println("Msg:" + response.body().getStrOutMEssage());
+
+
+                    if (response.body().getStrOutMEssage().equals(Constants.SUCCESS)) {
+
+                        complainView.showFLoginSuccessMsg(response.body().getTransactionId().toString(), response.body().getStrOutMEssage().toString());
+
+                    } else
+                        {
+
+                        if (response.body().getStrOutMEssage().equals(Constants.FAILED)) {
+
+                            complainView.showFLoginSuccessMsg(response.body().getTransactionId().toString(), response.body().getStrOutMEssage().toString());
+
+                        }
+
+                    }
+                }
+                else {
+
+
+                    complainView.showFErrorMeassage();
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ComplainPojo> call, Throwable t) {
+
+                complainView.hideprogress();
+
+                complainView.showFErrorMeassage();
+
+
+
+            }
+        });
+
+
+
+
+
+        //  clientFactory.get1().doComplain(username,password,id,msg);
+
+
+    }
+
+}

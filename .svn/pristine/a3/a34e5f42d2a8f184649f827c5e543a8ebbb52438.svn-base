@@ -1,0 +1,96 @@
+/*
+ * Copyright 2016 GoldenMace IT Solutions
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+package com.atishay.online.common;
+
+/**
+ * Created by Vishal Patel on 18,November,2016.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public class CommonBean {
+    String mUsername;
+    String mPassword;
+    String mTrancode;
+    String mCirclecode;
+    String mObjectid;
+    String mMobileno;
+    String mAmount;
+    String mTotalAmount;
+    String mProduct;
+    String mServiceType;
+    String mAccountNumber;
+
+    public CommonBean(String aUsername, String aPassword, String aTrancode, String aCirclecode, String aObjectid, String aMobileno, String aAmount, String aTotalAmount, String aProduct, String aServiceType, String aAccountNumber) {
+        this.mUsername = aUsername;
+        this.mPassword = aPassword;
+        this.mTrancode = aTrancode;
+        this.mCirclecode = aCirclecode;
+        this.mObjectid = aObjectid;
+        this.mMobileno = aMobileno;
+        this.mAmount = aAmount;
+        this.mTotalAmount = aTotalAmount;
+        this.mProduct = aProduct;
+        this.mAccountNumber = aAccountNumber;
+        this.mServiceType = aServiceType;
+    }
+
+    public String getServiceType() {
+        return mServiceType;
+    }
+
+    public String getAccountNumber() {
+        return mAccountNumber;
+    }
+
+    public String getUsername() {
+        return mUsername;
+    }
+
+    public String getPassword() {
+        return mPassword;
+    }
+
+    public String getTrancode() {
+        return mTrancode;
+    }
+
+    public String getCirclecode() {
+        return mCirclecode;
+    }
+
+    public String getObjectid() {
+        return mObjectid;
+    }
+
+    public String getMobileno() {
+        return mMobileno;
+    }
+
+    public String getAmount() {
+        return mAmount;
+    }
+
+    public String getTotalAmount() {
+        return mTotalAmount;
+    }
+
+    public String getProduct() {
+        return mProduct;
+    }
+}

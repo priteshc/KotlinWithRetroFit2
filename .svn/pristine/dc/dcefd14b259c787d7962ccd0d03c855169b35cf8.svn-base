@@ -1,0 +1,44 @@
+// Generated code from Butter Knife. Do not modify!
+package com.atishay.online.history;
+
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
+import butterknife.Unbinder;
+import butterknife.internal.Finder;
+import com.atishay.online.R;
+import com.atishay.online.utils.Loader;
+import com.goldenmace.framework.views.widgets.errorview.ErrorView;
+import java.lang.IllegalStateException;
+import java.lang.Object;
+import java.lang.Override;
+
+public class HistoryActivity_ViewBinding<T extends HistoryActivity> implements Unbinder {
+  protected T target;
+
+  public HistoryActivity_ViewBinding(T target, Finder finder, Object source) {
+    this.target = target;
+
+    target.mRLContainer = finder.findRequiredView(source, R.id.tabRLContainer, "field 'mRLContainer'");
+    target.mToolbar = finder.findRequiredViewAsType(source, R.id.toolbar, "field 'mToolbar'", Toolbar.class);
+    target.mTabLayout = finder.findRequiredViewAsType(source, R.id.tab_tlTab, "field 'mTabLayout'", TabLayout.class);
+    target.mErrorView = finder.findRequiredViewAsType(source, R.id.history_errorView, "field 'mErrorView'", ErrorView.class);
+    target.mViewPager = finder.findRequiredViewAsType(source, R.id.tab_vpViewPager, "field 'mViewPager'", ViewPager.class);
+    target.mLoader = finder.findRequiredViewAsType(source, R.id.tab_loader, "field 'mLoader'", Loader.class);
+  }
+
+  @Override
+  public void unbind() {
+    T target = this.target;
+    if (target == null) throw new IllegalStateException("Bindings already cleared.");
+
+    target.mRLContainer = null;
+    target.mToolbar = null;
+    target.mTabLayout = null;
+    target.mErrorView = null;
+    target.mViewPager = null;
+    target.mLoader = null;
+
+    this.target = null;
+  }
+}

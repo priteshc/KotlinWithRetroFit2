@@ -1,0 +1,98 @@
+// Generated code from Butter Knife. Do not modify!
+package com.atishay.online.postpaid;
+
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
+import butterknife.Unbinder;
+import butterknife.internal.DebouncingOnClickListener;
+import butterknife.internal.Finder;
+import com.atishay.online.R;
+import com.atishay.online.utils.Loader;
+import java.lang.IllegalStateException;
+import java.lang.Object;
+import java.lang.Override;
+
+public class PostpaidActivity_ViewBinding<T extends PostpaidActivity> implements Unbinder {
+  protected T target;
+
+  private View view2131231178;
+
+  public PostpaidActivity_ViewBinding(final T target, Finder finder, Object source) {
+    this.target = target;
+
+    View view;
+    target.mToolbar = finder.findRequiredViewAsType(source, R.id.toolbar, "field 'mToolbar'", Toolbar.class);
+    target.mPostpaidMain = finder.findRequiredViewAsType(source, R.id.postoaid_rlMain, "field 'mPostpaidMain'", RelativeLayout.class);
+    target.mTxtOperator = finder.findRequiredViewAsType(source, R.id.txtOperator, "field 'mTxtOperator'", TextView.class);
+    target.mOperator = finder.findRequiredViewAsType(source, R.id.postoaid_spOperator, "field 'mOperator'", Spinner.class);
+    target.mTxtNotice = finder.findRequiredViewAsType(source, R.id.notice_txt, "field 'mTxtNotice'", TextView.class);
+    target.mMobileExtraView = finder.findRequiredViewAsType(source, R.id.mobile_llExtraView, "field 'mMobileExtraView'", LinearLayout.class);
+    target.mTxtMobile = finder.findRequiredViewAsType(source, R.id.txtMobile, "field 'mTxtMobile'", TextView.class);
+    target.mMobile = finder.findRequiredViewAsType(source, R.id.postoaid_edtMobile, "field 'mMobile'", EditText.class);
+    target.mPhoneExtraView = finder.findRequiredViewAsType(source, R.id.phone_llExtraView, "field 'mPhoneExtraView'", LinearLayout.class);
+    target.mTxtPhone = finder.findRequiredViewAsType(source, R.id.txtPhone, "field 'mTxtPhone'", TextView.class);
+    target.mPhone = finder.findRequiredViewAsType(source, R.id.postoaid_edtPhone, "field 'mPhone'", EditText.class);
+    target.mExtraBsnlView = finder.findRequiredViewAsType(source, R.id.bsnl_llExtraView, "field 'mExtraBsnlView'", LinearLayout.class);
+    target.mTxtAccountNo = finder.findRequiredViewAsType(source, R.id.txtAccountNo, "field 'mTxtAccountNo'", TextView.class);
+    target.mAccountNumber = finder.findRequiredViewAsType(source, R.id.postoaid_edtAccountNo, "field 'mAccountNumber'", EditText.class);
+    target.mTxtServiceType = finder.findRequiredViewAsType(source, R.id.txtServiceType, "field 'mTxtServiceType'", TextView.class);
+    target.mServiceType = finder.findRequiredViewAsType(source, R.id.postoaid_spServiceType, "field 'mServiceType'", Spinner.class);
+    target.mTxtAmount = finder.findRequiredViewAsType(source, R.id.txtAmount, "field 'mTxtAmount'", TextView.class);
+    target.mAmount = finder.findRequiredViewAsType(source, R.id.postoaid_edtAmount, "field 'mAmount'", EditText.class);
+    target.mTxtTotalAmount = finder.findRequiredViewAsType(source, R.id.money_txtTotalAmunt, "field 'mTxtTotalAmount'", TextView.class);
+    target.mTotalAmount = finder.findRequiredViewAsType(source, R.id.money_edtTotalAmunt, "field 'mTotalAmount'", EditText.class);
+    target.mTxtTransactionCode = finder.findRequiredViewAsType(source, R.id.txtTranCode, "field 'mTxtTransactionCode'", TextView.class);
+    target.mTransactionCode = finder.findRequiredViewAsType(source, R.id.postoaid_edtTransaction, "field 'mTransactionCode'", EditText.class);
+    view = finder.findRequiredView(source, R.id.postoaid_txtProceed, "field 'mProceedPay' and method 'doPostpaidRechargePay'");
+    target.mProceedPay = finder.castView(view, R.id.postoaid_txtProceed, "field 'mProceedPay'", TextView.class);
+    view2131231178 = view;
+    view.setOnClickListener(new DebouncingOnClickListener() {
+      @Override
+      public void doClick(View p0) {
+        target.doPostpaidRechargePay();
+      }
+    });
+    target.mLoader = finder.findRequiredViewAsType(source, R.id.loader, "field 'mLoader'", Loader.class);
+  }
+
+  @Override
+  public void unbind() {
+    T target = this.target;
+    if (target == null) throw new IllegalStateException("Bindings already cleared.");
+
+    target.mToolbar = null;
+    target.mPostpaidMain = null;
+    target.mTxtOperator = null;
+    target.mOperator = null;
+    target.mTxtNotice = null;
+    target.mMobileExtraView = null;
+    target.mTxtMobile = null;
+    target.mMobile = null;
+    target.mPhoneExtraView = null;
+    target.mTxtPhone = null;
+    target.mPhone = null;
+    target.mExtraBsnlView = null;
+    target.mTxtAccountNo = null;
+    target.mAccountNumber = null;
+    target.mTxtServiceType = null;
+    target.mServiceType = null;
+    target.mTxtAmount = null;
+    target.mAmount = null;
+    target.mTxtTotalAmount = null;
+    target.mTotalAmount = null;
+    target.mTxtTransactionCode = null;
+    target.mTransactionCode = null;
+    target.mProceedPay = null;
+    target.mLoader = null;
+
+    view2131231178.setOnClickListener(null);
+    view2131231178 = null;
+
+    this.target = null;
+  }
+}

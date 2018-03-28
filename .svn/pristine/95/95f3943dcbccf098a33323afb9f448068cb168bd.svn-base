@@ -1,0 +1,187 @@
+
+package com.atishay.online.moneytransfer;
+
+import com.atishay.online.BaseResponse;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+/**
+ * Created by Vishal Patel on 14,December,2016.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+public class CommonRegistrationResponse extends BaseResponse {
+
+    @SerializedName("Name")
+    @Expose
+    private String name;
+    @SerializedName("FirstName")
+    @Expose
+    private String firstName;
+    @SerializedName("LastName")
+    @Expose
+    private String lastName;
+    @SerializedName("Gender")
+    @Expose
+    private String gender;
+    @SerializedName("Mobile")
+    @Expose
+    private String mobile;
+    @SerializedName("PinCode")
+    @Expose
+    private String pinCode;
+    @SerializedName("DateOfBirth")
+    @Expose
+    private String dateOfBirth;
+    @SerializedName("TransactionStatus")
+    @Expose
+    private String transactionStatus;
+    @SerializedName("CRNo")
+    @Expose
+    private String cRNo;
+    @SerializedName("ResponseCode")
+    @Expose
+    private String responseCode;
+
+    /**
+     * @return The name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @param name The Name
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * @return The firstName
+     */
+    public String getFirstName() {
+        return firstName;
+    }
+
+    /**
+     * @param firstName The FirstName
+     */
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    /**
+     * @return The lastName
+     */
+    public String getLastName() {
+        return lastName;
+    }
+
+    /**
+     * @param lastName The LastName
+     */
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    /**
+     * @return The gender
+     */
+    public String getGender() {
+        return gender;
+    }
+
+    /**
+     * @param gender The Gender
+     */
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    /**
+     * @return The mobile
+     */
+    public String getMobile() {
+        return mobile;
+    }
+
+    /**
+     * @param mobile The Mobile
+     */
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    /**
+     * @return The pinCode
+     */
+    public String getPinCode() {
+        return pinCode;
+    }
+
+    /**
+     * @param pinCode The PinCode
+     */
+    public void setPinCode(String pinCode) {
+        this.pinCode = pinCode;
+    }
+
+    /**
+     * @return The dateOfBirth
+     */
+    public String getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    /**
+     * @param dateOfBirth The DateOfBirth
+     */
+    public void setDateOfBirth(String dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    /**
+     * @return The transactionStatus
+     */
+    public String getTransactionStatus() {
+        return transactionStatus;
+    }
+
+    /**
+     * @param transactionStatus The TransactionStatus
+     */
+    public void setTransactionStatus(String transactionStatus) {
+        this.transactionStatus = transactionStatus;
+    }
+
+    /**
+     * @return The cRNo
+     */
+    public String getCRNo() {
+        return cRNo;
+    }
+
+    /**
+     * @param cRNo The CRNo
+     */
+    public void setCRNo(String cRNo) {
+        this.cRNo = cRNo;
+    }
+
+    /**
+     * @return The responseCode
+     */
+    public String getResponseCode() {
+        return responseCode;
+    }
+
+    /**
+     * @param responseCode The ResponseCode
+     */
+    public void setResponseCode(String responseCode) {
+        this.responseCode = responseCode;
+    }
+
+}

@@ -1,0 +1,19 @@
+package com.atishay.online.searchifsc;
+
+import com.atishay.online.AppBaseView;
+
+import java.util.ArrayList;
+
+/**
+ * Created by Vishal Patel on 17,December,2016.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public interface SearchIFSCView extends AppBaseView {
+
+    void getBankListIFSC(ArrayList<BankListBean> aBankListBeen);
+
+    void getSearchIFSC(ArrayList<SearchIFSCBean> aMasterIFSCBeen);
+}

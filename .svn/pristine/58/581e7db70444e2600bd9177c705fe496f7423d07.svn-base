@@ -1,0 +1,25 @@
+package com.atishay.online.addbenefiaciary;
+
+import com.goldenmace.framework.domain.UseCase;
+
+import java.util.Map;
+
+/**
+ * Created by Vishal Patel on 17,December,2016.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public interface AddBeneficiaryUsecase extends UseCase {
+
+    void getMasterIFSC(String aUsername, String aPassword);
+
+    void doAddBeneficiary(Map<String, String> aQueryMap);
+
+    void doResendOTP(Map<String, String> aQueryMap);
+
+    void getIFSCDetials(String ifsccode);
+
+    void doValidateBeneficiary(Map<String, String> aQueryMap);
+}

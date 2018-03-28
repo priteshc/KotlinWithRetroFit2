@@ -1,0 +1,21 @@
+package com.atishay.online.myaccountrecharge;
+
+import java.util.Map;
+
+/**
+ * Created by Vishal Patel on 25,November,2016.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+public interface AccountRechargeUsecase {
+    void loadMyAccountReport(String aUserName, String aPassword);
+
+    void doBankList(String aUserName, String aPassword);
+
+    void doTransactionTypeList(String aUserName, String aPassword);
+
+    void doAccountRechargeOnline(Map<String, String> aQueryMap);
+
+    void doAccountRechargeCash(Map<String, String> aQueryMap);
+}

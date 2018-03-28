@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2016 GoldenMace IT Solutions
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/cust_reg_mainView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/cust_alView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar"/>
+    </android.support.design.widget.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/cust_alView">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/customer_txtMobile"
+                style="@style/TextStyle"
+                android:text="@string/mobile_no"/>
+
+            <EditText
+                android:id="@+id/customer_edtMobile"
+                style="@style/EditStyle"
+                android:enabled="false"
+                android:hint="@string/hint_mobile_no"
+                android:inputType="number"/>
+
+            <TextView
+                android:id="@+id/cust_txtFirst"
+                style="@style/TextStyle"
+                android:text="@string/cust_first_name"/>
+
+            <EditText
+                android:id="@+id/cust_edtFirst"
+                style="@style/EditStyle"
+                android:hint="@string/hint_cust_fname"
+                android:inputType="text"/>
+
+            <TextView
+                android:id="@+id/cust_txtLast"
+                style="@style/TextStyle"
+                android:text="@string/cust_last_name"/>
+
+            <EditText
+                android:id="@+id/cust_edtLast"
+                style="@style/EditStyle"
+                android:hint="@string/hint_cust_lname"
+                android:inputType="text"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txtGender"
+                    style="@style/TextStyle"
+                    android:text="@string/gender"/>
+
+                <Spinner
+                    android:id="@+id/cust_spGender"
+                    style="@style/SpinnerStyle"
+                    android:spinnerMode="dropdown"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/cust_llOTP"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/cust_txtOTP"
+                    style="@style/TextStyle"
+                    android:text="@string/cust_otpcode"/>
+
+                <TextView
+                    android:id="@+id/cust_txtResendOTP"
+                    style="@style/TextStyle"
+                    android:layout_marginRight="@dimen/spacing_control"
+                    android:background="@drawable/btn_border"
+                    android:padding="@dimen/spacing_control"
+                    android:text="@string/resend_otp"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/font_medium"
+                    android:textStyle="normal"/>
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/cust_edtOTP"
+                style="@style/EditStyle"
+                android:hint="@string/hint_cust_otpcode"
+                android:inputType="numberPassword"
+                android:maxLength="10"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/spacing_standard"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/cust_txtreset"
+                    style="@style/FormStyle"
+                    android:layout_weight="1"
+                    android:text="@string/reset"
+                    android:textStyle="normal"/>
+
+                <TextView
+                    android:id="@+id/cust_txtsubmit"
+                    style="@style/FormStyle"
+                    android:layout_weight="1"
+                    android:text="@string/submit"
+                    android:textStyle="normal"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <com.atishay.online.utils.Loader
+        android:id="@+id/loader"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:visibility="gone">
+    </com.atishay.online.utils.Loader>
+</RelativeLayout>

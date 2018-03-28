@@ -1,0 +1,39 @@
+package com.atishay.online.aadhaar;
+
+/**
+ * Created by Vishal Patel on 01,December,2016.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public class AadhaarBean {
+
+    String mUsername;
+    String mPassword;
+    String mAadhaarNumber;
+    String mAadhaarName;
+
+    public AadhaarBean(String aUsername, String aPassword, String aAadhaarNumber, String aAadhaarName) {
+        this.mUsername = aUsername;
+        this.mPassword = aPassword;
+        this.mAadhaarNumber = aAadhaarNumber;
+        this.mAadhaarName = aAadhaarName;
+    }
+
+    public String getUsername() {
+        return mUsername;
+    }
+
+    public String getPassword() {
+        return mPassword;
+    }
+
+    public String getAadhaarNumber() {
+        return mAadhaarNumber;
+    }
+
+    public String getAadhaarName() {
+        return mAadhaarName;
+    }
+}

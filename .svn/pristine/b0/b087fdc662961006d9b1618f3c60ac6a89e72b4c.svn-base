@@ -1,0 +1,36 @@
+package com.atishay.online.history;
+
+/**
+ * Created by Atishay on 13-02-2018.
+ */
+
+import java.util.List;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+public class UtilityHistoryPojo {
+
+    @SerializedName("ResponseMessage")
+    @Expose
+    private String responseMessage;
+    @SerializedName("Response")
+    @Expose
+    private List<UtitlityResponse> response = null;
+
+    public String getResponseMessage() {
+        return responseMessage;
+    }
+
+    public void setResponseMessage(String responseMessage) {
+        this.responseMessage = responseMessage;
+    }
+
+    public List<UtitlityResponse> getResponse() {
+        return response;
+    }
+
+    public void setResponse(List<UtitlityResponse> response) {
+        this.response = response;
+    }
+
+}

@@ -1,0 +1,62 @@
+// Generated code from Butter Knife. Do not modify!
+package com.atishay.online.postpaid;
+
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import butterknife.Unbinder;
+import butterknife.internal.DebouncingOnClickListener;
+import butterknife.internal.Finder;
+import com.atishay.online.R;
+import com.jaredrummler.materialspinner.MaterialSpinner;
+import java.lang.IllegalStateException;
+import java.lang.Object;
+import java.lang.Override;
+
+public class PostpaidNewActivity_ViewBinding<T extends PostpaidNewActivity> implements Unbinder {
+  protected T target;
+
+  private View view2131231089;
+
+  public PostpaidNewActivity_ViewBinding(final T target, Finder finder, Object source) {
+    this.target = target;
+
+    View view;
+    target.mToolbar = finder.findRequiredViewAsType(source, R.id.toolbar, "field 'mToolbar'", Toolbar.class);
+    target.mMobileMainView = finder.findRequiredViewAsType(source, R.id.mobile_rlMain, "field 'mMobileMainView'", RelativeLayout.class);
+    target.mOperator = finder.findRequiredViewAsType(source, R.id.operator, "field 'mOperator'", MaterialSpinner.class);
+    target.mCoverage = finder.findRequiredViewAsType(source, R.id.coverage, "field 'mCoverage'", MaterialSpinner.class);
+    target.smsno = finder.findRequiredViewAsType(source, R.id.sms_mobile, "field 'smsno'", EditText.class);
+    target.mobile_no = finder.findRequiredViewAsType(source, R.id.mobile_no, "field 'mobile_no'", EditText.class);
+    view = finder.findRequiredView(source, R.id.mobile_txtProceed, "field 'mView' and method 'doProceedRecharge'");
+    target.mView = finder.castView(view, R.id.mobile_txtProceed, "field 'mView'", TextView.class);
+    view2131231089 = view;
+    view.setOnClickListener(new DebouncingOnClickListener() {
+      @Override
+      public void doClick(View p0) {
+        target.doProceedRecharge();
+      }
+    });
+  }
+
+  @Override
+  public void unbind() {
+    T target = this.target;
+    if (target == null) throw new IllegalStateException("Bindings already cleared.");
+
+    target.mToolbar = null;
+    target.mMobileMainView = null;
+    target.mOperator = null;
+    target.mCoverage = null;
+    target.smsno = null;
+    target.mobile_no = null;
+    target.mView = null;
+
+    view2131231089.setOnClickListener(null);
+    view2131231089 = null;
+
+    this.target = null;
+  }
+}

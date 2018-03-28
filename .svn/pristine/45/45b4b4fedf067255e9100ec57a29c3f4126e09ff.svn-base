@@ -1,0 +1,22 @@
+package com.atishay.online.aadhaar;
+
+/**
+ * Created by Atishay on 07-02-2018.
+ */
+
+public interface CommonInterface {
+
+    void showFErrorMeassage();
+
+    void showFLoginSuccessMsg(String msg,String verifacation);
+
+    void showprogress();
+
+    void hideprogress();
+
+
+}
+
+
+
+

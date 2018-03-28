@@ -1,0 +1,10 @@
+package com.atishay.online.changepassword;
+
+/**
+ * Created by hrdudhat on 11/20/2016.
+ */
+
+interface FragmentActionListener {
+    void onRequestChangePassword(String aOldPassword, String aNewPassword);
+    void onRequestChangeTransactionPassword(String aOldPassword, String aNewPassword);
+}

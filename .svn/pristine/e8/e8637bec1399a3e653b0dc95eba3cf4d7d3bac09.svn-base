@@ -1,0 +1,248 @@
+/*
+ * Copyright 2016 Goldenmace IT Solutions
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+package com.atishay.online.utils;
+
+/**
+ * Created by Vishal Patel on 11,November,2016.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+public class Constants {
+
+    public static final String SUCCESS = "Success";
+    public static final String SUCCESSFUL = "Successful";
+    public static final String PENDING = "Pending";
+    public static final String REJECTED = "Reject";
+    public static final String REJECTED1 = "Rejected";
+    public static final String UNAUTHORIZE = "Unauthorize";
+    public static final String AUTHORIZE = "Authorize";
+    public static final String APPROVED = "Approved";
+    public static final String FAILED = "Fail";
+    public static final String MOBILERECHARGE = "1";
+    public static final String DTHRECHARGE = "2";
+
+    public static final String REGX_AMOUNT = "^(((\\d{1,3})(,\\d{3})*)|(\\d+))(.\\d+)?$";
+
+    public static final String AIRCEL = "Aircel";
+    public static final String BSNL = "BSNL Landline";
+    public static final String AIRTEL_LANDLINE = "Airtel Landline";
+    public static final String AIRTEL = "Airtel";
+    public static final String RELIANCE = "Reliance (CDMA / GSM)";
+    public static final String ELE_BEST_Mumbai = "Electricity - BEST Mumbai";
+    public static final String ELE_BSES_RAJDHANI = "Electricity - BSES Rajdhani";
+    public static final String ELE_MPSEB_BHOPAL_DIVISION = "Electricity - MPSEB Bhopal Division";
+    public static final String ELE_MSEDCMAHARASHRTA = "Electricity - MSEDC Maharashtra";
+    public static final String ELE_RELIANCEENERGY = "Electricity - Reliance Energy";
+    public static final String ELE_TORRENTPOWER = "Electricity - Torrent Power";
+    public static final String INS_ICICILIFE = "Insurance - ICICI Pru Life";
+    public static final String INS_TATALIFE = "Insurance - Tata AIG Life";
+    public static final String MAHANAGAR_GAS_LIMITED = "Mahanagar Gas Limited";
+    public static final String SERVICE_TYPE_DTH = "DTH";
+    public static final String SERVICE_TYPE_TELECOMM = "Telecomm";
+    public static final String SERVICE_TYPE_BILL_PAYMENT = "PostPaid";
+    public static final String CASH_TYPE = "Cash";
+    public static final String ONLINE_TYPE = "Online";
+
+    public static final String UTILITY = "6";
+
+    public static final String BILL = "3";
+
+    public static final String BBPSTYPE = "Utility";
+
+
+    public static class SharedPref {
+        public static final String USER_DETAIL = "user_detail";
+        public static final String USER_NAME = "user_name";
+        public static final String PASSWORD = "password";
+        public static final String KEY_USER_NAME = "key_user_name";
+        public static final String KEY_NAME = "key_name";
+        public static final String KEY_PASSWORD = "key_password";
+        public static final String KEY_VENDORID = "key_vendor_id";
+        public static final String KEY_CHANNELPARTNER = "key_channel_partner";
+        public static final String KEY_TRANSPASSWORD = "key_trans_password";
+        public static final String KEY_REMEMBER_ME = "key_remember_me";
+        public static final String KEY_MONEY_HIDE = "key_money_hide";
+        public static final String KEY_AGENT_CODE = "key_agent_code";
+        public static final String KEY_MOBILE_NO = "key_mobile_no";
+
+    }
+
+    public static class ApiKeys {
+        public static final String USERNAME = "Username";
+        public static final String PASSWORD = "Password";
+        public static final String NEW_PASSWORD = "NewPassword";
+        public static final String TRPASSWORD = "TRPassword";
+        public static final String NEW_TRPASSWORD = "NewTRPassword";
+        public static final String CIRCLE_CODE = "CircleCode";
+        public static final String OPERATOR_ID = "OperatorID";
+        public static final String MOBILE_NO = "Mobileno";
+        public static final String AMOUNT = "Amount";
+        public static final String PRODUCT = "Product";
+        public static final String TRANSACTION_PASSWORD = "TransactionPassword";
+        public static final String TELECOM_ID = "TelecomID";
+        public static final String SUBSCRIBER_ID = "SubscriberID";
+        public static final String DTH_CODE = "DTHCode";
+        public static final String CYCLE_NUMBER = "CycleNumber";
+
+        public static final String LANDLINE_NUMBER = "LandLineNumber";
+        public static final String ACCOUNT_NUMBER = "AccountNumber";
+        public static final String SERVICE_TYPE = "ServiceType";
+        public static final String BILLING_UNIT = "BillingUnit";
+        public static final String PROCCESSING_CYCLE = "Proccessingcycle";
+        public static final String CITY = "City";
+        public static final String GAS_BILL_NO = "GasBillNO";
+        public static final String BILL_GRP_NO = "BillGrpNo";
+        public static final String DOB = "DOB";
+        public static final String FORGOTPASSWORD = "EmailID";
+
+        public static final String TRANSACTIONTYPE = "TransactionType";
+        public static final String UTRNO = "UTRNo";
+        public static final String BNKID = "BNKID";
+
+        public static final String AADHAARNUMBER = "Aadhaarnumber";
+        public static final String AADHAARNAME = "Name";
+
+        public static final String COVERGE_ID = "CoverageID";
+        public static final String CATEGORY_ID = "CategoryID";
+        public static final String BILLER_NAME = "BillerName";
+
+        public static final String BILLER_ID= "BillerID";
+        public static final String COUSTMOB_NO= "CustomerMobileNumber";
+        public static final String CUST_PARM= "CustomerParams";
+
+
+
+        public static final String AGENTCODE = "AgentCode";
+        public static final String MOBILENO = "MobileNo";
+        public static final String FIRSTNAME = "FirstName";
+        public static final String LASTNAME = "LastName";
+        public static final String GENDER = "Gender";
+        public static final String PINCODE = "PinCode";
+        public static final String OTP = "OTP";
+        public static final String BANKNAME = "BankName";
+        public static final String REMITTERMOBILE = "RemitterMobile";
+        public static final String CRNO = "CRNo";
+        public static final String BENEFICIARY_CODE = "BeneficiaryCode";
+        public static final String BENNAME = "BenName";
+        public static final String BENMOBILE = "BenMobile";
+        public static final String BENIFSCCODE = "BankIfscode";
+        public static final String BENACCOUNTNUMBER = "BankAccountNumber";
+        public static final String BENTRANSCODE = "TransactionCode";
+        public static final String IFSCCODE = "IFSCCode";
+        public static final String BENMOBILENO = "BenMobileNo";
+        public static final String BANKIFSC = "BankIFSC";
+        public static final String BANKACCOUNTNO = "BankAccountNo";
+        public static final String PTID = "PTID";
+        public static final String REMITTANCETYPE = "RemittanceType";
+        public static final String SENDERMOBILENO = "SenderMobileNo";
+        public static final String REPORTTYPE = "ReportType";
+        public static final String UNIQUETRANSID = "UniqueTransID";
+        public static final String TRANSACTIONID = "TransactionID";
+        public static final String CMSG = "Msg";
+        public static final String SERVICE_PRO = "ServiceProvider";
+        public static final String KEY_BBPS = "BBPS";
+
+        public static final String KEY_SMSNO = "SMSMobileNumber";
+        public static final String KEY_BAMOUNT = "BillAmount";
+        public static final String KEY_CUSTPARM = "CustomerParam";
+        public static final String KEY_TRANSID = "TransactionRefId";
+        public static final String KEY_CONVFEES = "ConvFees";
+        public static final String KEY_SERVICE = "BBPSServiceType";
+        public static final String KEY_BILLER = "Biller";
+
+        public static final String KEY_MOBILENUMBER = "MobileNumber";
+        public static final String KEY_DISPOSITION = "Disposition";
+        public static final String KEY_DESC = "Description";
+
+
+
+
+
+    }
+
+    public static class APICODE {
+        public static final int LOGIN = 801;
+        public static final int FORGOT = 802;
+        public static final int MOBILE_OPERATOR = 803;
+        public static final int CIRCLE = 804;
+        public static final int DTH_OPERATOR = 805;
+        public static final int POSTPAID_OPERATOR = 806;
+        public static final int UTILITY_OPERATOR = 807;
+        public static final int SURCHARGE = 808;
+        public static final int MOBILERECHARGE = 809;
+        public static final int DTHRECHARGE = 810;
+        public static final int POSTPAIDRECHARGE = 811;
+        public static final int UTILITYRECHARGE = 812;
+        public static final int CHANGE_PASSWORD = 813;
+        public static final int CHANGE_TRANSACTION_CODE = 814;
+        public static final int PREPAID_HISTORY = 815;
+        public static final int WALLET_BALLENCE = 816;
+        public static final int ACCOUNRREPORT = 817;
+        public static final int BANKLIST = 818;
+        public static final int MYACCOUNTRECHARGE = 819;
+        public static final int TRANSACTIONTYPE = 820;
+        public static final int AADHAARVERIFICATION = 821;
+        public static final int AADHAARHISTORY = 822;
+        public static final int NOTIFICATION = 823;
+        public static final int POSTPAID_HISTORY = 824;
+        public static final int QUERYREGISTER = 825;
+        public static final int CUSTREGISTER = 826;
+        public static final int SEARCHIFSC = 827;
+        public static final int MASTERIFSC = 828;
+        public static final int ADD_BENE = 829;
+        public static final int BANKLIST_IFSC = 830;
+        public static final int BENEFICIARYLIST = 831;
+        public static final int RESENDOTP = 832;
+        public static final int VALIDATEBENEFICIARY = 833;
+        public static final int DEACTIVATEBENEFICIARY = 834;
+        public static final int VALIDATEDEACTIVATEBENEFICIARY = 835;
+        public static final int IFSCDETAILS = 836;
+        public static final int ALERTCONFORMATION = 837;
+        public static final int BENEFICIARYVALIDATION = 838;
+        public static final int FUNDTRANSFER = 839;
+        public static final int REMITTANCEVALIDATION = 840;
+        public static final int DTH_HISTORY = 841;
+        public static final int OTP = 842;
+        public static final int FUNDTRANSACTIONHISTORY = 843;
+        public static final int QUERYREMITTANCETRANSACTION = 844;
+        public static final int REFUNDTRANSACTION = 845;
+        public static final int VALIDATEREFUNDTRANSACTION = 846;
+    }
+
+    //TODO Remove this code when code give to client
+    public static class DummyAPI {
+        static final String LOGIN_SUCCESS = "{ \"Status\": \"SUCCESS\", \"ChannelPartner\":\"Distributor\", \"AtishayVendorID\":\"JH2551699DI\", \"VendorName\":\"ARBIND CHOUHAN\", \"Username\":\"arbind\", \"AirtelTermID\":\"263685\", \"mRupeeTermID\":\"263692\" }";
+        static final String LOGIN_FAILUR = "{ \"Status\": \"FAILED\", \"Msg\":\"Invalid Username or Password\" }";
+        static final String FORGOT_PASSWORD_SUCCESS = "{ \"Status\": \"SUCCESS\", \"Msg\":\"Your New Password has been sent to your Email ID Successfully\" }";
+        static final String FORGOT_PASSWORD_FAIL = "{ \"Status\": \"FAILED\", \"Msg\":\"Invalid Email\" }";
+        static final String CHANGE_PASSWORD_SUCCESS = "{ \"Status\": \"SUCCESS\", \"Msg\":\"Your New Password has been sent to your Email ID Successfully\" }";
+        static final String CHANGE_PASSWORD_FAIL = "{ \"Status\": \"FAILED\", \"Msg\":\"Invalid Parameter\" }";
+        static final String MOBILE_DATA_SUCCESS = "[{\"TelecomName\":\"Aircel\"},{\"TelecomName\":\"Airtel\"},{\"TelecomName\":\"BSNL\"},{\"TelecomName\":\"Idea\"},{\"TelecomName\":\"MTNL - Delhi\"},{\"TelecomName\":\"MTNL - Mumbai\"},{\"TelecomName\":\"MTS\"},{\"TelecomName\":\"Reliance (CDMA / GSM)\"},{\"TelecomName\":\"T24\"},{\"TelecomName\":\"Tata Docomo\"},{\"TelecomName\":\"Tata Indicom\"},{\"TelecomName\":\"Telenor (Uninor)\"},{\"TelecomName\":\"Videocon\"},{\"TelecomName\":\"Virgin CDMA\"},{\"TelecomName\":\"Virgin GSM\"},{\"TelecomName\":\"Vodafone\"}]";
+        static final String MOBILE_DATA_FAIL = "{ \"Status\": \"FAILED\", \"Msg\":\"Invalid Parameter\" }";
+        static final String DTH_DATA_SUCCESS = "[{\"DTHName\":\"Airtel Digital TV\"}, {\"DTHName\":\"Dish TV\"},{\"DTHName\":\"Reliance Big TV\"},{\"DTHName\":\"Sun Direct\"},{\"DTHName\":\"Tata Sky\"},{\"DTHName\":\"Videocon D2H\"}]";
+        static final String DTH_DATA_FAIL = "{ \"Status\": \"FAILED\", \"Msg\":\"Invalid Parameter\" }";
+        static final String CIRCLE_DATA_SUCCESS = "[{\"CircleCode\":\"36\",\"CircleName\":\"Andaman and Nicrobar\"},{\"CircleCode\":\"6\",\"CircleName\":\"Andhra Pradesh\"},{\"CircleCode\":\"17\",\"CircleName\":\"Arunachal Pradesh\"},{\"CircleCode\":\"1\",\"CircleName\":\"Assam\"},{\"CircleCode\":\"18\",\"CircleName\":\"Bihar\"},{\"CircleCode\":\"11\",\"CircleName\":\"Chhattisgarh\"},{\"CircleCode\":\"21\",\"CircleName\":\"Dadraand Nagar Haveli\"},{\"CircleCode\":\"29\",\"CircleName\":\"Daman and Diu\"},{\"CircleCode\":\"27\",\"CircleName\":\"Delhi\"},{\"CircleCode\":\"15\",\"CircleName\":\"Goa\"},{\"CircleCode\":\"5\",\"CircleName\":\"Gujarat\"},{\"CircleCode\":\"25\",\"CircleName\":\"Haryana\"},{\"CircleCode\":\"24\",\"CircleName\":\"Himachal Pradesh\"},{\"CircleCode\":\"2\",\"CircleName\":\"Jammu & Kashmir\"},{\"CircleCode\":\"20\",\"CircleName\":\"Jharkhand\"},{\"CircleCode\":\"7\",\"CircleName\":\"Karnataka\"},{\"CircleCode\":\"8\",\"CircleName\":\"Kerala\"},{\"CircleCode\":\"19\",\"CircleName\":\"Lakshadweep\"},{\"CircleCode\":\"26\",\"CircleName\":\"Madhya Pradesh\"},{\"CircleCode\":\"3\",\"CircleName\":\"Maharashtra\"},{\"CircleCode\":\"32\",\"CircleName\":\"Manipur\"},{\"CircleCode\":\"33\",\"CircleName\":\"Meghalaya\"},{\"CircleCode\":\"13\",\"CircleName\":\"Mizoram\"},{\"CircleCode\":\"30\",\"CircleName\":\"Nagaland\"},{\"CircleCode\":\"22\",\"CircleName\":\"Orissa\"},{\"CircleCode\":\"34\",\"CircleName\":\"Pondicherry\"},{\"CircleCode\":\"12\",\"CircleName\":\"Punjab\"},{\"CircleCode\":\"14\",\"CircleName\":\"Rajasthan\"},{\"CircleCode\":\"31\",\"CircleName\":\"Sikkim\"},{\"CircleCode\":\"23\",\"CircleName\":\"Tamil Nadu\"},{\"CircleCode\":\"10\",\"CircleName\":\"Tripura\"},{\"CircleCode\":\"4\",\"CircleName\":\"Uttar Pradesh East\"},{\"CircleCode\":\"16\",\"CircleName\":\"Uttrakhand\"},{\"CircleCode\":\"9\",\"CircleName\":\"WestBengal\"},{\"CircleCode\":\"4\",\"CircleName\":\"Uttar Pradesh West\"},{\"CircleCode\":null,\"CircleName\":\"Universal\"},{\"CircleCode\":null,\"CircleName\":\"Kolkata\"},{\"CircleCode\":null,\"CircleName\":\"Chennai\"},{\"CircleCode\":\"0\",\"CircleName\":\"Mumbai\"},{\"CircleCode\":\"28\",\"CircleName\":\"Chandigarh\"}]";
+        static final String CIRCLE_DATA_FAIL = "{ \"Status\": \"FAILED\", \"Msg\":\"Invalid Parameter\" }";
+        static final String POST_DATA_SUCCESS = "[{\"TelecomName\":\"Aircel\"},{\"TelecomName\":\"Airtel\"},{\"TelecomName\":\"Airtel Landline\"},{\"TelecomName\":\"BSNL Cellone\"},{\"TelecomName\":\"BSNL Landline\"},{\"TelecomName\":\"Idea\"},{\"TelecomName\":\"Reliance (CDMA / GSM)\"},{\"TelecomName\":\"Tata Docomo\"},{\"TelecomName\":\"Vodafone\"}]";
+        static final String UTILITY_DATA_SUCCESS = "[{\"TelecomName\":\"Electricity - BEST Mumbai\"},{\"TelecomName\":\"Electricity - BSES Rajdhani\"},{\"TelecomName\":\"Electricity - MPSEB Bhopal Division\"},{\"TelecomName\":\"Electricity - MSEDC Maharashtra\"},{\"TelecomName\":\"Electricity - Reliance Energy\"},{\"TelecomName\":\"Electricity - Torrent Power\"},{\"TelecomName\":\"Insurance - ICICI Pru Life\"},{\"TelecomName\":\"Insurance - Tata AIG Life\"},{\"TelecomName\":\"Mahanagar Gas Limited\"}]";
+        static final String SURCHARGE = "{ \"TelecomName\": \"Reliance (CDMA / GSM)\",\"SurCharge\":\"5.00\"}";
+        static final String NOTIFICATION = "[{\"Notification\":\"We have launched a new android app. Please search Atishay Online App on Play Store. Current app will be removed soon.\"},{\"Notification\":\"this is testing for Android App Notification\"}]}";
+        static final String BENEFICIARYVALIDATION = "{ \"Status\": \"SUCCESS\", \"ResponseCode\": \"0\", \"BeneficiaryName\": \"Mr. ANKIT  KUMAR\", \"Msg\":\"Your Verification is Successful\" }";
+        static final String JSONFOR = "{\"strOutMEssage\":\"Success\",\"Response\":{\"SingleTransaction\":[{\"UniqueTransID\":\"AO-31082016121332060\",\"BenBankAccountNo\":\"1207000200419602\",\"SenderMobileNo\":\"8828335568\",\"BeneficiaryCode\":\"11519397\",\"BeneficiaryName\":\"Alok Kumar  \",\"PTID\":null,\"Amount\":100.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"31 Aug 2016\"},{\"UniqueTransID\":\"AO-30062016085957440\",\"BenBankAccountNo\":\"1207000200419602\",\"SenderMobileNo\":\"8828335568\",\"BeneficiaryCode\":\"11254053\",\"BeneficiaryName\":\"Alok Kumar  \",\"PTID\":null,\"Amount\":100.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"30 Jun 2016\"},{\"UniqueTransID\":\"AO-30062016084754969\",\"BenBankAccountNo\":\"1207000200419602\",\"SenderMobileNo\":\"8828335568\",\"BeneficiaryCode\":\"11254053\",\"BeneficiaryName\":\"Alok Kumar  \",\"PTID\":null,\"Amount\":100.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"30 Jun 2016\"},{\"UniqueTransID\":\"AO-29062016012029712\",\"BenBankAccountNo\":\"36090100000608\",\"SenderMobileNo\":\"8828335568\",\"BeneficiaryCode\":\"11338139\",\"BeneficiaryName\":\"rameshchandra  \",\"PTID\":null,\"Amount\":100.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"29 Jun 2016\"},{\"UniqueTransID\":\"AO-27062016060719249\",\"BenBankAccountNo\":\"33782732916\",\"SenderMobileNo\":\"8828335568\",\"BeneficiaryCode\":\"11327697\",\"BeneficiaryName\":\"FIROZ AHMED  \",\"PTID\":null,\"Amount\":2000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"27 Jun 2016\"},{\"UniqueTransID\":\"AO-27062016024221903\",\"BenBankAccountNo\":\"20019602199\",\"SenderMobileNo\":\"8828335568\",\"BeneficiaryCode\":\"11271755\",\"BeneficiaryName\":\"Hasnain  \",\"PTID\":null,\"Amount\":100.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"27 Jun 2016\"},{\"UniqueTransID\":\"AO-24082016030058340\",\"BenBankAccountNo\":\"1207000200419602\",\"SenderMobileNo\":\"8828335568\",\"BeneficiaryCode\":\"11519397\",\"BeneficiaryName\":\"Alok Kumar  \",\"PTID\":null,\"Amount\":100.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"24 Aug 2016\"},{\"UniqueTransID\":\"AO-20072016084837549\",\"BenBankAccountNo\":\"036010100244053\",\"SenderMobileNo\":\"8828335568\",\"BeneficiaryCode\":\"11467375\",\"BeneficiaryName\":\"Vidnyan patil  \",\"PTID\":null,\"Amount\":1020.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"20 Jul 2016\"},{\"UniqueTransID\":\"AO-19082016123141568\",\"BenBankAccountNo\":\"1207000200419602\",\"SenderMobileNo\":\"8828335568\",\"BeneficiaryCode\":\"11519397\",\"BeneficiaryName\":\"Alok Kumar  \",\"PTID\":null,\"Amount\":100.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"19 Aug 2016\"},{\"UniqueTransID\":\"AO-16082016124601806\",\"BenBankAccountNo\":\"33902357362\",\"SenderMobileNo\":\"8828335568\",\"BeneficiaryCode\":\"11254015\",\"BeneficiaryName\":\"Atishay Limited  \",\"PTID\":null,\"Amount\":100.00,\"RechargeStatus\":\"Transaction Cancelled / Fail\",\"TransactionDate\":\"16 Aug 2016\"},{\"UniqueTransID\":\"AO-12072016033124610\",\"BenBankAccountNo\":\"1207000200419602\",\"SenderMobileNo\":\"8828335568\",\"BeneficiaryCode\":\"11254053\",\"BeneficiaryName\":\"Alok Kumar  \",\"PTID\":null,\"Amount\":100.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"12 Jul 2016\"},{\"UniqueTransID\":\"AO-11072016100922064\",\"BenBankAccountNo\":\"33902357362\",\"SenderMobileNo\":\"8828335568\",\"BeneficiaryCode\":\"11254015\",\"BeneficiaryName\":\"Atishay Limited  \",\"PTID\":null,\"Amount\":100.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"11 Jul 2016\"},{\"UniqueTransID\":\"AO-11082016123920470\",\"BenBankAccountNo\":\"50200016212600\",\"SenderMobileNo\":\"8828335568\",\"BeneficiaryCode\":\"11617061\",\"BeneficiaryName\":\"PORTIQUE HUB  \",\"PTID\":null,\"Amount\":500.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"11 Aug 2016\"},{\"UniqueTransID\":\"AO-08072016054453782\",\"BenBankAccountNo\":\"33902357362\",\"SenderMobileNo\":\"8828335568\",\"BeneficiaryCode\":\"11254015\",\"BeneficiaryName\":\"Atishay Limited  \",\"PTID\":null,\"Amount\":1500.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"08 Jul 2016\"},{\"UniqueTransID\":\"AO-08082016103240483\",\"BenBankAccountNo\":\"33902357362\",\"SenderMobileNo\":\"8828335568\",\"BeneficiaryCode\":\"11254015\",\"BeneficiaryName\":\"Atishay Limited  \",\"PTID\":null,\"Amount\":100.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"08 Aug 2016\"},{\"UniqueTransID\":\"AO-08082016102413341\",\"BenBankAccountNo\":\"33902357362\",\"SenderMobileNo\":\"8828335568\",\"BeneficiaryCode\":\"11254015\",\"BeneficiaryName\":\"Atishay Limited  \",\"PTID\":null,\"Amount\":100.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"08 Aug 2016\"},{\"UniqueTransID\":\"AO-07072016024552981\",\"BenBankAccountNo\":\"103303130002115\",\"SenderMobileNo\":\"8828335568\",\"BeneficiaryCode\":\"11383325\",\"BeneficiaryName\":\"Yatin P  \",\"PTID\":null,\"Amount\":1500.00,\"RechargeStatus\":\"Transaction Cancelled / Fail\",\"TransactionDate\":\"07 Jul 2016\"},{\"UniqueTransID\":\"AO-07082016094659501\",\"BenBankAccountNo\":\"33902357362\",\"SenderMobileNo\":\"8828335568\",\"BeneficiaryCode\":\"11254015\",\"BeneficiaryName\":\"Atishay Limited  \",\"PTID\":null,\"Amount\":100.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"07 Aug 2016\"},{\"UniqueTransID\":\"AO-06082016072450508\",\"BenBankAccountNo\":\"33902357362\",\"SenderMobileNo\":\"8828335568\",\"BeneficiaryCode\":\"11254015\",\"BeneficiaryName\":\"Atishay Limited  \",\"PTID\":null,\"Amount\":100.00,\"RechargeStatus\":\"Transaction Cancelled / Fail\",\"TransactionDate\":\"06 Aug 2016\"},{\"UniqueTransID\":\"AO-04082016041931014\",\"BenBankAccountNo\":\"33902357362\",\"SenderMobileNo\":\"8828335568\",\"BeneficiaryCode\":\"11254015\",\"BeneficiaryName\":\"Atishay Limited  \",\"PTID\":null,\"Amount\":100.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"04 Aug 2016\"},{\"UniqueTransID\":\"AO-03082016112800285\",\"BenBankAccountNo\":\"33902357362\",\"SenderMobileNo\":\"8828335568\",\"BeneficiaryCode\":\"11254015\",\"BeneficiaryName\":\"Atishay Limited  \",\"PTID\":null,\"Amount\":100.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"03 Aug 2016\"},{\"UniqueTransID\":\"AO-03082016050320216\",\"BenBankAccountNo\":\"33902357362\",\"SenderMobileNo\":\"8828335568\",\"BeneficiaryCode\":\"11254015\",\"BeneficiaryName\":\"Atishay Limited  \",\"PTID\":null,\"Amount\":200.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"03 Aug 2016\"},{\"UniqueTransID\":\"AO-01072016043052547\",\"BenBankAccountNo\":\"33902357362\",\"SenderMobileNo\":\"9975841816\",\"BeneficiaryCode\":\"11257217\",\"BeneficiaryName\":\"Atishay Limited  \",\"PTID\":null,\"Amount\":100.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"01 Jul 2016\"},{\"UniqueTransID\":\"AO-01072016040113792\",\"BenBankAccountNo\":\"33902357362\",\"SenderMobileNo\":\"9975841816\",\"BeneficiaryCode\":\"11257217\",\"BeneficiaryName\":\"Atishay Limited  \",\"PTID\":null,\"Amount\":100.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"01 Jul 2016\"}],\"GroupTransaction\":{\"AO-01082016123536500\":[{\"BenBankAccountNo\":\"026805004109\",\"SenderMobileNo\":\"7718872259\",\"BeneficiaryCode\":\"11539519\",\"BeneficiaryName\":\"BYTCELL TECHNOLOGIES  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"01 Aug 2016\",\"UTR\":\"621412327894\"},{\"BenBankAccountNo\":\"026805004109\",\"SenderMobileNo\":\"7718872259\",\"BeneficiaryCode\":\"11539519\",\"BeneficiaryName\":\"BYTCELL TECHNOLOGIES  \",\"PTID\":null,\"Amount\":130.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"01 Aug 2016\",\"UTR\":\"621412795002\"}],\"AO-03082016033759256\":[{\"BenBankAccountNo\":\"27870100010669\",\"SenderMobileNo\":\"9870764695\",\"BeneficiaryCode\":\"11303754\",\"BeneficiaryName\":\"Amar Kumbhar  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"03 Aug 2016\",\"UTR\":\"621615632140\"},{\"BenBankAccountNo\":\"27870100010669\",\"SenderMobileNo\":\"9870764695\",\"BeneficiaryCode\":\"11303754\",\"BeneficiaryName\":\"Amar Kumbhar  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"03 Aug 2016\",\"UTR\":\"621615185088\"},{\"BenBankAccountNo\":\"27870100010669\",\"SenderMobileNo\":\"9870764695\",\"BeneficiaryCode\":\"11303754\",\"BeneficiaryName\":\"Amar Kumbhar  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"03 Aug 2016\",\"UTR\":\"621615965594\"},{\"BenBankAccountNo\":\"27870100010669\",\"SenderMobileNo\":\"9870764695\",\"BeneficiaryCode\":\"11303754\",\"BeneficiaryName\":\"Amar Kumbhar  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"03 Aug 2016\",\"UTR\":\"621615561068\"},{\"BenBankAccountNo\":\"27870100010669\",\"SenderMobileNo\":\"9870764695\",\"BeneficiaryCode\":\"11303754\",\"BeneficiaryName\":\"Amar Kumbhar  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"03 Aug 2016\",\"UTR\":\"621615837349\"}],\"AO-03122016091335134\":[{\"BenBankAccountNo\":\"201310110011761\",\"SenderMobileNo\":\"9870764695\",\"BeneficiaryCode\":\"12581707\",\"BeneficiaryName\":\"Sohel Shekh  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"03 Dec 2016\",\"UTR\":\"633821988704\"},{\"BenBankAccountNo\":\"201310110011761\",\"SenderMobileNo\":\"9870764695\",\"BeneficiaryCode\":\"12581707\",\"BeneficiaryName\":\"Sohel Shekh  \",\"PTID\":null,\"Amount\":3600.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"03 Dec 2016\",\"UTR\":\"633821966524\"}],\"AO-04092016024411267\":[{\"BenBankAccountNo\":\"27870100010669\",\"SenderMobileNo\":\"9870764695\",\"BeneficiaryCode\":\"11303754\",\"BeneficiaryName\":\"Amar Kumbhar  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"04 Sep 2016\",\"UTR\":\"624814988956\"},{\"BenBankAccountNo\":\"27870100010669\",\"SenderMobileNo\":\"9870764695\",\"BeneficiaryCode\":\"11303754\",\"BeneficiaryName\":\"Amar Kumbhar  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"04 Sep 2016\",\"UTR\":\"624814171048\"},{\"BenBankAccountNo\":\"27870100010669\",\"SenderMobileNo\":\"9870764695\",\"BeneficiaryCode\":\"11303754\",\"BeneficiaryName\":\"Amar Kumbhar  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"04 Sep 2016\",\"UTR\":\"624814728281\"},{\"BenBankAccountNo\":\"27870100010669\",\"SenderMobileNo\":\"9870764695\",\"BeneficiaryCode\":\"11303754\",\"BeneficiaryName\":\"Amar Kumbhar  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"04 Sep 2016\",\"UTR\":\"624814679593\"},{\"BenBankAccountNo\":\"27870100010669\",\"SenderMobileNo\":\"9870764695\",\"BeneficiaryCode\":\"11303754\",\"BeneficiaryName\":\"Amar Kumbhar  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"04 Sep 2016\",\"UTR\":\"624814015946\"}],\"AO-07112016061932605\":[{\"BenBankAccountNo\":\"27870100010669\",\"SenderMobileNo\":\"9870764695\",\"BeneficiaryCode\":\"11303754\",\"BeneficiaryName\":\"Amar Kumbhar  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"07 Nov 2016\",\"UTR\":\"631218810189\"},{\"BenBankAccountNo\":\"27870100010669\",\"SenderMobileNo\":\"9870764695\",\"BeneficiaryCode\":\"11303754\",\"BeneficiaryName\":\"Amar Kumbhar  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"07 Nov 2016\",\"UTR\":\"631218713098\"},{\"BenBankAccountNo\":\"27870100010669\",\"SenderMobileNo\":\"9870764695\",\"BeneficiaryCode\":\"11303754\",\"BeneficiaryName\":\"Amar Kumbhar  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"07 Nov 2016\",\"UTR\":\"631218591926\"},{\"BenBankAccountNo\":\"27870100010669\",\"SenderMobileNo\":\"9870764695\",\"BeneficiaryCode\":\"11303754\",\"BeneficiaryName\":\"Amar Kumbhar  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"07 Nov 2016\",\"UTR\":\"631218195724\"},{\"BenBankAccountNo\":\"27870100010669\",\"SenderMobileNo\":\"9870764695\",\"BeneficiaryCode\":\"11303754\",\"BeneficiaryName\":\"Amar Kumbhar  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"07 Nov 2016\",\"UTR\":\"631218946860\"}],\"AO-10102016020429548\":[{\"BenBankAccountNo\":\"27870100010669\",\"SenderMobileNo\":\"9870764695\",\"BeneficiaryCode\":\"11303754\",\"BeneficiaryName\":\"Amar Kumbhar  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"10 Oct 2016\",\"UTR\":\"628414277950\"},{\"BenBankAccountNo\":\"27870100010669\",\"SenderMobileNo\":\"9870764695\",\"BeneficiaryCode\":\"11303754\",\"BeneficiaryName\":\"Amar Kumbhar  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"10 Oct 2016\",\"UTR\":\"628414034447\"},{\"BenBankAccountNo\":\"27870100010669\",\"SenderMobileNo\":\"9870764695\",\"BeneficiaryCode\":\"11303754\",\"BeneficiaryName\":\"Amar Kumbhar  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"10 Oct 2016\",\"UTR\":\"628414599604\"},{\"BenBankAccountNo\":\"27870100010669\",\"SenderMobileNo\":\"9870764695\",\"BeneficiaryCode\":\"11303754\",\"BeneficiaryName\":\"Amar Kumbhar  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"10 Oct 2016\",\"UTR\":\"628414070176\"}],\"AO-10102016020959221\":[{\"BenBankAccountNo\":\"27870100010669\",\"SenderMobileNo\":\"7718872260\",\"BeneficiaryCode\":\"11324209\",\"BeneficiaryName\":\"Amar  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"10 Oct 2016\",\"UTR\":\"628414886250\"},{\"BenBankAccountNo\":\"27870100010669\",\"SenderMobileNo\":\"7718872260\",\"BeneficiaryCode\":\"11324209\",\"BeneficiaryName\":\"Amar  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"10 Oct 2016\",\"UTR\":\"628414531462\"},{\"BenBankAccountNo\":\"27870100010669\",\"SenderMobileNo\":\"7718872260\",\"BeneficiaryCode\":\"11324209\",\"BeneficiaryName\":\"Amar  \",\"PTID\":null,\"Amount\":2000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"10 Oct 2016\",\"UTR\":\"628414403981\"}],\"AO-11082016055554363\":[{\"BenBankAccountNo\":\"27870100010669\",\"SenderMobileNo\":\"7718872260\",\"BeneficiaryCode\":\"11324209\",\"BeneficiaryName\":\"Amar  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"11 Aug 2016\",\"UTR\":\"622417611317\"},{\"BenBankAccountNo\":\"27870100010669\",\"SenderMobileNo\":\"7718872260\",\"BeneficiaryCode\":\"11324209\",\"BeneficiaryName\":\"Amar  \",\"PTID\":null,\"Amount\":2000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"11 Aug 2016\",\"UTR\":\"622417157544\"}],\"AO-11112016112120038\":[{\"BenBankAccountNo\":\"27870100010669\",\"SenderMobileNo\":\"7718872260\",\"BeneficiaryCode\":\"11324209\",\"BeneficiaryName\":\"Amar  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"11 Nov 2016\",\"UTR\":\"631611227251\"},{\"BenBankAccountNo\":\"27870100010669\",\"SenderMobileNo\":\"7718872260\",\"BeneficiaryCode\":\"11324209\",\"BeneficiaryName\":\"Amar  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"11 Nov 2016\",\"UTR\":\"631611906134\"},{\"BenBankAccountNo\":\"27870100010669\",\"SenderMobileNo\":\"7718872260\",\"BeneficiaryCode\":\"11324209\",\"BeneficiaryName\":\"Amar  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"11 Nov 2016\",\"UTR\":\"631611804064\"},{\"BenBankAccountNo\":\"27870100010669\",\"SenderMobileNo\":\"7718872260\",\"BeneficiaryCode\":\"11324209\",\"BeneficiaryName\":\"Amar  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"11 Nov 2016\",\"UTR\":\"631611779456\"}],\"AO-12072016033446215\":[{\"BenBankAccountNo\":\"3179766173\",\"SenderMobileNo\":\"7718872260\",\"BeneficiaryCode\":\"11312105\",\"BeneficiaryName\":\"Datamini Technologies  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"12 Jul 2016\",\"UTR\":\"619415208022\"},{\"BenBankAccountNo\":\"3179766173\",\"SenderMobileNo\":\"7718872260\",\"BeneficiaryCode\":\"11312105\",\"BeneficiaryName\":\"Datamini Technologies  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"12 Jul 2016\",\"UTR\":\"619415268024\"},{\"BenBankAccountNo\":\"3179766173\",\"SenderMobileNo\":\"7718872260\",\"BeneficiaryCode\":\"11312105\",\"BeneficiaryName\":\"Datamini Technologies  \",\"PTID\":null,\"Amount\":761.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"12 Jul 2016\",\"UTR\":\"619415304885\"}],\"AO-14112016100403128\":[{\"BenBankAccountNo\":\"50200016212600\",\"SenderMobileNo\":\"7021678491\",\"BeneficiaryCode\":\"12494507\",\"BeneficiaryName\":\"PORTIQUE HUB  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"14 Nov 2016\",\"UTR\":\"631910560692\"},{\"BenBankAccountNo\":\"50200016212600\",\"SenderMobileNo\":\"7021678491\",\"BeneficiaryCode\":\"12494507\",\"BeneficiaryName\":\"PORTIQUE HUB  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"14 Nov 2016\",\"UTR\":\"631910281163\"},{\"BenBankAccountNo\":\"50200016212600\",\"SenderMobileNo\":\"7021678491\",\"BeneficiaryCode\":\"12494507\",\"BeneficiaryName\":\"PORTIQUE HUB  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"14 Nov 2016\",\"UTR\":\"631910691194\"},{\"BenBankAccountNo\":\"50200016212600\",\"SenderMobileNo\":\"7021678491\",\"BeneficiaryCode\":\"12494507\",\"BeneficiaryName\":\"PORTIQUE HUB  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"14 Nov 2016\",\"UTR\":\"631910488353\"}],\"AO-16112016053743045\":[{\"BenBankAccountNo\":\"03880100015805\",\"SenderMobileNo\":\"9920862748\",\"BeneficiaryCode\":\"12505586\",\"BeneficiaryName\":\"Mayuri  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"16 Nov 2016\",\"UTR\":\"632117992329\"},{\"BenBankAccountNo\":\"03880100015805\",\"SenderMobileNo\":\"9920862748\",\"BeneficiaryCode\":\"12505586\",\"BeneficiaryName\":\"Mayuri  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"16 Nov 2016\",\"UTR\":\"632117070513\"}],\"AO-17082016053310453\":[{\"BenBankAccountNo\":\"4452002100006109\",\"SenderMobileNo\":\"7718872266\",\"BeneficiaryCode\":\"11677857\",\"BeneficiaryName\":\"Mantra Softech Pvt Ltd  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"17 Aug 2016\",\"UTR\":\"623017149138\"},{\"BenBankAccountNo\":\"4452002100006109\",\"SenderMobileNo\":\"7718872266\",\"BeneficiaryCode\":\"11677857\",\"BeneficiaryName\":\"Mantra Softech Pvt Ltd  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"17 Aug 2016\",\"UTR\":\"623017207491\"},{\"BenBankAccountNo\":\"4452002100006109\",\"SenderMobileNo\":\"7718872266\",\"BeneficiaryCode\":\"11677857\",\"BeneficiaryName\":\"Mantra Softech Pvt Ltd  \",\"PTID\":null,\"Amount\":2600.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"17 Aug 2016\",\"UTR\":\"623017279294\"}],\"AO-24102016054004650\":[{\"BenBankAccountNo\":\"27870100010669\",\"SenderMobileNo\":\"9664979926\",\"BeneficiaryCode\":\"12316305\",\"BeneficiaryName\":\"Amar Kumbhar  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"24 Oct 2016\",\"UTR\":\"629817650063\"},{\"BenBankAccountNo\":\"27870100010669\",\"SenderMobileNo\":\"9664979926\",\"BeneficiaryCode\":\"12316305\",\"BeneficiaryName\":\"Amar Kumbhar  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"24 Oct 2016\",\"UTR\":\"629817103716\"},{\"BenBankAccountNo\":\"27870100010669\",\"SenderMobileNo\":\"9664979926\",\"BeneficiaryCode\":\"12316305\",\"BeneficiaryName\":\"Amar Kumbhar  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"24 Oct 2016\",\"UTR\":\"629817502803\"},{\"BenBankAccountNo\":\"27870100010669\",\"SenderMobileNo\":\"9664979926\",\"BeneficiaryCode\":\"12316305\",\"BeneficiaryName\":\"Amar Kumbhar  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"24 Oct 2016\",\"UTR\":\"629817802771\"}],\"AO-25072016034304723\":[{\"BenBankAccountNo\":\"08782000001505\",\"SenderMobileNo\":\"7718872259\",\"BeneficiaryCode\":\"11496078\",\"BeneficiaryName\":\"Appropriate Solutions  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"25 Jul 2016\",\"UTR\":\"620715431268\"},{\"BenBankAccountNo\":\"08782000001505\",\"SenderMobileNo\":\"7718872259\",\"BeneficiaryCode\":\"11496078\",\"BeneficiaryName\":\"Appropriate Solutions  \",\"PTID\":null,\"Amount\":2875.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"25 Jul 2016\",\"UTR\":\"620715054940\"}],\"AO-26082016051617410\":[{\"BenBankAccountNo\":\"026805004109\",\"SenderMobileNo\":\"7718872259\",\"BeneficiaryCode\":\"11539519\",\"BeneficiaryName\":\"BYTCELL TECHNOLOGIES  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"26 Aug 2016\",\"UTR\":\"623917218256\"},{\"BenBankAccountNo\":\"026805004109\",\"SenderMobileNo\":\"7718872259\",\"BeneficiaryCode\":\"11539519\",\"BeneficiaryName\":\"BYTCELL TECHNOLOGIES  \",\"PTID\":null,\"Amount\":2832.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"26 Aug 2016\",\"UTR\":\"623917575204\"}],\"AO-27072016023203490\":[{\"BenBankAccountNo\":\"27870100010669\",\"SenderMobileNo\":\"9870764695\",\"BeneficiaryCode\":\"11303754\",\"BeneficiaryName\":\"Amar Kumbhar  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"27 Jul 2016\",\"UTR\":\"620914872104\"},{\"BenBankAccountNo\":\"27870100010669\",\"SenderMobileNo\":\"9870764695\",\"BeneficiaryCode\":\"11303754\",\"BeneficiaryName\":\"Amar Kumbhar  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"27 Jul 2016\",\"UTR\":\"620914393084\"},{\"BenBankAccountNo\":\"27870100010669\",\"SenderMobileNo\":\"9870764695\",\"BeneficiaryCode\":\"11303754\",\"BeneficiaryName\":\"Amar Kumbhar  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"27 Jul 2016\",\"UTR\":\"620914233017\"},{\"BenBankAccountNo\":\"27870100010669\",\"SenderMobileNo\":\"9870764695\",\"BeneficiaryCode\":\"11303754\",\"BeneficiaryName\":\"Amar Kumbhar  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"27 Jul 2016\",\"UTR\":\"620914733886\"}],\"AO-29092016071204616\":[{\"BenBankAccountNo\":\"27870100010669\",\"SenderMobileNo\":\"7718872260\",\"BeneficiaryCode\":\"11324209\",\"BeneficiaryName\":\"Amar  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"29 Sep 2016\",\"UTR\":\"627319521509\"},{\"BenBankAccountNo\":\"27870100010669\",\"SenderMobileNo\":\"7718872260\",\"BeneficiaryCode\":\"11324209\",\"BeneficiaryName\":\"Amar  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"29 Sep 2016\",\"UTR\":\"627319765654\"}],\"AO-30112016044631056\":[{\"BenBankAccountNo\":\"50200014717484\",\"SenderMobileNo\":\"7718872258\",\"BeneficiaryCode\":\"12568670\",\"BeneficiaryName\":\"Vulcan India  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"30 Nov 2016\",\"UTR\":\"633516204299\"},{\"BenBankAccountNo\":\"50200014717484\",\"SenderMobileNo\":\"7718872258\",\"BeneficiaryCode\":\"12568670\",\"BeneficiaryName\":\"Vulcan India  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"30 Nov 2016\",\"UTR\":\"633516275654\"},{\"BenBankAccountNo\":\"50200014717484\",\"SenderMobileNo\":\"7718872258\",\"BeneficiaryCode\":\"12568670\",\"BeneficiaryName\":\"Vulcan India  \",\"PTID\":null,\"Amount\":5000.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"30 Nov 2016\",\"UTR\":\"633516876144\"},{\"BenBankAccountNo\":\"50200014717484\",\"SenderMobileNo\":\"7718872258\",\"BeneficiaryCode\":\"12568670\",\"BeneficiaryName\":\"Vulcan India  \",\"PTID\":null,\"Amount\":4209.00,\"RechargeStatus\":\"Successful\",\"TransactionDate\":\"30 Nov 2016\",\"UTR\":\"633516184352\"}]}}}";
+    }
+}

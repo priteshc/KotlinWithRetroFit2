@@ -1,0 +1,26 @@
+{
+    "logs": [
+        {
+            "outputFile": "C:\\StudioProject\\AtishayOnline\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-w560dp-land-v13\\values-w560dp-land-v13.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\Atishay\\.gradle\\caches\\transforms-1\\files-1.1\\materialdatetimepicker-2.3.0.aar\\45b6e370ce11135c4847c2d78394e442\\res\\values-w560dp-land\\values-w560dp-land.xml",
+                    "from": {
+                        "startLines": "4,5,6",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "221,286,340",
+                        "endColumns": "64,53,50",
+                        "endOffsets": "281,335,386"
+                    },
+                    "to": {
+                        "startLines": "2,3,4",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "55,120,174",
+                        "endColumns": "64,53,50",
+                        "endOffsets": "115,169,220"
+                    }
+                }
+            ]
+        }
+    ]
+}

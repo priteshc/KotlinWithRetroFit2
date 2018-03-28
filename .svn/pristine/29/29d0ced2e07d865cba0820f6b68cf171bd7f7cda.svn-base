@@ -1,0 +1,130 @@
+
+package com.atishay.online.history;
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
+
+public class HistoryBean implements Serializable {
+
+    @SerializedName("TransactionId")
+    @Expose
+    private String transactionId;
+    @SerializedName("ServiceType")
+    @Expose
+    private String serviceType;
+    @SerializedName("OperatorName")
+    @Expose
+    private String operatorName;
+    @SerializedName("MobileNo")
+    @Expose
+    private String mobileNo;
+    @SerializedName("Amount")
+    @Expose
+    private float amount;
+    @SerializedName("RechargeStatus")
+    @Expose
+    private String rechargeStatus;
+    @SerializedName("TransactionDate")
+    @Expose
+    private String transactionDate;
+
+    /**
+     * @return The transactionId
+     */
+    public String getTransactionId() {
+        return transactionId;
+    }
+
+    /**
+     * @param transactionId The TransactionId
+     */
+    public void setTransactionId(String transactionId) {
+        this.transactionId = transactionId;
+    }
+
+    /**
+     * @return The serviceType
+     */
+    public String getServiceType() {
+        return serviceType;
+    }
+
+    /**
+     * @param serviceType The ServiceType
+     */
+    public void setServiceType(String serviceType) {
+        this.serviceType = serviceType;
+    }
+
+    /**
+     * @return The operatorName
+     */
+    public String getOperatorName() {
+        return operatorName;
+    }
+
+    /**
+     * @param operatorName The OperatorName
+     */
+    public void setOperatorName(String operatorName) {
+        this.operatorName = operatorName;
+    }
+
+    /**
+     * @return The mobileNo
+     */
+    public String getMobileNo() {
+        return mobileNo;
+    }
+
+    /**
+     * @param mobileNo The MobileNo
+     */
+    public void setMobileNo(String mobileNo) {
+        this.mobileNo = mobileNo;
+    }
+
+    /**
+     * @return The amount
+     */
+    public float getAmount() {
+        return amount;
+    }
+
+    /**
+     * @param amount The Amount
+     */
+    public void setAmount(float amount) {
+        this.amount = amount;
+    }
+
+    /**
+     * @return The rechargeStatus
+     */
+    public String getRechargeStatus() {
+        return rechargeStatus;
+    }
+
+    /**
+     * @param rechargeStatus The RechargeStatus
+     */
+    public void setRechargeStatus(String rechargeStatus) {
+        this.rechargeStatus = rechargeStatus;
+    }
+
+    /**
+     * @return The transactionDate
+     */
+    public String getTransactionDate() {
+        return transactionDate;
+    }
+
+    /**
+     * @param transactionDate The TransactionDate
+     */
+    public void setTransactionDate(String transactionDate) {
+        this.transactionDate = transactionDate;
+    }
+}

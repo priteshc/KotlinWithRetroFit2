@@ -1,0 +1,20 @@
+package com.atishay.online.aadhaar;
+
+import com.atishay.online.AppBaseView;
+import com.atishay.online.BaseResponse;
+
+import java.util.ArrayList;
+
+/**
+ * Created by Vishal Patel on 01,December,2016.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public interface AadhaarVerificationView extends AppBaseView {
+
+    void doAadhaarVerificationDetails(BaseResponse aBaseResponse);
+
+    void onAadhaarVerificationHistoryFetched(ArrayList<AadhaarVerificationBean> aAadhaarVerificationResponses);
+}

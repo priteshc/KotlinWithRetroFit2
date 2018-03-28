@@ -1,0 +1,44 @@
+package com.example.atishay.mykotlinpractice
+
+import android.support.v7.app.AppCompatActivity
+import android.os.Bundle
+import android.widget.TextView
+import android.widget.Toast
+import kotlinx.android.synthetic.main.activity_main.*
+
+
+class MainActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        kot.text = "pritesh"
+
+        kot.setOnClickListener {
+
+            Toast.makeText(this, kot.text.toString(), Toast.LENGTH_LONG).show()
+
+        }
+
+
+
+          login.setOnClickListener(){
+
+              if(!username.text.toString().isEmpty() && !password.text.toString().isEmpty()){
+
+                  Toast.makeText(this, username.text.toString() +" "+ password.text.toString(), Toast.LENGTH_LONG).show()
+              }
+              else{
+
+                  Toast.makeText(this, "fill all field", Toast.LENGTH_LONG).show()
+
+              }
+
+          }
+
+
+
+
+    }
+}

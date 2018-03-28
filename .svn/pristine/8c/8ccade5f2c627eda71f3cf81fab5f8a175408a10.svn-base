@@ -1,0 +1,11 @@
+package com.atishay.online;
+
+import com.goldenmace.framework.mvp.views.BaseView;
+
+/**
+ * Created by E15 on 09,February,2017.
+ * GoldenMace IT Solutions
+ */
+public interface AppBaseView extends BaseView {
+    void onUserUnAuthorized(String aErrorMessage);
+}

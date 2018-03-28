@@ -1,0 +1,53 @@
+package com.atishay.online.moneytransfer;
+
+import com.atishay.online.AtishayOnlineApp;
+import com.atishay.online.utils.network.ApiError;
+import com.atishay.online.utils.network.RestApiCallback;
+
+import java.util.Map;
+
+/**
+ * Created by Vishal Patel on 03,January,2017.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public class FundTransferController implements FundTransferUsecase {
+
+    private RestApiCallback<Object, ApiError<Object>> mApiCallback;
+
+    public FundTransferController(RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+        mApiCallback = aApiCallback;
+    }
+
+    @Override
+    public void doRemittanceTransaction(Map<String, String> aQueryMap) {
+        AtishayOnlineApp.getAppInstance().getRestApis().doRemittanceTransaction(aQueryMap, mApiCallback);
+    }
+
+    @Override
+    public void doFundTransaction(Map<String, String> aQueryMap) {
+        AtishayOnlineApp.getAppInstance().getRestApis().doFundTransaction(aQueryMap, mApiCallback);
+    }
+
+    @Override
+    public void doFundTransferHistory(Map<String, String> aQueryMap) {
+        AtishayOnlineApp.getAppInstance().getRestApis().doFundTransferHistory(aQueryMap, mApiCallback);
+    }
+
+    @Override
+    public void doQueryRemittanceTransaction(Map<String, String> aQueryMap) {
+        AtishayOnlineApp.getAppInstance().getRestApis().doQueryRemittanceTransaction(aQueryMap, mApiCallback);
+    }
+
+    @Override
+    public void doRefundTransaction(Map<String, String> aQueryMap) {
+        AtishayOnlineApp.getAppInstance().getRestApis().doRefundTransaction(aQueryMap, mApiCallback);
+    }
+
+    @Override
+    public void doValidateRefundTransaction(Map<String, String> aQueryMap) {
+        AtishayOnlineApp.getAppInstance().getRestApis().doValidateRefundTransaction(aQueryMap, mApiCallback);
+    }
+}

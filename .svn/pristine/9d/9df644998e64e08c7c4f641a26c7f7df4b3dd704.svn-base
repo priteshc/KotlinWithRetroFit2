@@ -1,0 +1,153 @@
+/*
+ * Copyright 2016 Goldenmace IT Solutions
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+package com.atishay.online.login;
+
+import com.atishay.online.AtishayOnlineApp;
+import com.atishay.online.BaseResponse;
+import com.atishay.online.R;
+import com.atishay.online.utils.Constants;
+import com.atishay.online.utils.network.ApiError;
+import com.atishay.online.utils.network.RestApiCallback;
+import com.goldenmace.framework.mvp.presenters.Presenter;
+import com.goldenmace.framework.utils.NetworkUtils;
+import com.goldenmace.framework.utils.StringUtils;
+
+/**
+ * Created by Vishal Patel on 10,October,2016.
+ * AtishayOnline
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+public class LoginPresenter implements Presenter, LoginUsecase, RestApiCallback<Object, ApiError<Object>> {
+
+    private LoginView mLoginView;
+    private LoginController mLoginController;
+
+    public LoginPresenter(LoginView aLoginView) {
+        mLoginController = new LoginController(this);
+        mLoginView = aLoginView;
+    }
+
+    @Override
+    public void validateLogin(String aUserName, String aPassword) {
+
+        if (StringUtils.isTrimmedEmpty(aUserName)) {
+            mLoginView.invalidUserName(aUserName);
+            return;
+        }
+        if (StringUtils.isTrimmedEmpty(aPassword)) {
+            mLoginView.invalidPassword(aPassword);
+            return;
+        }
+        if (mLoginView != null && NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            mLoginView.showLoader(R.string.please_wait);
+            mLoginController.validateLogin(aUserName, aPassword);
+        } else {
+            mLoginView.noInternetConnection();
+        }
+    }
+
+    @Override
+    public void validateLoginView(String aUserName, String aPassword) {
+
+        if (StringUtils.isTrimmedEmpty(aUserName)) {
+            mLoginView.invalidUserName(aUserName);
+            return;
+        }
+        if (StringUtils.isTrimmedEmpty(aPassword)) {
+            mLoginView.invalidPassword(aPassword);
+            return;
+        }
+        if (mLoginView != null && NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            mLoginController.validateLoginView(aUserName, aPassword);
+        } else {
+            mLoginView.noInternetConnectionLogin();
+        }
+    }
+
+    @Override
+    public void validateForgotPassword(String aUserName) {
+        if (mLoginView != null && NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            mLoginView.showDialogLoader(R.string.please_wait);
+            mLoginController.validateForgotPassword(aUserName);
+        } else {
+            mLoginView.noInternetConnection();
+        }
+    }
+
+    @Override
+    public void fetchConfig() {
+    }
+
+    @Override
+    public void onDestroy() {
+        mLoginView = null;
+    }
+
+    @Override
+    public void onSuccess(int aApiCode, Object aSuccessResponse) {
+        if (mLoginView != null) {
+            if (aSuccessResponse == null) {
+                AtishayOnlineApp.getAppInstance().getString(R.string.error_network_server_errors);
+            } else {
+                switch (aApiCode) {
+                    case Constants.APICODE.LOGIN:
+                        mLoginView.onLoginSuccess((LoginResponse) aSuccessResponse);
+                        break;
+                    case Constants.APICODE.FORGOT:
+                        mLoginView.onForgotPassSuccess((BaseResponse) aSuccessResponse);
+                        break;
+                }
+            }
+        } else {
+
+        }
+    }
+
+    @Override
+    public void onApiError(int aApiCode, ApiError<Object> aFailureResponse) {
+        if (mLoginView != null) {
+            if (aFailureResponse.getError() instanceof String) {
+                switch (aApiCode) {
+                    case Constants.APICODE.LOGIN:
+                        mLoginView.apiError((String) aFailureResponse.getError());
+                        break;
+                    case Constants.APICODE.FORGOT:
+                        mLoginView.onForgotPassFail((String) aFailureResponse.getError());
+                        break;
+                }
+            }
+        } else {
+
+        }
+    }
+
+    @Override
+    public void registerBus() {
+
+    }
+
+    @Override
+    public void unRegisterBus() {
+
+    }
+
+    @Override
+    public void clearReferences() {
+        mLoginView = null;
+    }
+}

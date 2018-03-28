@@ -1,0 +1,22 @@
+
+package com.atishay.online.addbenefiaciary;
+
+import com.atishay.online.BaseResponse;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+public class ResendOTPResponse extends BaseResponse {
+
+    @SerializedName("ResponseCode")
+    @Expose
+    private String responseCode;
+
+    public String getResponseCode() {
+        return responseCode;
+    }
+
+    public void setResponseCode(String responseCode) {
+        this.responseCode = responseCode;
+    }
+
+}

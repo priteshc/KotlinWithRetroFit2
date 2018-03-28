@@ -1,0 +1,255 @@
+/*
+ * Copyright 2016 Goldenmace IT Solutions
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+package com.atishay.online.utils;
+
+import com.atishay.online.BaseResponse;
+import com.atishay.online.WalletBalanceResponse;
+import com.atishay.online.aadhaar.AadhaarVerificationResponse;
+import com.atishay.online.aadhaar.PvcValidatePojo;
+import com.atishay.online.addbenefiaciary.AddBeneficiaryResponse;
+import com.atishay.online.addbenefiaciary.MasterIFSCResponse;
+import com.atishay.online.addbenefiaciary.ResendOTPResponse;
+import com.atishay.online.addbenefiaciary.ValidateBeneficiaryResponse;
+import com.atishay.online.benefiaciary.BankIFSCDetailResponse;
+import com.atishay.online.benefiaciary.BeneficiaryListResponse;
+import com.atishay.online.benefiaciary.BeneficiaryValidationResponse;
+import com.atishay.online.benefiaciary.DeactiveBeneficiaryResponse;
+import com.atishay.online.common.CommonRechargeResponse;
+import com.atishay.online.common.SurchargeResponse;
+import com.atishay.online.dth.DthOperatorResponse;
+import com.atishay.online.history.ComplainPojo;
+import com.atishay.online.history.HistoryResponse;
+import com.atishay.online.history.UtilityComplainPojo;
+import com.atishay.online.history.UtilityHistoryPojo;
+import com.atishay.online.login.LoginResponse;
+import com.atishay.online.menu.NotificationResponse;
+import com.atishay.online.mobilerecharge.CircleResponse;
+import com.atishay.online.mobilerecharge.MobileOperatorResponse;
+import com.atishay.online.moneytransfer.CommonRegistrationResponse;
+import com.atishay.online.moneytransfer.FundServiceChargeResponse;
+import com.atishay.online.moneytransfer.FundTransferHistoryResponse;
+import com.atishay.online.moneytransfer.QueryRefundTransactionResponse;
+import com.atishay.online.moneytransfer.RefundTransactionResponse;
+import com.atishay.online.moneytransfer.ServiceResponse;
+import com.atishay.online.myaccountrecharge.AccountRechargeReportResponse;
+import com.atishay.online.myaccountrecharge.BankListResponse;
+import com.atishay.online.myaccountrecharge.TransactionTypeResponse;
+import com.atishay.online.postpaid.BIllerInfoPojo;
+import com.atishay.online.postpaid.BillerCovergePojo;
+import com.atishay.online.postpaid.ConvesPojo;
+import com.atishay.online.postpaid.FinalPostpaidBillPojo;
+import com.atishay.online.postpaid.PostpaidOperatorResponse;
+import com.atishay.online.postpaid.PostpaidPojo;
+import com.atishay.online.searchifsc.BankListIFSCResponse;
+import com.atishay.online.searchifsc.SearchIFSCResponse;
+import com.atishay.online.utility.BillFetchPojo;
+import com.atishay.online.utility.FinalbillpaymentPojo;
+import com.atishay.online.utility.UtilityOperatorResponse;
+
+import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.http.GET;
+import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
+
+/**
+ * Created by Vishal Patel on 11,November,2016.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+public interface RestApis {
+
+    @GET("VendorLogin")
+    Call<LoginResponse> doLogin(@Query(Constants.ApiKeys.USERNAME) String username, @Query(Constants.ApiKeys.PASSWORD) String password);
+
+    @GET("VendorChangePassword")
+    Call<BaseResponse> changePassword(@Query(Constants.ApiKeys.USERNAME) String username, @Query(Constants.ApiKeys.PASSWORD) String password, @Query(Constants.ApiKeys.NEW_PASSWORD) String aNewPassword);
+
+    @GET("VendorChangeTransactionCode")
+    Call<BaseResponse> changeTrancationCode(@Query(Constants.ApiKeys.USERNAME) String username, @Query(Constants.ApiKeys.PASSWORD) String password, @Query(Constants.ApiKeys.TRPASSWORD) String aTransactionCode, @Query(Constants.ApiKeys.NEW_TRPASSWORD) String aNewTransactionCode);
+
+    @GET("VendorForgotPassword")
+    Call<BaseResponse> doForgotPassword(@Query(Constants.ApiKeys.FORGOTPASSWORD) String forgotpassword);
+
+    @GET("MobileDataCardOperator")
+    Call<MobileOperatorResponse> doMobileOperator(@Query(Constants.ApiKeys.USERNAME) String username, @Query(Constants.ApiKeys.PASSWORD) String password);
+
+    @GET("DTHOperator")
+    Call<DthOperatorResponse> getDthOperators(@Query(Constants.ApiKeys.USERNAME) String username, @Query(Constants.ApiKeys.PASSWORD) String password);
+
+    @GET("CircleName")
+    Call<CircleResponse> doMobileCircle(@Query(Constants.ApiKeys.USERNAME) String username, @Query(Constants.ApiKeys.PASSWORD) String password);
+
+    @GET("MobileLandlineOperator")
+    Call<PostpaidOperatorResponse> doPostOperator(@Query(Constants.ApiKeys.USERNAME) String username, @Query(Constants.ApiKeys.PASSWORD) String password);
+
+    @GET("UtilityBillOperator")
+    Call<UtilityOperatorResponse> doUtilityOperator(@Query(Constants.ApiKeys.USERNAME) String username, @Query(Constants.ApiKeys.PASSWORD) String password);
+
+    @GET("Vendorsurcharge")
+    Call<SurchargeResponse> doSurcharge(@Query(Constants.ApiKeys.TELECOM_ID) int telecomID);
+
+    @GET("PrepaidRechargeGSM")
+    Call<CommonRechargeResponse> doMobileRecharge(@QueryMap Map<String, String> aQueryParams);
+
+    @GET("DTHRecharge")
+    Call<CommonRechargeResponse> doDTHRecharge(@QueryMap Map<String, String> aQueryParams);
+
+    @GET("BillPayment")
+    Call<CommonRechargeResponse> doPostpaidRecharge(@QueryMap Map<String, String> aQueryParams);
+
+    @GET("BillPayment")
+    Call<CommonRechargeResponse> doUtilityBillPayment(@QueryMap Map<String, String> aQueryParams);
+
+    @GET("VendorTransactionHistory")
+    Call<HistoryResponse> fetchPrepaidHistory(@Query(Constants.ApiKeys.USERNAME) String username, @Query(Constants.ApiKeys.PASSWORD) String password);
+
+    @GET("VendorTransactionHistoryPostpaid")
+    Call<HistoryResponse> fetchPostpaidHistory(@Query(Constants.ApiKeys.USERNAME) String username, @Query(Constants.ApiKeys.PASSWORD) String password);
+
+    @GET("VendorTransactionHistoryDTH")
+    Call<HistoryResponse> fetchDTHHistory(@Query(Constants.ApiKeys.USERNAME) String username, @Query(Constants.ApiKeys.PASSWORD) String password);
+
+    @GET("VendorRechargeReport")
+    Call<AccountRechargeReportResponse> fetchAccountHistory(@Query(Constants.ApiKeys.USERNAME) String username, @Query(Constants.ApiKeys.PASSWORD) String password);
+
+    @GET("BankList")
+    Call<BankListResponse> doBankList(@Query(Constants.ApiKeys.USERNAME) String username, @Query(Constants.ApiKeys.PASSWORD) String password);
+
+    @GET("TransactionType")
+    Call<TransactionTypeResponse> doTransactionTypeList(@Query(Constants.ApiKeys.USERNAME) String username, @Query(Constants.ApiKeys.PASSWORD) String password);
+
+    @GET("VendorAccountRecharge")
+    Call<BaseResponse> doAccountRecharge(@QueryMap Map<String, String> aQueryParams);
+
+    @GET("GetWalletBalance")
+    Call<WalletBalanceResponse> getWalletBalance(@Query(Constants.ApiKeys.USERNAME) String username, @Query(Constants.ApiKeys.PASSWORD) String password);
+
+    @GET("AadhaarAuth")
+    Call<BaseResponse> doAadhaarVerification(@QueryMap Map<String, String> aQueryParams);
+
+    @GET("AadhaarAuth")
+    Call<AadhaarVerificationResponse> fetchAadhaarHistory(@Query(Constants.ApiKeys.USERNAME) String username, @Query(Constants.ApiKeys.PASSWORD) String password);
+
+    @GET("Getnotification")
+    Call<NotificationResponse> fetchNotificationDetails(@Query(Constants.ApiKeys.USERNAME) String username, @Query(Constants.ApiKeys.PASSWORD) String password);
+
+    @GET("GenerateOTP")
+    Call<CommonRegistrationResponse> getOTP(@Query(Constants.ApiKeys.USERNAME) String username, @Query(Constants.ApiKeys.PASSWORD) String password, @Query(Constants.ApiKeys.MOBILE_NO) String mobile);
+
+    @GET("CustomerRegistration")
+    Call<CommonRegistrationResponse> doCustomRegistration(@QueryMap Map<String, String> aQueryParams);
+
+    @GET("QueryRegistration")
+    Call<CommonRegistrationResponse> doQueryRegistration(@QueryMap Map<String, String> aQueryParams);
+
+    @GET("Searchifsccode")
+    Call<BankListIFSCResponse> getBankListIFSC(@Query(Constants.ApiKeys.USERNAME) String username, @Query(Constants.ApiKeys.PASSWORD) String password);
+
+    @GET("Searchifsccode")
+    Call<SearchIFSCResponse> getSearchIFSC(@Query(Constants.ApiKeys.USERNAME) String username, @Query(Constants.ApiKeys.PASSWORD) String password, @Query(Constants.ApiKeys.BANKNAME) String bankname);
+
+    @GET("Masterifsccode")
+    Call<MasterIFSCResponse> getMasterIFSC(@Query(Constants.ApiKeys.USERNAME) String username, @Query(Constants.ApiKeys.PASSWORD) String password);
+
+    @GET("QueryBeneficiaryList")
+    Call<BeneficiaryListResponse> getBeneficiaryList(@QueryMap Map<String, String> aQueryParams);
+
+    @GET("BeneficiaryRegistration")
+    Call<AddBeneficiaryResponse> doAddBeneficiary(@QueryMap Map<String, String> aQueryParams);
+
+    @GET("ReSendBeneficiaryRegistrationOTP")
+    Call<ResendOTPResponse> doResendOTP(@QueryMap Map<String, String> aQueryParams);
+
+    @GET("ValidateBeneficiaryRegistration")
+    Call<ValidateBeneficiaryResponse> doValidateBeneficiary(@QueryMap Map<String, String> aQueryParams);
+
+    @GET("DeactivateBeneficiary")
+    Call<DeactiveBeneficiaryResponse> doDeactivateBeneficiary(@QueryMap Map<String, String> aQueryParams);
+
+    @GET("ValidateDeactivateBeneficiary")
+    Call<DeactiveBeneficiaryResponse> doValidateDeactivateBeneficiary(@QueryMap Map<String, String> aQueryParams);
+
+    @GET("Searchifsccode")
+    Call<BankIFSCDetailResponse> getIFSCDetails(@Query(Constants.ApiKeys.IFSCCODE) String aIFSCCode);
+
+    @GET("AlertConfirmation")
+    Call<BaseResponse> getAlertConformation(@Query(Constants.ApiKeys.USERNAME) String username, @Query(Constants.ApiKeys.PASSWORD) String password);
+
+    @GET("BeneficiaryAccountValidation")
+    Call<BeneficiaryValidationResponse> doBeneficiaryValidation(@QueryMap Map<String, String> aQueryParams);
+
+    @GET("GetServiceCharge")
+    Call<ServiceResponse> doRemittanceTransaction(@QueryMap Map<String, String> aQueryParams);
+
+    @GET("RemittanceTransaction")
+    Call<FundServiceChargeResponse> doFundTransaction(@QueryMap Map<String, String> aQueryParams);
+
+    @GET("VendorTransactionHistorymRupee")
+    Call<FundTransferHistoryResponse> doFundTransferHistory(@QueryMap Map<String, String> aQueryParams);
+
+    @GET("QueryRemittanceTransaction")
+    Call<FundServiceChargeResponse> doQueryRemittanceTransaction(@QueryMap Map<String, String> aQueryParams);
+
+    @GET("RefundTransaction")
+    Call<RefundTransactionResponse> doRefundTransaction(@QueryMap Map<String, String> aQueryParams);
+
+    @GET("ValidateRefundTransaction")
+    Call<QueryRefundTransactionResponse> doValidateRefundTransaction(@QueryMap Map<String, String> aQueryParams);
+
+    @GET("RaiseTransactionComplaint")
+    Call<ComplainPojo> regComplain(@Query(Constants.ApiKeys.USERNAME) String username, @Query(Constants.ApiKeys.PASSWORD) String password, @Query(Constants.ApiKeys.TRANSACTIONID) String transid, @Query(Constants.ApiKeys.CMSG) String msg);
+
+    @GET("MobileLandlineOperator")
+    Call<PostpaidPojo>getOperator(@Query(Constants.ApiKeys.USERNAME) String username, @Query(Constants.ApiKeys.PASSWORD) String password);
+
+    @GET("GetBillerCoverages")
+    Call<BillerCovergePojo>getBillerCoverage(@Query(Constants.ApiKeys.USERNAME) String username, @Query(Constants.ApiKeys.PASSWORD) String password);
+
+
+    @GET("PVCValidate")
+    Call<PvcValidatePojo>getPvcValidate(@Query(Constants.ApiKeys.USERNAME) String username, @Query(Constants.ApiKeys.PASSWORD) String password);
+
+    @GET("GetBillersByCategory")
+    Call<BIllerInfoPojo>getbillerbyCateggory(@Query(Constants.ApiKeys.COVERGE_ID) String covid, @Query(Constants.ApiKeys.CATEGORY_ID) String catid, @Query(Constants.ApiKeys.BILLER_NAME) String billname);
+
+    @GET("GetConvenienceFees")
+    Call<ConvesPojo>getConves(@Query(Constants.ApiKeys.AMOUNT) String amount, @Query(Constants.ApiKeys.SERVICE_PRO) String proname);
+
+    @GET("UtilityBillOperator")
+    Call<PostpaidPojo>getUtilityOperator(@Query(Constants.ApiKeys.USERNAME) String username, @Query(Constants.ApiKeys.PASSWORD) String password);
+
+    @GET("SendBillFetchRequest")
+    Call<BillFetchPojo>getBillDetail(@Query(Constants.ApiKeys.USERNAME) String username, @Query(Constants.ApiKeys.PASSWORD) String password,@Query(Constants.ApiKeys.BILLER_ID) String id,@Query(Constants.ApiKeys.COUSTMOB_NO) String mobnumber,@Query(Constants.ApiKeys.CUST_PARM) String parms);
+
+
+    @GET("SendBillPaymentRequestOnline")
+    Call<FinalbillpaymentPojo>getBillPaymentDetail(@Query(Constants.ApiKeys.USERNAME) String username, @Query(Constants.ApiKeys.PASSWORD) String password, @Query(Constants.ApiKeys.KEY_SMSNO) String smsno, @Query(Constants.ApiKeys.KEY_BAMOUNT) String billamount, @Query(Constants.ApiKeys.KEY_CUSTPARM) String parms, @Query(Constants.ApiKeys.KEY_TRANSID) String transid, @Query(Constants.ApiKeys.KEY_CONVFEES) String convfees, @Query(Constants.ApiKeys.KEY_SERVICE) String servicetype, @Query(Constants.ApiKeys.KEY_BILLER) String biller);
+
+    @GET("VendorTransactionHistoryUtility")
+    Call<UtilityHistoryPojo> fetchUtilityHistory(@Query(Constants.ApiKeys.USERNAME) String username, @Query(Constants.ApiKeys.PASSWORD) String password);
+
+    @GET("RegisterTxtComplaintReq")
+    Call<UtilityComplainPojo> UtilityComplain(@Query(Constants.ApiKeys.USERNAME) String username, @Query(Constants.ApiKeys.PASSWORD) String password,@Query(Constants.ApiKeys.KEY_TRANSID) String transid,@Query(Constants.ApiKeys.KEY_MOBILENUMBER) String mobno,@Query(Constants.ApiKeys.KEY_DISPOSITION) String dispotion,@Query(Constants.ApiKeys.KEY_DESC) String desc);
+
+    @GET("SendBillPaymentRequest")
+    Call<FinalPostpaidBillPojo>getPostpaidBillPaymentDetail(@Query(Constants.ApiKeys.USERNAME) String username, @Query(Constants.ApiKeys.PASSWORD) String password, @Query(Constants.ApiKeys.KEY_SMSNO) String smsno, @Query(Constants.ApiKeys.KEY_BAMOUNT) String billamount, @Query(Constants.ApiKeys.KEY_CUSTPARM) String parms, @Query(Constants.ApiKeys.KEY_CONVFEES) String convfees, @Query(Constants.ApiKeys.KEY_SERVICE) String servicetype, @Query(Constants.ApiKeys.KEY_BILLER) String biller, @Query(Constants.ApiKeys.BILLER_ID) String billerid);
+
+
+}

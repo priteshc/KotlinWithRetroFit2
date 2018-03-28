@@ -1,0 +1,165 @@
+package com.atishay.online.postpaid;
+
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.atishay.online.AppBaseActivity;
+import com.atishay.online.AtishayOnlineApp;
+import com.atishay.online.R;
+import com.atishay.online.utils.Constants;
+import com.atishay.online.utils.network.ApiError;
+import com.atishay.online.utils.network.RestApiCallback;
+import com.goldenmace.framework.utils.NetworkUtils;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+import static com.atishay.online.R.id.mobile_txtProceed;
+
+/**
+ * Created by Atishay on 09-02-2018.
+ */
+
+public class Fetch_Bill extends AppBaseActivity implements FinalBillView,RestApiCallback<Object, ApiError<Object>> {
+
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.mobile_rlMain)
+    RelativeLayout mMobileMainView;
+    @BindView(R.id.Location)
+    TextView mlocation;
+    @BindView(R.id.service)
+    TextView mservice;
+    @BindView(R.id.consnumber)
+    TextView mconsnumber;
+    @BindView(R.id.smsnumber)
+    TextView msmsnumber;
+    @BindView(R.id.amount)
+    TextView mamount;
+    @BindView(R.id.convfee)
+    TextView mconvfee;
+    @BindView(R.id.total)
+    TextView mtotal;
+    @BindView(R.id.date)
+    TextView mdate;
+    @BindView(R.id.mobile_txtProceed)
+    TextView mView;
+    @BindView(R.id.lin1)
+    LinearLayout Lin;
+    private String service,location,smsno,mobno,amount,convess,total,billerid;
+    private PostpaidBillPresenter postpaidBillPresenter;
+
+    private Context context = Fetch_Bill.this;
+    private ProgressDialog progressDialog;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.bill_conformation);
+        ButterKnife.bind(this);
+        setToolbar(mToolbar);
+        ButterKnife.<TextView>findById(this, R.id.toolbar_txtTitle).setText(getString(R.string.postpaid));
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Please wait");
+        progressDialog.setCancelable(false);
+
+
+        postpaidBillPresenter = new PostpaidBillPresenter(this,this);
+
+        if (getIntent().getExtras() != null) {
+
+            Lin.setVisibility(View.GONE);
+
+            mservice.setText(getIntent().getExtras().getString("Service"));
+            mlocation .setText(getIntent().getExtras().getString("Location"));
+            msmsnumber.setText(getIntent().getExtras().getString("Smsno"));
+            mconsnumber.setText(getIntent().getExtras().getString("Mobno"));
+            mamount.setText(getIntent().getExtras().getString("Amount"));
+            mconvfee.setText(getIntent().getExtras().getString("Convess"));
+            mtotal.setText(getIntent().getExtras().getString("Total"));
+
+            billerid = getIntent().getExtras().getString("BillerId");
+
+            Toast.makeText(context,billerid,Toast.LENGTH_SHORT).show();
+
+            String s = "Proceed To Pay ₹ "+ mtotal.getText().toString();
+
+            mView.setText(s);
+
+        }
+
+
+        }
+
+    @OnClick(mobile_txtProceed)
+    public void doProceedRecharge() {
+
+        if (NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            
+            postpaidBillPresenter.getPostpaiBillPayment(mUsername, mPassword, msmsnumber.getText().toString(), mtotal.getText().toString(), mconsnumber.getText().toString(), mconvfee.getText().toString(), Constants.SERVICE_TYPE_BILL_PAYMENT, mservice.getText().toString(), billerid);
+
+        }
+        else {
+
+            Toast.makeText(context,R.string.error_network_no_internet,Toast.LENGTH_SHORT).show();
+
+        }
+    }
+
+
+    @Override
+    public void showFErrorMeassage(String msg) {
+
+        Toast.makeText(context,msg,Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void showUtilitySuccessMsg(String msg) {
+
+        Toast.makeText(context,msg,Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void showUtilityfailedMsg(String msg) {
+
+        Toast.makeText(context,msg,Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void showprogress() {
+
+        progressDialog.show();
+    }
+
+    @Override
+    public void hideprogress() {
+
+        progressDialog.dismiss();
+    }
+
+    @Override
+    public void onSuccess(int aApiCode, Object aSuccessResponse) {
+
+    }
+
+    @Override
+    public void onApiError(int aApiCode, ApiError<Object> aFailureResponse) {
+
+
+        Toast.makeText(context,R.string.error_network_server_errors,Toast.LENGTH_SHORT).show();
+
+    }
+}

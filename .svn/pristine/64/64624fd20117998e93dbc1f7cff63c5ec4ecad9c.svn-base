@@ -1,0 +1,17 @@
+package com.atishay.online.searchifsc;
+
+import com.goldenmace.framework.domain.UseCase;
+
+/**
+ * Created by Vishal Patel on 17,December,2016.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public interface SearchIFSCUseCase extends UseCase {
+
+    void getBankListIFSC(String aUsername, String aPassword);
+
+    void getSearchIFSC(String aUsername, String aPassword, String aBankName);
+}

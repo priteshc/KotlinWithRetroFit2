@@ -1,0 +1,33 @@
+// Generated code from Butter Knife. Do not modify!
+package com.atishay.online.moneytransfer;
+
+import android.support.v7.widget.RecyclerView;
+import butterknife.Unbinder;
+import butterknife.internal.Finder;
+import com.atishay.online.R;
+import com.goldenmace.framework.views.widgets.errorview.ErrorView;
+import java.lang.IllegalStateException;
+import java.lang.Object;
+import java.lang.Override;
+
+public class SingleFundHistoryFragment_ViewBinding<T extends SingleFundHistoryFragment> implements Unbinder {
+  protected T target;
+
+  public SingleFundHistoryFragment_ViewBinding(T target, Finder finder, Object source) {
+    this.target = target;
+
+    target.mHistoryList = finder.findRequiredViewAsType(source, R.id.history_rvHistory, "field 'mHistoryList'", RecyclerView.class);
+    target.mErrorView = finder.findRequiredViewAsType(source, R.id.history_errorView, "field 'mErrorView'", ErrorView.class);
+  }
+
+  @Override
+  public void unbind() {
+    T target = this.target;
+    if (target == null) throw new IllegalStateException("Bindings already cleared.");
+
+    target.mHistoryList = null;
+    target.mErrorView = null;
+
+    this.target = null;
+  }
+}

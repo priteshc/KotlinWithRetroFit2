@@ -1,0 +1,319 @@
+package com.atishay.online.searchifsc;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
+
+import com.atishay.online.AppBaseActivity;
+import com.atishay.online.R;
+import com.atishay.online.common.CommonAdapter;
+import com.atishay.online.common.CommonInterface;
+import com.atishay.online.utils.Constants;
+import com.atishay.online.utils.Loader;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+import static com.atishay.online.R.string.address;
+import static com.atishay.online.R.string.ifsc;
+
+/**
+ * Created by Vishal Patel on 24,December,2016.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public class SearchIFSCActivity extends AppBaseActivity implements SearchIFSCView, AdapterView.OnItemSelectedListener {
+
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.loader)
+    Loader mLoader;
+    @BindView(R.id.searchIFSC_rlMain)
+    RelativeLayout mSearchIFSCMain;
+    @BindView(R.id.searchIFSC_spBank)
+    Spinner mBank;
+    @BindView(R.id.searchIFSC_spState)
+    Spinner mState;
+    @BindView(R.id.searchIFSC_spDistrict)
+    Spinner mDistrict;
+    @BindView(R.id.searchIFSC_spCity)
+    Spinner mCity;
+    @BindView(R.id.searchIFSC_spBranch)
+    Spinner mBranch;
+    @BindView(R.id.item_txtBankName)
+    TextView mBankName;
+    @BindView(R.id.item_txtIFSCCode)
+    TextView mIFSCCode;
+    @BindView(R.id.item_txtAddress)
+    TextView mAddress;
+    ArrayList<CommonInterface> mBankListBeen;
+    ArrayList<SearchIFSCBean> mSearchIFSCBeen;
+    ArrayList<CommonDataBean> mStateBeen;
+    ArrayList<CommonDataBean> mDistrictBeen;
+    ArrayList<CommonDataBean> mCityBeen;
+    ArrayList<CommonDataBean> mBranchBeen;
+    SearchIFSCPresenter mSearchIFSCPresenter;
+    SearchIFSCBean detailsMapMap;
+    private CommonAdapter mCommonAdapter;
+    private SearchIFSCAdapter mSearchIFSCAdapter;
+    private Map<String, Map<String, Map<String, Map<String, SearchIFSCBean>>>> mapstatelist;
+    private String mSelectedState;
+    private String mSelectedDistrict;
+    private String mSelectedCity;
+    private String mSelectedBranch;
+    private String mSelecteBank;
+
+    @NonNull
+    private static Map<String, Map<String, Map<String, Map<String, SearchIFSCBean>>>> getSortedBankDetail(ArrayList<SearchIFSCBean> bankDetails) {
+        Map<String, Map<String, Map<String, Map<String, SearchIFSCBean>>>> state = new LinkedHashMap<>();
+        Map<String, SearchIFSCBean> branch;
+        Map<String, Map<String, SearchIFSCBean>> city;
+        Map<String, Map<String, Map<String, SearchIFSCBean>>> district;
+        for (SearchIFSCBean bankDetail : bankDetails) {
+            if (!state.containsKey(bankDetail.getSTATE())) {
+                branch = new LinkedHashMap<>();
+                city = new LinkedHashMap<>();
+                district = new LinkedHashMap<>();
+                branch.put(bankDetail.getBRANCH(), bankDetail);
+                city.put(bankDetail.getCITY(), branch);
+                district.put(bankDetail.getDISTRICT(), city);
+                state.put(bankDetail.getSTATE(), district);
+            } else {
+                district = state.get(bankDetail.getSTATE());
+                if (!district.containsKey(bankDetail.getDISTRICT())) {
+                    branch = new LinkedHashMap<>();
+                    city = new LinkedHashMap<>();
+                    branch.put(bankDetail.getBRANCH(), bankDetail);
+                    city.put(bankDetail.getCITY(), branch);
+                    district.put(bankDetail.getDISTRICT(), city);
+                } else {
+                    city = district.get(bankDetail.getDISTRICT());
+                    if (!city.containsKey(bankDetail.getCITY())) {
+                        branch = new LinkedHashMap<>();
+                        branch.put(bankDetail.getBRANCH(), bankDetail);
+                        city.put(bankDetail.getCITY(), branch);
+                    } else {
+                        branch = city.get(bankDetail.getCITY());
+                        if (!branch.containsKey(bankDetail.getBRANCH())) {
+                            branch.put(bankDetail.getBRANCH(), bankDetail);
+                        }
+                    }
+                }
+            }
+        }
+        return state;
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.searchifsc);
+
+        ButterKnife.bind(this);
+        setToolbar(mToolbar);
+        mSearchIFSCPresenter = new SearchIFSCPresenter(this);
+        mBankListBeen = new ArrayList<>();
+        mSearchIFSCBeen = new ArrayList<>();
+        mStateBeen = new ArrayList<>();
+        mDistrictBeen = new ArrayList<>();
+        mCityBeen = new ArrayList<>();
+        mBranchBeen = new ArrayList<>();
+        /**
+         * Custom Toolbar with amount view
+         */
+        ButterKnife.<TextView>findById(this, R.id.toolbar_txtAmount).setVisibility(View.GONE);
+        ButterKnife.<TextView>findById(this, R.id.toolbar_txtTitle).setText(getString(R.string.search_ifsc_list));
+
+
+        mBank.setPadding(0, mBank.getPaddingTop(), mBank.getPaddingRight(), mBank.getPaddingBottom());
+        mSearchIFSCPresenter.getBankListIFSC(mUsername, mPassword);
+        mCommonAdapter = new CommonAdapter(this, mBankListBeen);
+        mBank.setAdapter(mCommonAdapter);
+        mBank.setOnItemSelectedListener(this);
+
+    }
+
+    @Override
+    public void showLoader(String aMessage) {
+        if (aMessage != null) {
+            mLoader.setText(aMessage);
+        }
+        mLoader.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showLoader(int aResId) {
+        if (aResId > 0) {
+            mLoader.setText(getString(aResId));
+        }
+        mLoader.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideLoader() {
+        mLoader.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void noInternetConnection() {
+        Snackbar.make(mSearchIFSCMain, getString(R.string.error_network_no_internet), Snackbar.LENGTH_SHORT).show();
+        hideLoader();
+    }
+
+    @Override
+    public void apiError(String aError) {
+        hideLoader();
+        Snackbar.make(mSearchIFSCMain, aError, Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void apiError(int aApiCode, String aError) {
+        switch (aApiCode) {
+            case Constants.APICODE.SEARCHIFSC:
+                Snackbar.make(mSearchIFSCMain, aError, Snackbar.LENGTH_INDEFINITE).setAction(R.string.error_view_retry, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mSearchIFSCPresenter.getSearchIFSC(mUsername, mPassword, mSelecteBank);
+                    }
+                }).show();
+                break;
+            case Constants.APICODE.BANKLIST_IFSC:
+                Snackbar.make(mSearchIFSCMain, aError, Snackbar.LENGTH_INDEFINITE).setAction(R.string.error_view_retry, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mSearchIFSCPresenter.getBankListIFSC(mUsername, mPassword);
+                    }
+                }).show();
+                break;
+            default:
+                Snackbar.make(mSearchIFSCMain, aError, Snackbar.LENGTH_LONG).show();
+                break;
+        }
+        super.apiError(aApiCode, aError);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mSearchIFSCPresenter.clearReferences();
+    }
+
+    @Override
+    public void getBankListIFSC(ArrayList<BankListBean> aBankListBeen) {
+        mBankListBeen.clear();
+        mBankListBeen.addAll(aBankListBeen);
+        mCommonAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void getSearchIFSC(ArrayList<SearchIFSCBean> aSearchIFSCBeen) {
+        mSearchIFSCBeen.clear();
+        mSearchIFSCBeen.addAll(aSearchIFSCBeen);
+        mapstatelist = getSortedBankDetail(mSearchIFSCBeen);
+        String[] stateList = new String[]{};
+        mStateBeen.clear();
+        mapstatelist.keySet().toArray(stateList);
+        for (int i = 0; i < mapstatelist.keySet().toArray(stateList).length; i++) {
+
+            final CommonDataBean commonInterface = new CommonDataBean();
+            commonInterface.setTitle(mapstatelist.keySet().toArray(stateList)[i]);
+            mStateBeen.add(commonInterface);
+        }
+        mSearchIFSCAdapter = new SearchIFSCAdapter(this, mStateBeen);
+        mState.setAdapter(mSearchIFSCAdapter);
+        mState.setOnItemSelectedListener(this);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        switch (parent.getId()) {
+            case R.id.searchIFSC_spBank:
+                mSelecteBank = mBankListBeen.get(position).getTitle();
+                mSearchIFSCPresenter.getSearchIFSC(mUsername, mPassword, mSelecteBank);
+                break;
+            case R.id.searchIFSC_spState:
+                mSelectedState = mStateBeen.get(position).getTitle();
+                Map<String, Map<String, Map<String, SearchIFSCBean>>> districtMapMap = mapstatelist.get(mSelectedState);
+                String[] districtList = new String[]{};
+                districtMapMap.keySet().toArray(districtList);
+                mDistrictBeen.clear();
+                for (int i = 0; i < districtMapMap.keySet().toArray(districtList).length; i++) {
+
+                    final CommonDataBean commonInterface = new CommonDataBean();
+                    commonInterface.setTitle(districtMapMap.keySet().toArray(districtList)[i]);
+                    mDistrictBeen.add(commonInterface);
+                }
+                mSearchIFSCAdapter = new SearchIFSCAdapter(this, mDistrictBeen);
+                mDistrict.setAdapter(mSearchIFSCAdapter);
+                mDistrict.setOnItemSelectedListener(this);
+                break;
+            case R.id.searchIFSC_spDistrict:
+                mSelectedDistrict = mDistrictBeen.get(position).getTitle();
+                Map<String, Map<String, SearchIFSCBean>> cityMapMap = mapstatelist.get(mSelectedState).get(mSelectedDistrict);
+                String[] cityList = new String[]{};
+                cityMapMap.keySet().toArray(cityList);
+                mCityBeen.clear();
+                for (int i = 0; i < cityMapMap.keySet().toArray(cityList).length; i++) {
+
+                    final CommonDataBean commonInterface = new CommonDataBean();
+                    commonInterface.setTitle(cityMapMap.keySet().toArray(cityList)[i]);
+                    mCityBeen.add(commonInterface);
+                }
+                mSearchIFSCAdapter = new SearchIFSCAdapter(this, mCityBeen);
+                mCity.setAdapter(mSearchIFSCAdapter);
+                mCity.setOnItemSelectedListener(this);
+                break;
+            case R.id.searchIFSC_spCity:
+                mSelectedCity = mCityBeen.get(position).getTitle();
+                Map<String, SearchIFSCBean> branchMapMap = mapstatelist.get(mSelectedState).get(mSelectedDistrict).get(mSelectedCity);
+                String[] branchList = new String[]{};
+                branchMapMap.keySet().toArray(branchList);
+                mBranchBeen.clear();
+                for (int i = 0; i < branchMapMap.keySet().toArray(branchList).length; i++) {
+
+                    final CommonDataBean commonInterface = new CommonDataBean();
+                    commonInterface.setTitle(branchMapMap.keySet().toArray(branchList)[i]);
+                    mBranchBeen.add(commonInterface);
+                }
+                mSearchIFSCAdapter = new SearchIFSCAdapter(this, mBranchBeen);
+                mBranch.setAdapter(mSearchIFSCAdapter);
+                mBranch.setOnItemSelectedListener(this);
+                break;
+            case R.id.searchIFSC_spBranch:
+                mSelectedBranch = mBranchBeen.get(position).getTitle();
+                detailsMapMap = mapstatelist.get(mSelectedState).get(mSelectedDistrict).get(mSelectedCity).get(mSelectedBranch);
+                mBankName.setText(mSelecteBank);
+                mIFSCCode.setText(Html.fromHtml(String.format(getString(ifsc), detailsMapMap.getIFSC())));
+                mAddress.setText(Html.fromHtml(String.format(getString(address), detailsMapMap.getADDRESS())));
+                break;
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    @OnClick(R.id.searchIFSC_cvView)
+    void passSearchIFSCCode() {
+        Intent resultIntent = getIntent();
+        resultIntent.putExtra("searchifsccode", detailsMapMap.getIFSC());
+        setResult(RESULT_OK, resultIntent);
+        finish();
+    }
+}

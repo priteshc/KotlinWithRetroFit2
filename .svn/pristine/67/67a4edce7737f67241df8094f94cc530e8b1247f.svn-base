@@ -1,0 +1,37 @@
+// Generated code from Butter Knife. Do not modify!
+package com.atishay.online.benefiaciary;
+
+import android.widget.FrameLayout;
+import android.widget.TextView;
+import butterknife.Unbinder;
+import butterknife.internal.Finder;
+import com.atishay.online.R;
+import java.lang.IllegalStateException;
+import java.lang.Object;
+import java.lang.Override;
+
+public class BeneficiaryActivity$ViewHolder_ViewBinding<T extends BeneficiaryActivity.ViewHolder> implements Unbinder {
+  protected T target;
+
+  public BeneficiaryActivity$ViewHolder_ViewBinding(T target, Finder finder, Object source) {
+    this.target = target;
+
+    target.mOk = finder.findRequiredViewAsType(source, R.id.verify_txtOk, "field 'mOk'", TextView.class);
+    target.mCancel = finder.findRequiredViewAsType(source, R.id.verify_txtCancel, "field 'mCancel'", TextView.class);
+    target.mAlertMessage = finder.findRequiredViewAsType(source, R.id.verify_txtMsg, "field 'mAlertMessage'", TextView.class);
+    target.mAlertDialogView = finder.findRequiredViewAsType(source, R.id.alert_flDialog, "field 'mAlertDialogView'", FrameLayout.class);
+  }
+
+  @Override
+  public void unbind() {
+    T target = this.target;
+    if (target == null) throw new IllegalStateException("Bindings already cleared.");
+
+    target.mOk = null;
+    target.mCancel = null;
+    target.mAlertMessage = null;
+    target.mAlertDialogView = null;
+
+    this.target = null;
+  }
+}

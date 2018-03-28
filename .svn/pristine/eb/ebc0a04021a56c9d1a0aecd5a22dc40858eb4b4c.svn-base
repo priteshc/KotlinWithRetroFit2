@@ -1,0 +1,154 @@
+package com.atishay.online.myaccountrecharge;
+
+import com.atishay.online.AtishayOnlineApp;
+import com.atishay.online.BaseResponse;
+import com.atishay.online.R;
+import com.atishay.online.utils.Constants;
+import com.atishay.online.utils.network.ApiError;
+import com.atishay.online.utils.network.RestApiCallback;
+import com.goldenmace.framework.mvp.presenters.Presenter;
+import com.goldenmace.framework.utils.NetworkUtils;
+
+import java.net.HttpURLConnection;
+import java.util.ArrayList;
+import java.util.Map;
+
+import static com.atishay.online.utils.Constants.APICODE.MYACCOUNTRECHARGE;
+
+/**
+ * Created by Vishal Patel on 25,November,2016.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+public class AccountRechargePresenter implements Presenter, RestApiCallback<Object, ApiError<Object>> {
+
+    private AccountRechargeView mAccountRechargeView;
+    private AccountRechargeController mAccountRechargeController;
+    private ArrayList<Integer> mApiList;
+
+    public AccountRechargePresenter(AccountRechargeView aAccountRechargeView) {
+        mAccountRechargeView = aAccountRechargeView;
+        mAccountRechargeController = new AccountRechargeController(this);
+        mApiList = new ArrayList<>();
+    }
+
+    void loadAccountReport(String aUserName, String aPassword) {
+        if (NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            mAccountRechargeView.showLoader(R.string.please_wait);
+            mAccountRechargeController.loadMyAccountReport(aUserName, aPassword);
+        } else {
+            mAccountRechargeView.noInternetConnection();
+        }
+    }
+
+    void doBankList(String aUserName, String aPassword) {
+        if (NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            mAccountRechargeView.showLoader(R.string.please_wait);
+            mAccountRechargeController.doBankList(aUserName, aPassword);
+        } else {
+            mAccountRechargeView.noInternetConnection();
+        }
+    }
+
+    public void doOnlineAccountRecharge(Map<String, String> aOnlineMapDataBean) {
+        if (NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            mAccountRechargeView.showLoader(R.string.please_wait);
+            mApiList.add(Constants.APICODE.MYACCOUNTRECHARGE);
+            mAccountRechargeController.doAccountRechargeOnline(aOnlineMapDataBean);
+        } else {
+            mAccountRechargeView.hideLoader();
+            mAccountRechargeView.noInternetConnection();
+        }
+    }
+
+    public void doCashAccountRecharge(Map<String, String> aCashMapDataBean) {
+        if (NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            mAccountRechargeView.showLoader(R.string.please_wait);
+            mApiList.add(Constants.APICODE.MYACCOUNTRECHARGE);
+            mAccountRechargeController.doAccountRechargeCash(aCashMapDataBean);
+        } else {
+            mAccountRechargeView.hideLoader();
+            mAccountRechargeView.noInternetConnection();
+        }
+    }
+
+    void doTransactionTypeList(String aUserName, String aPassword) {
+        if (NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            mAccountRechargeView.showLoader(R.string.please_wait);
+            mAccountRechargeController.doTransactionTypeList(aUserName, aPassword);
+        } else {
+            mAccountRechargeView.noInternetConnection();
+        }
+    }
+
+    @Override
+    public void onSuccess(int aApiCode, Object aSuccessResponse) {
+        if (mAccountRechargeView != null) {
+            mApiList.remove(Integer.valueOf(aApiCode));
+            if (mApiList.size() == 0) {
+                mAccountRechargeView.hideLoader();
+            }
+            if (aSuccessResponse == null) {
+                AtishayOnlineApp.getAppInstance().getString(R.string.error_network_server_errors);
+            } else {
+                switch (aApiCode) {
+                    case Constants.APICODE.ACCOUNRREPORT:
+                        mAccountRechargeView.onAccountReportFetched(((ArrayList<AccountRechargeReportBean>) aSuccessResponse));
+                        break;
+                    case Constants.APICODE.BANKLIST:
+                        mAccountRechargeView.onBankListFetched((ArrayList<BankListBean>) aSuccessResponse);
+                        break;
+                    case Constants.APICODE.TRANSACTIONTYPE:
+                        mAccountRechargeView.onTransactionTypeListFetched((ArrayList<TransactionTypeBean>) aSuccessResponse);
+                        break;
+                    case MYACCOUNTRECHARGE:
+                        mAccountRechargeView.doTransactionCompleteDetails((BaseResponse) aSuccessResponse);
+                        break;
+                }
+            }
+        } else {
+
+        }
+    }
+
+    @Override
+    public void onApiError(int aApiCode, ApiError<Object> aFailureResponse) {
+        if (mAccountRechargeView != null) {
+            mApiList.remove(Integer.valueOf(aApiCode));
+            if (mApiList.size() == 0) {
+                mAccountRechargeView.hideLoader();
+            }
+            if (aFailureResponse.getApiErrorCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                mAccountRechargeView.onUserUnAuthorized((String) aFailureResponse.getError());
+                return;
+            }
+            if (aFailureResponse.getApiErrorCode() == -1) {
+                mAccountRechargeView.apiError(aApiCode, (String) aFailureResponse.getError());
+                return;
+            }
+            if (aFailureResponse.getError() instanceof String) {
+                mAccountRechargeView.apiError((String) aFailureResponse.getError());
+                return;
+            }
+            mAccountRechargeView.apiError((String) AtishayOnlineApp.getAppInstance().getString(R.string.error_network_server_errors));
+        } else {
+
+        }
+    }
+
+    @Override
+    public void registerBus() {
+
+    }
+
+    @Override
+    public void unRegisterBus() {
+
+    }
+
+    @Override
+    public void clearReferences() {
+        mAccountRechargeView = null;
+    }
+}

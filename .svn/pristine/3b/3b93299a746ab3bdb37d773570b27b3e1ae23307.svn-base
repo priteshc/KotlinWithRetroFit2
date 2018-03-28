@@ -1,0 +1,310 @@
+package com.atishay.online.benefiaciary;
+
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.atishay.online.AppBaseActivity;
+import com.atishay.online.BaseResponse;
+import com.atishay.online.R;
+import com.atishay.online.moneytransfer.CommonRegistrationResponse;
+import com.atishay.online.utils.Constants;
+import com.atishay.online.utils.DialogUtils;
+import com.atishay.online.utils.Loader;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+/**
+ * Created by Vishal Patel on 27,December,2016.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public class RemoveBeneficiaryActivity extends AppBaseActivity implements BeneficiaryView {
+
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.remove_edtBeneCode)
+    EditText mBeneCode;
+    @BindView(R.id.remove_edtBeneName)
+    EditText mBeneName;
+    @BindView(R.id.remove_edtBeneAccount)
+    EditText mBeneBankAccount;
+    @BindView(R.id.remove_edtBeneIFSC)
+    EditText mBeneIFSC;
+    @BindView(R.id.remove_edtBeneBankDetails)
+    EditText mBeneBankDetails;
+    @BindView(R.id.loader)
+    Loader mLoader;
+    @BindView(R.id.remove_rlMain)
+    RelativeLayout mMainView;
+    String mRemitterMobile, mCRNo;
+    BeneficiaryPresenter mBeneficiaryPresenter;
+    OTPHolder mOTPHolder;
+    Dialog mBottomSheetDialog;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.remove_beneficiary);
+        ButterKnife.bind(this);
+        setToolbar(mToolbar);
+
+        initDataFromRemove();
+        mBeneficiaryPresenter = new BeneficiaryPresenter(this);
+
+        /**
+         * Custom Toolbar with amount view
+         */
+        ButterKnife.<TextView>findById(this, R.id.toolbar_txtAmount).setVisibility(View.GONE);
+        ButterKnife.<TextView>findById(this, R.id.toolbar_txtTitle).setText(getString(R.string.remove_beneficiary));
+
+    }
+
+    private void initDataFromRemove() {
+        Bundle mBundle = getIntent().getExtras();
+        mBeneCode.setText(mBundle.getString("BenCode"));
+        mBeneName.setText(mBundle.getString("BenName"));
+        mBeneBankAccount.setText(mBundle.getString("BenAC"));
+        mBeneIFSC.setText(mBundle.getString("BenIFSC"));
+        mBeneBankDetails.setText(mBundle.getString("BenBank"));
+        mRemitterMobile = mBundle.getString("BenRemitterMobile");
+        mCRNo = mBundle.getString("BenCRNo");
+    }
+
+    @OnClick(R.id.remove_txtRequestOTP)
+    void doRemoveBeneficiaryItem() {
+        hideKeyboard();
+        Map<String, String> queryMap = new HashMap<>();
+        queryMap.put(Constants.ApiKeys.USERNAME, mUsername);
+        queryMap.put(Constants.ApiKeys.PASSWORD, mPassword);
+        queryMap.put(Constants.ApiKeys.AGENTCODE, mAgentCode);
+        queryMap.put(Constants.ApiKeys.REMITTERMOBILE, mRemitterMobile);
+        queryMap.put(Constants.ApiKeys.BENEFICIARY_CODE, mBeneCode.getText().toString());
+        queryMap.put(Constants.ApiKeys.CRNO, mCRNo);
+        mBeneficiaryPresenter.doDeactivateBeneficiary(queryMap);
+    }
+
+    @Override
+    public void showLoader(String aMessage) {
+        if (aMessage != null) {
+            mLoader.setText(aMessage);
+        }
+        mLoader.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showLoader(int aResId) {
+        if (aResId > 0) {
+            mLoader.setText(getString(aResId));
+        }
+        mLoader.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideLoader() {
+        mLoader.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void noInternetConnection() {
+        Snackbar.make(mMainView, getString(R.string.error_network_no_internet), Snackbar.LENGTH_SHORT).show();
+        hideLoader();
+    }
+
+    @Override
+    public void apiError(int aApiCode, String aError) {
+        hideDialogLoader();
+        switch (aApiCode) {
+            case Constants.APICODE.DEACTIVATEBENEFICIARY:
+                Snackbar.make(mMainView, aError, Snackbar.LENGTH_INDEFINITE).setAction(R.string.error_view_retry, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Map<String, String> queryMap = new HashMap<>();
+                        queryMap.put(Constants.ApiKeys.USERNAME, mUsername);
+                        queryMap.put(Constants.ApiKeys.PASSWORD, mPassword);
+                        queryMap.put(Constants.ApiKeys.AGENTCODE, mAgentCode);
+                        queryMap.put(Constants.ApiKeys.REMITTERMOBILE, mRemitterMobile);
+                        queryMap.put(Constants.ApiKeys.BENEFICIARY_CODE, mBeneCode.getText().toString());
+                        queryMap.put(Constants.ApiKeys.CRNO, mCRNo);
+                        mBeneficiaryPresenter.doDeactivateBeneficiary(queryMap);
+                    }
+                }).show();
+                break;
+            case Constants.APICODE.VALIDATEDEACTIVATEBENEFICIARY:
+                Snackbar.make(mOTPHolder.mOTPDialog, aError, Snackbar.LENGTH_LONG).show();
+                break;
+            default:
+                Snackbar.make(mMainView, aError, Snackbar.LENGTH_LONG).show();
+                break;
+        }
+        super.apiError(aApiCode, aError);
+    }
+
+    @Override
+    public void getBeneficiaryList(ArrayList<BeneficiaryListBean> aBeneficiaryListBeen) {
+    }
+
+    @Override
+    public void showDialogLoader(int aResId) {
+        if (mBottomSheetDialog != null && mBottomSheetDialog.isShowing()) {
+            ButterKnife.<FrameLayout>findById(mBottomSheetDialog, R.id.dialog_loader).setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void hideDialogLoader() {
+        if (mBottomSheetDialog != null && mBottomSheetDialog.isShowing()) {
+            ButterKnife.<FrameLayout>findById(mBottomSheetDialog, R.id.dialog_loader).setVisibility(View.GONE);
+        }
+    }
+
+
+    @Override
+    public void hideRefresh() {
+
+    }
+
+    @Override
+    public void onOTPSuccess(CommonRegistrationResponse aMoneyTransferResponse) {
+
+    }
+
+    @Override
+    public void doQueryRegister(CommonRegistrationResponse aMoneyTransferResponse) {
+
+    }
+
+    @Override
+    public void doCustRegister(CommonRegistrationResponse aMoneyTransferResponse) {
+
+    }
+
+    @Override
+    public void doDeactivateBeneficiary(DeactiveBeneficiaryResponse aDeactiveBeneficiaryResponse) {
+
+        View view = getLayoutInflater().inflate(R.layout.otp_bottomdialog, null);
+        mOTPHolder = new OTPHolder(view);
+        mBottomSheetDialog = new Dialog(RemoveBeneficiaryActivity.this,
+                R.style.MaterialDialogSheet);
+        mBottomSheetDialog.setContentView(view);
+        mBottomSheetDialog.setCanceledOnTouchOutside(false);
+        if (mBottomSheetDialog.getWindow() != null) {
+            mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            mBottomSheetDialog.getWindow().setGravity(Gravity.BOTTOM);
+        }
+        mBottomSheetDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                //do whatever you want the back key to do
+                finish();
+                mBottomSheetDialog.dismiss();
+            }
+        });
+        mOTPHolder.mConformAddBeneficiary.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideKeyboard();
+                if (!TextUtils.isEmpty(mOTPHolder.mOTP.getText().toString()) && !TextUtils.isEmpty(mOTPHolder.mTrnasCode.getText().toString())) {
+                    Map<String, String> queryMap = new HashMap<>();
+                    queryMap.put(Constants.ApiKeys.USERNAME, mUsername);
+                    queryMap.put(Constants.ApiKeys.PASSWORD, mPassword);
+                    queryMap.put(Constants.ApiKeys.AGENTCODE, mAgentCode);
+                    queryMap.put(Constants.ApiKeys.REMITTERMOBILE, mRemitterMobile);
+                    queryMap.put(Constants.ApiKeys.BENEFICIARY_CODE, mBeneCode.getText().toString());
+                    queryMap.put(Constants.ApiKeys.CRNO, mCRNo);
+                    queryMap.put(Constants.ApiKeys.BENTRANSCODE, mOTPHolder.mTrnasCode.getText().toString());
+                    queryMap.put(Constants.ApiKeys.OTP, mOTPHolder.mOTP.getText().toString());
+                    mBeneficiaryPresenter.doValidateDeactivateBeneficiary(queryMap);
+                } else {
+                    Snackbar.make(mOTPHolder.mOTPDialog, getResources().getString(R.string.error_field_required), Snackbar.LENGTH_SHORT).show();
+                }
+            }
+        });
+        mBottomSheetDialog.show();
+    }
+
+    @Override
+    public void doValidateDeactivateBeneficiary(DeactiveBeneficiaryResponse aDeactiveBeneficiaryResponse) {
+        mBottomSheetDialog.dismiss();
+        DialogUtils.getSingleButtonDialog(this, R.drawable.ic_success, getResources().getString(R.string.remove_beneficiary), aDeactiveBeneficiaryResponse.getMsg(), getString(R.string.lbl_ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == DialogInterface.BUTTON_POSITIVE) {
+                    Intent resultIntent = getIntent();
+                    resultIntent.putExtra("position", 1);
+                    setResult(RESULT_OK, resultIntent);
+                    finish();
+                }
+            }
+        }, false).show();
+    }
+
+    @Override
+    public void invalidMobile(String aMobile) {
+
+    }
+
+    @Override
+    public void doVerifyBeneficiary(int aObject) {
+
+    }
+
+    @Override
+    public void callFundActivity(int position) {
+
+    }
+
+    @Override
+    public void getAlertConformation(BaseResponse aBaseResponse) {
+
+    }
+
+    @Override
+    public void doBeneficiaryValidation(BeneficiaryValidationResponse aBeneficiaryValidationResponse) {
+
+    }
+
+    @Override
+    public void userAlreadyRegistered() {
+
+    }
+
+    static class OTPHolder {
+        @BindView(R.id.otp_txtResend)
+        TextView mResendOTP;
+        @BindView(R.id.otp_txtConfirm)
+        TextView mConformAddBeneficiary;
+        @BindView(R.id.otp_flDialog)
+        FrameLayout mOTPDialog;
+        @BindView(R.id.otp_edtOTP)
+        EditText mOTP;
+        @BindView(R.id.otp_edtTransCode)
+        EditText mTrnasCode;
+
+        OTPHolder(View view) {
+            ButterKnife.bind(this, view);
+            mResendOTP.setVisibility(View.GONE);
+        }
+
+    }
+}

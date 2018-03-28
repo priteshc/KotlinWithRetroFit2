@@ -1,0 +1,130 @@
+/*
+ * Copyright 2016 GoldenMace IT Solutions
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+package com.atishay.online;
+
+import android.app.Application;
+import android.support.multidex.MultiDex;
+import android.support.v4.util.ArrayMap;
+
+import com.atishay.online.utils.RestApisImpl;
+import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.core.CrashlyticsCore;
+import com.goldenmace.framework.utils.GsonFactory;
+import com.goldenmace.framework.utils.network.OkHttpFactory;
+import com.google.gson.Gson;
+
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.concurrent.TimeUnit;
+
+import io.fabric.sdk.android.Fabric;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+
+/**
+ * Created by Vishal Patel on 11,November,2016.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+public class AtishayOnlineApp extends Application {
+    private static AtishayOnlineApp mAppInstance;
+    //    private Gson mGson;
+    private OkHttpClient mClient;
+    private RestApisImpl mRestApis;
+    private String mBaseUrl;
+    private EventBus mEventBus;
+    private Gson mGson;
+    private float mBalance;
+    private String mNotification;
+
+    /**
+     * To get singleton instance of {@link AtishayOnlineApp}
+     *
+     * @return ModelApp instance
+     */
+    public static AtishayOnlineApp getAppInstance() {
+        return mAppInstance;
+    }
+
+    public String getNotification() {
+        return mNotification;
+    }
+
+    public void setNotification(String aNotification) {
+        mNotification = aNotification;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        final Crashlytics crashlytics = new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build();
+        Fabric.with(this, crashlytics);
+        mAppInstance = this;
+        MultiDex.install(this);
+    }
+
+    /**
+     * To get singleton instance of {@link OkHttpClient}. It will generate {@link OkHttpClient} instance only if existing instance is null
+     *
+     * @return OkHttpClient instance
+     */
+    public OkHttpClient getOkHttpClient() {
+        if (mClient == null) {
+            OkHttpFactory.Builder builder = new OkHttpFactory.Builder();
+            if (BuildConfig.DEBUG) {
+                builder.enableHttpLog(HttpLoggingInterceptor.Level.BODY);
+            }
+            ArrayMap<String, String> headers = new ArrayMap<>();
+            headers.put("Content-Type", "application/json");
+            builder.addHeaders(headers);
+            mClient = builder.setReadTimeOut(270, TimeUnit.SECONDS)
+                    .setConnectTimeOut(270, TimeUnit.SECONDS)
+                    .build();
+        }
+        return mClient;
+    }
+
+    public EventBus getEventBus() {
+        if (mEventBus == null) {
+            mEventBus = EventBus.getDefault();
+        }
+        return mEventBus;
+    }
+
+    public RestApisImpl getRestApis() {
+        if (mRestApis == null) {
+            mRestApis = new RestApisImpl();
+        }
+        return mRestApis;
+    }
+
+    public Gson getGson() {
+        if (mGson == null) {
+            mGson = new GsonFactory.Builder().buildByExcludeFieldsWithoutExpose();
+        }
+        return mGson;
+    }
+
+    public String getBalance() {
+        return mBalance == 0 ? "-.--" : String.format("%.2f", mBalance);
+    }
+
+    public void setBalance(float aBalance) {
+        mBalance = aBalance;
+    }
+}

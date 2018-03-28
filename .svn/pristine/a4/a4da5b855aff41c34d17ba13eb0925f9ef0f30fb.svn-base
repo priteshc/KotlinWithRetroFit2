@@ -1,0 +1,15 @@
+// Generated code from Butter Knife. Do not modify!
+package com.atishay.online.postpaid;
+
+import butterknife.Unbinder;
+import butterknife.internal.Finder;
+import butterknife.internal.ViewBinder;
+import java.lang.Object;
+import java.lang.Override;
+
+public final class PostpaidActivity_ViewBinder implements ViewBinder<PostpaidActivity> {
+  @Override
+  public Unbinder bind(Finder finder, PostpaidActivity target, Object source) {
+    return new PostpaidActivity_ViewBinding<>(target, finder, source);
+  }
+}

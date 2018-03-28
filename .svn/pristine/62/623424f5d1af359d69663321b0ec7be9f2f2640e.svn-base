@@ -1,0 +1,38 @@
+// Generated code from Butter Knife. Do not modify!
+package com.atishay.online.utils;
+
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import butterknife.Unbinder;
+import butterknife.internal.Finder;
+import com.atishay.online.R;
+import java.lang.IllegalStateException;
+import java.lang.Object;
+import java.lang.Override;
+
+public class Loader_ViewBinding<T extends Loader> implements Unbinder {
+  protected T target;
+
+  public Loader_ViewBinding(T target, Finder finder, Object source) {
+    this.target = target;
+
+    target.mflContainer = finder.findRequiredView(source, R.id.loader_flContainer, "field 'mflContainer'");
+    target.mprogressBar = finder.findRequiredViewAsType(source, R.id.progressBar, "field 'mprogressBar'", ProgressBar.class);
+    target.mtxtMessage = finder.findRequiredViewAsType(source, R.id.txtMessage, "field 'mtxtMessage'", TextView.class);
+    target.mLoaderBG = finder.findRequiredViewAsType(source, R.id.loader_llView, "field 'mLoaderBG'", LinearLayout.class);
+  }
+
+  @Override
+  public void unbind() {
+    T target = this.target;
+    if (target == null) throw new IllegalStateException("Bindings already cleared.");
+
+    target.mflContainer = null;
+    target.mprogressBar = null;
+    target.mtxtMessage = null;
+    target.mLoaderBG = null;
+
+    this.target = null;
+  }
+}

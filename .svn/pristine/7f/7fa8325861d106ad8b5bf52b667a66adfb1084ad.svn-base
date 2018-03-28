@@ -1,0 +1,33 @@
+package com.atishay.online.aadhaar;
+
+import com.atishay.online.AtishayOnlineApp;
+import com.atishay.online.utils.network.ApiError;
+import com.atishay.online.utils.network.RestApiCallback;
+
+import java.util.Map;
+
+/**
+ * Created by Vishal Patel on 01,December,2016.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public class AadhaarVerificationController implements AadhaarVerificationUsecase {
+
+    private RestApiCallback<Object, ApiError<Object>> mApiCallback;
+
+    public AadhaarVerificationController(RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+        mApiCallback = aApiCallback;
+    }
+
+    @Override
+    public void loadAadhaarVerificationDetails(String aUsername, String aPassword) {
+        AtishayOnlineApp.getAppInstance().getRestApis().loadAadhaarVerificationHistory(aUsername, aPassword, mApiCallback);
+    }
+
+    @Override
+    public void doAadhaarVerication(Map<String, String> aQueryMap) {
+        AtishayOnlineApp.getAppInstance().getRestApis().getAadhaarVerification(aQueryMap, mApiCallback);
+    }
+}

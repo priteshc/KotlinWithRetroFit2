@@ -1,0 +1,241 @@
+
+package com.atishay.online.benefiaciary;
+
+import com.atishay.online.BaseResponse;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+public class BeneficiaryListBean extends BaseResponse {
+
+    @SerializedName("RowID")
+    @Expose
+    private Integer rowID;
+    @SerializedName("CRNo")
+    @Expose
+    private String cRNo;
+    @SerializedName("RemitterMobile")
+    @Expose
+    private String remitterMobile;
+    @SerializedName("AccountNumber")
+    @Expose
+    private Object accountNumber;
+    @SerializedName("BeneficiaryCode")
+    @Expose
+    private String beneficiaryCode;
+    @SerializedName("BenMobileNo")
+    @Expose
+    private Object benMobileNo;
+    @SerializedName("BenAccountType")
+    @Expose
+    private Object benAccountType;
+    @SerializedName("Name")
+    @Expose
+    private String name;
+    @SerializedName("BenNickName")
+    @Expose
+    private Object benNickName;
+    @SerializedName("BankAccountNumber")
+    @Expose
+    private String bankAccountNumber;
+    @SerializedName("BenBankAccountType")
+    @Expose
+    private Object benBankAccountType;
+    @SerializedName("BankIfscode")
+    @Expose
+    private String bankIfscode;
+    @SerializedName("BankName")
+    @Expose
+    private String bankName;
+    @SerializedName("BankBranch")
+    @Expose
+    private String bankBranch;
+    @SerializedName("BankCity")
+    @Expose
+    private String bankCity;
+    @SerializedName("BeneficiaryType")
+    @Expose
+    private String beneficiaryType;
+    @SerializedName("Status")
+    @Expose
+    private String status;
+    @SerializedName("TransRefNo")
+    @Expose
+    private String transRefNo;
+    @SerializedName("AckNo")
+    @Expose
+    private String ackNo;
+    @SerializedName("ResBenName")
+    @Expose
+    private Object resBenName;
+    @SerializedName("ResponseMessage")
+    @Expose
+    private Object responseMessage;
+
+    public Integer getRowID() {
+        return rowID;
+    }
+
+    public void setRowID(Integer rowID) {
+        this.rowID = rowID;
+    }
+
+    public String getCRNo() {
+        return cRNo;
+    }
+
+    public void setCRNo(String cRNo) {
+        this.cRNo = cRNo;
+    }
+
+    public String getRemitterMobile() {
+        return remitterMobile;
+    }
+
+    public void setRemitterMobile(String remitterMobile) {
+        this.remitterMobile = remitterMobile;
+    }
+
+    public Object getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(Object accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+
+    public String getBeneficiaryCode() {
+        return beneficiaryCode;
+    }
+
+    public void setBeneficiaryCode(String beneficiaryCode) {
+        this.beneficiaryCode = beneficiaryCode;
+    }
+
+    public Object getBenMobileNo() {
+        return benMobileNo;
+    }
+
+    public void setBenMobileNo(Object benMobileNo) {
+        this.benMobileNo = benMobileNo;
+    }
+
+    public Object getBenAccountType() {
+        return benAccountType;
+    }
+
+    public void setBenAccountType(Object benAccountType) {
+        this.benAccountType = benAccountType;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Object getBenNickName() {
+        return benNickName;
+    }
+
+    public void setBenNickName(Object benNickName) {
+        this.benNickName = benNickName;
+    }
+
+    public String getBankAccountNumber() {
+        return bankAccountNumber;
+    }
+
+    public void setBankAccountNumber(String bankAccountNumber) {
+        this.bankAccountNumber = bankAccountNumber;
+    }
+
+    public Object getBenBankAccountType() {
+        return benBankAccountType;
+    }
+
+    public void setBenBankAccountType(Object benBankAccountType) {
+        this.benBankAccountType = benBankAccountType;
+    }
+
+    public String getBankIfscode() {
+        return bankIfscode;
+    }
+
+    public void setBankIfscode(String bankIfscode) {
+        this.bankIfscode = bankIfscode;
+    }
+
+    public String getBankName() {
+        return bankName;
+    }
+
+    public void setBankName(String bankName) {
+        this.bankName = bankName;
+    }
+
+    public String getBankBranch() {
+        return bankBranch;
+    }
+
+    public void setBankBranch(String bankBranch) {
+        this.bankBranch = bankBranch;
+    }
+
+    public String getBankCity() {
+        return bankCity;
+    }
+
+    public void setBankCity(String bankCity) {
+        this.bankCity = bankCity;
+    }
+
+    public String getBeneficiaryType() {
+        return beneficiaryType;
+    }
+
+    public void setBeneficiaryType(String beneficiaryType) {
+        this.beneficiaryType = beneficiaryType;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getTransRefNo() {
+        return transRefNo;
+    }
+
+    public void setTransRefNo(String transRefNo) {
+        this.transRefNo = transRefNo;
+    }
+
+    public String getAckNo() {
+        return ackNo;
+    }
+
+    public void setAckNo(String ackNo) {
+        this.ackNo = ackNo;
+    }
+
+    public Object getResBenName() {
+        return resBenName;
+    }
+
+    public void setResBenName(Object resBenName) {
+        this.resBenName = resBenName;
+    }
+
+    public Object getResponseMessage() {
+        return responseMessage;
+    }
+
+    public void setResponseMessage(Object responseMessage) {
+        this.responseMessage = responseMessage;
+    }
+}

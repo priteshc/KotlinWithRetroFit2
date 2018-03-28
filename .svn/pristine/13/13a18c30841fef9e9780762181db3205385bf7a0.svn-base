@@ -1,0 +1,90 @@
+package com.atishay.online.changepassword;
+
+import com.atishay.online.AtishayOnlineApp;
+import com.atishay.online.BaseResponse;
+import com.atishay.online.R;
+import com.atishay.online.utils.Constants;
+import com.atishay.online.utils.network.ApiError;
+import com.atishay.online.utils.network.RestApiCallback;
+import com.goldenmace.framework.mvp.presenters.Presenter;
+import com.goldenmace.framework.utils.NetworkUtils;
+
+import java.net.HttpURLConnection;
+
+/**
+ * Created by hrdudhat on 11/22/2016.
+ */
+public class TabChngPassPresenter implements Presenter, RestApiCallback<Object, ApiError<Object>> {
+    TabChngPassView mTabChngPassView;
+    TabChngPassController mTabChngPassController;
+
+    public TabChngPassPresenter(TabChngPassView aTabChngPassView) {
+        mTabChngPassView = aTabChngPassView;
+        mTabChngPassController = new TabChngPassController(this);
+    }
+
+    void requestChangePassword(String aUsername, String aOldPassword, String aNewPassword) {
+        if (NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            mTabChngPassView.showLoader(R.string.please_wait);
+            mTabChngPassController.requestChangePassword(aUsername, aOldPassword, aNewPassword);
+        } else {
+            mTabChngPassView.noInternetConnection();
+        }
+    }
+
+    void requestChangeTransactionPassword(String aUsername, String aPassword, String aOldTransactionCode, String aNewTransactionCode) {
+        if (NetworkUtils.isNetworkAvailable(AtishayOnlineApp.getAppInstance())) {
+            mTabChngPassView.showLoader(R.string.please_wait);
+            mTabChngPassController.requestChangeTransactionCode(aUsername, aPassword, aOldTransactionCode, aNewTransactionCode);
+        } else {
+            mTabChngPassView.noInternetConnection();
+        }
+    }
+
+    @Override
+    public void onSuccess(int aApiCode, Object aSuccessResponse) {
+        if (mTabChngPassView != null) {
+            mTabChngPassView.hideLoader();
+            if (aApiCode == Constants.APICODE.CHANGE_PASSWORD) {
+                mTabChngPassView.onPasswordChanged((BaseResponse) aSuccessResponse);
+            } else if (aApiCode == Constants.APICODE.CHANGE_TRANSACTION_CODE) {
+                mTabChngPassView.onTransactionCodeChanged((BaseResponse) aSuccessResponse);
+            }
+        } else {
+
+        }
+    }
+
+    @Override
+    public void onApiError(int aApiCode, ApiError<Object> aFailureResponse) {
+        if (mTabChngPassView != null) {
+            mTabChngPassView.hideLoader();
+            if (aFailureResponse.getApiErrorCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                mTabChngPassView.onUserUnAuthorized((String) aFailureResponse.getError());
+                return;
+            }
+            if (aApiCode == Constants.APICODE.CHANGE_PASSWORD) {
+                mTabChngPassView.apiError((String) aFailureResponse.getError());
+            } else if (aApiCode == Constants.APICODE.CHANGE_TRANSACTION_CODE) {
+                mTabChngPassView.apiError((String) aFailureResponse.getError());
+            }
+        } else {
+
+        }
+    }
+
+    @Override
+    public void registerBus() {
+
+    }
+
+    @Override
+    public void unRegisterBus() {
+
+    }
+
+    @Override
+    public void clearReferences() {
+        mTabChngPassView = null;
+    }
+}

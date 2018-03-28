@@ -1,0 +1,15 @@
+// Generated code from Butter Knife. Do not modify!
+package com.atishay.online.history;
+
+import butterknife.Unbinder;
+import butterknife.internal.Finder;
+import butterknife.internal.ViewBinder;
+import java.lang.Object;
+import java.lang.Override;
+
+public final class PrepaidHistoryFragment_ViewBinder implements ViewBinder<PrepaidHistoryFragment> {
+  @Override
+  public Unbinder bind(Finder finder, PrepaidHistoryFragment target, Object source) {
+    return new PrepaidHistoryFragment_ViewBinding<>(target, finder, source);
+  }
+}

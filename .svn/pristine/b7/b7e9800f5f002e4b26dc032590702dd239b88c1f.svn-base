@@ -1,0 +1,27 @@
+package com.atishay.online.benefiaciary;
+
+import com.atishay.online.BaseResponse;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+/**
+ * Created by Vishal Patel on 27,December,2016.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public class DeactiveBeneficiaryResponse extends BaseResponse {
+
+    @SerializedName("ResponseCode")
+    @Expose
+    private String responseCode;
+
+    public String getResponseCode() {
+        return responseCode;
+    }
+
+    public void setResponseCode(String aResponseCode) {
+        responseCode = aResponseCode;
+    }
+}

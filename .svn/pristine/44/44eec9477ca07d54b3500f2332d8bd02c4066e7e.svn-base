@@ -1,0 +1,11 @@
+package com.atishay.online.Interface;
+
+/**
+ * Created by Atishay on 18-01-2018.
+ */
+
+public interface ComplainCallback {
+
+    void onMethodCallback(String tid);
+
+}

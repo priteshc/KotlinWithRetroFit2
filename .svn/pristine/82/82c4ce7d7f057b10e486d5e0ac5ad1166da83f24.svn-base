@@ -1,0 +1,26 @@
+package com.atishay.online.postpaid;
+
+import java.util.List;
+
+/**
+ * Created by Atishay on 19-01-2018.
+ */
+
+public interface PoperatorView {
+
+
+    void showFErrorMeassage(String msg);
+
+    void showFLoginSuccessMsg(String msg, List<PostpaidResponse> postpaidResponseList);
+
+    void showCovergeSuccessMsg(String msg, List<BillerCoverge> billerCoverges);
+
+    void showCovergeFailedMeassage(String msg);
+
+    void showFailedMeassage(String msg);
+
+    void showprogress();
+
+    void hideprogress();
+
+}

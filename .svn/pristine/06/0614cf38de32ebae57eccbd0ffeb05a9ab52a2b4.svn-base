@@ -1,0 +1,55 @@
+// Generated code from Butter Knife. Do not modify!
+package com.atishay.online.moneytransfer;
+
+import android.widget.ImageView;
+import android.widget.TextView;
+import butterknife.Unbinder;
+import butterknife.internal.Finder;
+import com.atishay.online.R;
+import java.lang.IllegalStateException;
+import java.lang.Object;
+import java.lang.Override;
+
+public class GroupFundHistoryAdapter$GroupHolder_ViewBinding<T extends GroupFundHistoryAdapter.GroupHolder> implements Unbinder {
+  protected T target;
+
+  public GroupFundHistoryAdapter$GroupHolder_ViewBinding(T target, Finder finder, Object source) {
+    this.target = target;
+
+    target.fundtransferHistoryTxtID = finder.findRequiredViewAsType(source, R.id.fundtransfer_history_txtID, "field 'fundtransferHistoryTxtID'", TextView.class);
+    target.fundtransferHistoryTxtDate = finder.findRequiredViewAsType(source, R.id.fundtransfer_history_txtDate, "field 'fundtransferHistoryTxtDate'", TextView.class);
+    target.fundtransferHistoryTxtUniqueTansID = finder.findRequiredViewAsType(source, R.id.fundtransfer_history_txtUniqueTansID, "field 'fundtransferHistoryTxtUniqueTansID'", TextView.class);
+    target.fundtransferHistoryTxtBeneName = finder.findRequiredViewAsType(source, R.id.fundtransfer_history_txtBeneName, "field 'fundtransferHistoryTxtBeneName'", TextView.class);
+    target.fundtransferHistoryTxtBankNo = finder.findRequiredViewAsType(source, R.id.fundtransfer_history_txtBankNo, "field 'fundtransferHistoryTxtBankNo'", TextView.class);
+    target.fundtransferHistoryTxtUTR = finder.findRequiredViewAsType(source, R.id.fundtransfer_history_txtUTR, "field 'fundtransferHistoryTxtUTR'", TextView.class);
+    target.fundtransferHistoryTxtSenderName = finder.findRequiredViewAsType(source, R.id.fundtransfer_history_txtSenderName, "field 'fundtransferHistoryTxtSenderName'", TextView.class);
+    target.fundtransferHistoryTxtMobile = finder.findRequiredViewAsType(source, R.id.fundtransfer_history_txtMobile, "field 'fundtransferHistoryTxtMobile'", TextView.class);
+    target.fundtransferHistoryTxtTransStatus = finder.findRequiredViewAsType(source, R.id.fundtransfer_history_txtTransStatus, "field 'fundtransferHistoryTxtTransStatus'", TextView.class);
+    target.fundtransferHistoryTxtQueryTransaction = finder.findRequiredViewAsType(source, R.id.fundtransfer_history_txtQueryTransaction, "field 'fundtransferHistoryTxtQueryTransaction'", TextView.class);
+    target.fundtransferHistoryTxtRS = finder.findRequiredViewAsType(source, R.id.fundtransfer_history_txtRS, "field 'fundtransferHistoryTxtRS'", TextView.class);
+    target.fundtransferHistoryTxtBeneCode = finder.findRequiredViewAsType(source, R.id.fundtransfer_history_txtBeneCode, "field 'fundtransferHistoryTxtBeneCode'", TextView.class);
+    target.mArrow = finder.findRequiredViewAsType(source, R.id.arrow, "field 'mArrow'", ImageView.class);
+  }
+
+  @Override
+  public void unbind() {
+    T target = this.target;
+    if (target == null) throw new IllegalStateException("Bindings already cleared.");
+
+    target.fundtransferHistoryTxtID = null;
+    target.fundtransferHistoryTxtDate = null;
+    target.fundtransferHistoryTxtUniqueTansID = null;
+    target.fundtransferHistoryTxtBeneName = null;
+    target.fundtransferHistoryTxtBankNo = null;
+    target.fundtransferHistoryTxtUTR = null;
+    target.fundtransferHistoryTxtSenderName = null;
+    target.fundtransferHistoryTxtMobile = null;
+    target.fundtransferHistoryTxtTransStatus = null;
+    target.fundtransferHistoryTxtQueryTransaction = null;
+    target.fundtransferHistoryTxtRS = null;
+    target.fundtransferHistoryTxtBeneCode = null;
+    target.mArrow = null;
+
+    this.target = null;
+  }
+}

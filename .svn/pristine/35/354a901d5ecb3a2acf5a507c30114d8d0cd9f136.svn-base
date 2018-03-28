@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2016 GoldenMace IT Solutions
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbarAlwaysDrawVerticalTrack="false"
+            android:scrollbarSize="0dip"
+            android:scrollbarThumbVertical="@android:color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:weightSum="1">
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/profile_clView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/profile_llmain"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/spacing_activity_container"
+                android:layout_marginEnd="@dimen/nav_header_vertical_spacing"
+                android:layout_marginLeft="@dimen/nav_header_vertical_spacing"
+                android:layout_marginRight="@dimen/nav_header_vertical_spacing"
+                android:layout_marginStart="@dimen/nav_header_vertical_spacing"
+                android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_editor_absoluteY="0dp">
+
+                <com.atishay.online.views.widgets.circlemenu.CircleImageView
+                    android:id="@+id/profile_image"
+                    android:layout_width="@dimen/avatar"
+                    android:layout_height="@dimen/avatar"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_user_profile"
+                    app:civ_border_color="@color/colorAccent"
+                    app:civ_border_width="0dp"/>
+
+                <TextView
+                    android:id="@+id/profile_username"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_control"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/font_large"
+                    tools:text="Patolia Vishal"/>
+
+                <TextView
+                    android:id="@+id/profile_partner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_control"
+                    android:gravity="center"
+                    android:text="Goldenmace"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/font_medium"/>
+
+                <TextView
+                    android:id="@+id/profile_vendor_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_control"
+                    android:layout_marginTop="@dimen/spacing_control"
+                    android:gravity="center"
+                    android:text="MH10235652"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/font_medium"/>
+
+            </LinearLayout>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/profile_cardview_company"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/spacing_standard"
+                android:layout_marginLeft="@dimen/spacing_standard"
+                android:layout_marginRight="@dimen/spacing_standard"
+                android:layout_marginStart="@dimen/spacing_standard"
+                android:layout_marginTop="@dimen/cardview_space"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/profile_llmain"
+                tools:layout_constraintRight_creator="1"
+                tools:layout_constraintTop_creator="1">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/spacing_standard"
+                    android:layout_marginTop="@dimen/spacing_standard">
+
+                    <TextView
+                        android:id="@+id/profile_txtCName"
+                        style="@style/TextStyle"
+                        android:text="@string/company_name"/>
+
+                    <EditText
+                        android:id="@+id/profile_edtCName"
+                        style="@style/EditStyle"
+                        android:layout_below="@id/profile_txtCName"
+                        android:hint="@string/company_name"
+                        android:inputType="text"/>
+
+                    <TextView
+                        android:id="@+id/profile_txtCAddress"
+                        style="@style/TextStyle"
+                        android:layout_below="@id/profile_edtCName"
+                        android:text="@string/company_address"/>
+
+                    <EditText
+                        android:id="@+id/profile_edtCAddress"
+                        style="@style/EditStyle"
+                        android:layout_below="@id/profile_txtCAddress"
+                        android:hint="@string/company_address"
+                        android:inputType="textPostalAddress"/>
+
+                    <TextView
+                        android:id="@+id/profile_txtCCity"
+                        style="@style/TextStyle"
+                        android:layout_below="@id/profile_edtCAddress"
+                        android:text="@string/company_city"/>
+
+                    <EditText
+                        android:id="@+id/profile_edtCCity"
+                        style="@style/EditStyle"
+                        android:layout_below="@id/profile_txtCCity"
+                        android:hint="@string/company_city"
+                        android:inputType="text"/>
+
+                    <TextView
+                        android:id="@+id/profile_txtCPin"
+                        style="@style/TextStyle"
+                        android:layout_below="@id/profile_edtCCity"
+                        android:text="@string/company_pin"/>
+
+                    <EditText
+                        android:id="@+id/profile_edtCPin"
+                        style="@style/EditStyle"
+                        android:layout_below="@id/profile_txtCPin"
+                        android:hint="@string/company_pin"
+                        android:inputType="numberPassword"/>
+
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+            <TextView
+                android:id="@+id/profile_header_company"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/nav_header_vertical_spacing"
+                android:layout_marginStart="@dimen/nav_header_vertical_spacing"
+                android:background="@drawable/btn_border"
+                android:paddingBottom="@dimen/spacing_control"
+                android:paddingLeft="@dimen/spacing_standard"
+                android:paddingRight="@dimen/spacing_standard"
+                android:paddingTop="@dimen/spacing_control"
+                android:text="@string/company_info"
+                android:textColor="@color/windowBackground"
+                android:textSize="@dimen/font_large"
+                android:translationZ="4dp"
+                app:layout_constraintBottom_toTopOf="@id/profile_cardview_company"
+                app:layout_constraintLeft_toLeftOf="@id/profile_cardview_company"
+                app:layout_constraintTop_toTopOf="@id/profile_cardview_company"
+                tools:layout_constraintBottom_creator="1"
+                tools:layout_constraintLeft_creator="1"
+                tools:layout_constraintTop_creator="1"/>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/profile_cardview_personal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/cardview_space"
+                app:layout_constraintLeft_toLeftOf="@id/profile_cardview_company"
+                app:layout_constraintRight_toRightOf="@id/profile_cardview_company"
+                app:layout_constraintTop_toBottomOf="@id/profile_cardview_company"
+                tools:layout_constraintLeft_creator="1"
+                tools:layout_constraintRight_creator="1"
+                tools:layout_constraintTop_creator="1">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/spacing_standard"
+                    android:layout_marginTop="@dimen/spacing_standard">
+
+                    <TextView
+                        android:id="@+id/profile_txtPFName"
+                        style="@style/TextStyle"
+                        android:text="@string/personal_first_name"/>
+
+                    <EditText
+                        android:id="@+id/profile_edtPFName"
+                        style="@style/EditStyle"
+                        android:layout_below="@id/profile_txtPFName"
+                        android:hint="@string/personal_first_name"
+                        android:inputType="text"/>
+
+                    <TextView
+                        android:id="@+id/profile_txtPMName"
+                        style="@style/TextStyle"
+                        android:layout_below="@id/profile_edtPFName"
+                        android:text="@string/personal_middle_name"/>
+
+                    <EditText
+                        android:id="@+id/profile_edtPMName"
+                        style="@style/EditStyle"
+                        android:layout_below="@id/profile_txtPMName"
+                        android:hint="@string/personal_middle_name"
+                        android:inputType="text"/>
+
+                    <TextView
+                        android:id="@+id/profile_txtLName"
+                        style="@style/TextStyle"
+                        android:layout_below="@id/profile_edtPMName"
+                        android:text="@string/personal_last_name"/>
+
+                    <EditText
+                        android:id="@+id/profile_edtPLName"
+                        style="@style/EditStyle"
+                        android:layout_below="@id/profile_txtLName"
+                        android:hint="@string/personal_last_name"
+                        android:inputType="text"/>
+
+                    <TextView
+                        android:id="@+id/profile_txtPAddress"
+                        style="@style/TextStyle"
+                        android:layout_below="@id/profile_edtPLName"
+                        android:text="@string/personal_address"/>
+
+                    <EditText
+                        android:id="@+id/profile_edtPAddress"
+                        style="@style/EditStyle"
+                        android:layout_below="@id/profile_txtPAddress"
+                        android:hint="@string/personal_address"
+                        android:inputType="textPostalAddress"/>
+
+                    <TextView
+                        android:id="@+id/profile_txtPMobile"
+                        style="@style/TextStyle"
+                        android:layout_below="@id/profile_edtPAddress"
+                        android:text="@string/personal_mobile"/>
+
+                    <EditText
+                        android:id="@+id/profile_edtPMobile"
+                        style="@style/EditStyle"
+                        android:layout_below="@id/profile_txtPMobile"
+                        android:hint="@string/personal_mobile"
+                        android:inputType="number"/>
+
+                    <TextView
+                        android:id="@+id/profile_txtPEmail"
+                        style="@style/TextStyle"
+                        android:layout_below="@id/profile_edtPMobile"
+                        android:text="@string/personal_email"/>
+
+                    <EditText
+                        android:id="@+id/profile_edtPEmail"
+                        style="@style/EditStyle"
+                        android:layout_below="@id/profile_txtPEmail"
+                        android:hint="@string/personal_email"
+                        android:inputType="textEmailAddress"/>
+
+                    <TextView
+                        android:id="@+id/profile_txtPSetup"
+                        style="@style/TextStyle"
+                        android:layout_below="@id/profile_edtPEmail"
+                        android:text="@string/personal_setup_charge"/>
+
+                    <EditText
+                        android:id="@+id/profile_edtPSetup"
+                        style="@style/EditStyle"
+                        android:layout_below="@id/profile_txtPSetup"
+                        android:hint="@string/personal_setup_charge"
+                        android:inputType="numberDecimal"/>
+
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+            <TextView
+                android:id="@+id/profile_header_personal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/nav_header_vertical_spacing"
+                android:layout_marginStart="@dimen/nav_header_vertical_spacing"
+                android:background="@drawable/btn_border"
+                android:paddingBottom="@dimen/spacing_control"
+                android:paddingLeft="@dimen/spacing_standard"
+                android:paddingRight="@dimen/spacing_standard"
+                android:paddingTop="@dimen/spacing_control"
+                android:text="@string/personal_info"
+                android:textColor="@color/windowBackground"
+                android:textSize="@dimen/font_large"
+                android:translationZ="4dp"
+                app:layout_constraintBottom_toTopOf="@id/profile_cardview_personal"
+                app:layout_constraintLeft_toLeftOf="@id/profile_cardview_personal"
+                app:layout_constraintTop_toBottomOf="@id/profile_cardview_personal"
+                app:layout_constraintTop_toTopOf="@id/profile_cardview_personal"
+                tools:layout_constraintBottom_creator="1"
+                tools:layout_constraintLeft_creator="1"
+                tools:layout_constraintTop_creator="1"/>
+
+        </android.support.constraint.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/profile_txtSave"
+            style="@style/FormStyle"
+            android:text="@string/save"
+            app:layout_constraintLeft_toLeftOf="@id/profile_cardview_company"
+            app:layout_constraintRight_toRightOf="@id/profile_cardview_company"
+            app:layout_constraintTop_toBottomOf="@id/profile_cardview_company"
+            tools:layout_constraintLeft_creator="1"
+            tools:layout_constraintRight_creator="1"
+            tools:layout_constraintTop_creator="1"/>
+    </LinearLayout>
+</ScrollView>

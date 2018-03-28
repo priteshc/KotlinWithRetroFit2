@@ -1,0 +1,33 @@
+
+package com.atishay.online.benefiaciary;
+
+import com.atishay.online.BaseResponse;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+public class BeneficiaryValidationResponse extends BaseResponse {
+
+
+    @SerializedName("ResponseCode")
+    @Expose
+    private String responseCode;
+    @SerializedName("BeneficiaryName")
+    @Expose
+    private String beneficiaryName;
+
+    public String getResponseCode() {
+        return responseCode;
+    }
+
+    public void setResponseCode(String responseCode) {
+        this.responseCode = responseCode;
+    }
+
+    public String getBeneficiaryName() {
+        return beneficiaryName;
+    }
+
+    public void setBeneficiaryName(String beneficiaryName) {
+        this.beneficiaryName = beneficiaryName;
+    }
+}

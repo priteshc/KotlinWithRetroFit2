@@ -1,0 +1,22 @@
+package com.atishay.online.postpaid;
+
+import java.util.List;
+
+/**
+ * Created by Atishay on 19-01-2018.
+ */
+
+public interface BillerView {
+
+
+    void showFErrorMeassage(String msg);
+
+    void showBSuccessMsg(String msg, List<BillerResponse> billerResponses);
+
+    void showBfailedMeassage(String msg);
+
+    void showprogress();
+
+    void hideprogress();
+
+}

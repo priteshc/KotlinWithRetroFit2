@@ -1,0 +1,47 @@
+package com.atishay.online.addbenefiaciary;
+
+import com.atishay.online.AtishayOnlineApp;
+import com.atishay.online.utils.network.ApiError;
+import com.atishay.online.utils.network.RestApiCallback;
+
+import java.util.Map;
+
+/**
+ * Created by Vishal Patel on 17,December,2016.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public class AddBeneficiaryController implements AddBeneficiaryUsecase {
+    RestApiCallback<Object, ApiError<Object>> mApiCallback;
+
+    public AddBeneficiaryController(RestApiCallback<Object, ApiError<Object>> aApiCallback) {
+        mApiCallback = aApiCallback;
+    }
+
+    @Override
+    public void getMasterIFSC(String aUsername, String aPassword) {
+        AtishayOnlineApp.getAppInstance().getRestApis().getMasterIFSC(aUsername, aPassword, mApiCallback);
+    }
+
+    @Override
+    public void doAddBeneficiary(Map<String, String> aQueryMap) {
+        AtishayOnlineApp.getAppInstance().getRestApis().doAddBeneficiary(aQueryMap, mApiCallback);
+    }
+
+    @Override
+    public void doResendOTP(Map<String, String> aQueryMap) {
+        AtishayOnlineApp.getAppInstance().getRestApis().doResendOTP(aQueryMap, mApiCallback);
+    }
+
+    @Override
+    public void doValidateBeneficiary(Map<String, String> aQueryMap) {
+        AtishayOnlineApp.getAppInstance().getRestApis().doValidateBeneficiary(aQueryMap, mApiCallback);
+    }
+
+    @Override
+    public void getIFSCDetials(String ifsccode) {
+        AtishayOnlineApp.getAppInstance().getRestApis().getIFSCDetails(ifsccode, mApiCallback);
+    }
+}

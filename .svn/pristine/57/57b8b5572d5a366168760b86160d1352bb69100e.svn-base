@@ -1,0 +1,121 @@
+package com.atishay.online.utils;
+
+import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
+
+import com.atishay.online.R;
+
+
+/**
+ * Created by 1064 on 6/1/2015.
+ */
+public class DialogUtils {
+
+    /**
+     * To get instance of  Two button dialog with given params with app compact theme.
+     *
+     * @param aContext             activity context
+     * @param aTitle               Title of the dialog
+     * @param aMsg                 alert message to show to uset
+     * @param aPositiveButtonTitle caption for the positive button.
+     * @param aNegativeButtonTitle caption for the negative button.
+     * @param aOnClickListener     click listener of the dialog
+     * @return Alert dialog to show.
+     */
+    public static AlertDialog getTwoButtonDialog(Context aContext, String aTitle, String aMsg, String aPositiveButtonTitle, String aNegativeButtonTitle, DialogInterface.OnClickListener aOnClickListener) {
+        return getTwoButtonDialog(aContext, 0, aTitle, aMsg, aPositiveButtonTitle, aNegativeButtonTitle, aOnClickListener, false);
+    }
+    /**
+     * To get instance of  Two button dialog with given params with app compact theme.
+     *
+     * @param aContext             activity context
+     * @param aTitle               Title of the dialog
+     * @param aMsg                 alert message to show to uset
+     * @param aPositiveButtonTitle caption for the positive button.
+     * @param aNegativeButtonTitle caption for the negative button.
+     * @param aOnClickListener     click listener of the dialog
+     * @return Alert dialog to show.
+     */
+    public static AlertDialog getTwoButtonDialog(Context aContext, String aTitle, String aMsg, String aPositiveButtonTitle, String aNegativeButtonTitle, DialogInterface.OnClickListener aOnClickListener,boolean aCancelable) {
+        return getTwoButtonDialog(aContext, 0, aTitle, aMsg, aPositiveButtonTitle, aNegativeButtonTitle, aOnClickListener, aCancelable);
+    }
+
+    /**
+     * To get instance of  Two button dialog with given params with app compact theme.
+     *
+     * @param aContext             activity context
+     * @param aTitle               Title of the dialog
+     * @param aMsg                 alert message to show to uset
+     * @param aPositiveButtonTitle caption for the positive button.
+     * @param aNegativeButtonTitle caption for the negative button.
+     * @param aOnClickListener     click listener of the dialog
+     * @return Alert dialog to show.
+     */
+    public static AlertDialog getTwoButtonDialog(Context aContext, int drawable, String aTitle, String aMsg, String aPositiveButtonTitle, String aNegativeButtonTitle, DialogInterface.OnClickListener aOnClickListener, boolean aCancelable) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(aContext, R.style.AppAlertDialogStyle);
+        builder.setTitle(aTitle);
+        builder.setMessage(aMsg);
+        if (drawable != 0)
+            builder.setIcon(drawable);
+        builder.setPositiveButton(aPositiveButtonTitle, aOnClickListener);
+        builder.setNegativeButton(aNegativeButtonTitle, aOnClickListener);
+        builder.setCancelable(aCancelable);
+        return builder.create();
+    }
+
+    /**
+     * To get instance of  Two button dialog with given params with app compact theme.
+     *
+     * @param aContext             activity context
+     * @param aTitle               Title of the dialog
+     * @param aMsg                 alert message to show to uset
+     * @param aPositiveButtonTitle caption for the positive button.
+     * @param aOnClickListener     click listener of the dialog
+     * @return Alert dialog to show.
+     */
+    public static AlertDialog getSingleButtonDialog(Context aContext, String aTitle, String aMsg, String aPositiveButtonTitle, DialogInterface.OnClickListener aOnClickListener, boolean isCancelable) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(aContext, R.style.AppAlertDialogStyle);
+        builder.setTitle(aTitle);
+        builder.setMessage(aMsg);
+        builder.setCancelable(isCancelable);
+        builder.setPositiveButton(aPositiveButtonTitle, aOnClickListener);
+        return builder.create();
+    }
+
+    /**
+     * To get instance of  Two button dialog with given params with app compact theme.
+     *
+     * @param aContext             activity context
+     * @param aTitle               Title of the dialog
+     * @param aMsg                 alert message to show to uset
+     * @param aPositiveButtonTitle caption for the positive button.
+     * @param aOnClickListener     click listener of the dialog
+     * @return Alert dialog to show.
+     */
+    public static AlertDialog getSingleButtonDialog(Context aContext, int drawable, String aTitle, String aMsg, String aPositiveButtonTitle, DialogInterface.OnClickListener aOnClickListener, boolean isCancelable) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(aContext, R.style.AppAlertDialogStyle);
+        builder.setTitle(aTitle);
+        builder.setIcon(drawable);
+        builder.setMessage(aMsg);
+        builder.setCancelable(isCancelable);
+        builder.setPositiveButton(aPositiveButtonTitle, aOnClickListener);
+        return builder.create();
+    }
+
+    /**
+     * To get instance of  Two button dialog with given params with app compact theme.
+     *
+     * @param aContext             activity context
+     * @param aTitle               Title of the dialog
+     * @param aMsg                 alert message to show to uset
+     * @param aPositiveButtonTitle caption for the positive button.
+     * @param aOnClickListener     click listener of the dialog
+     * @return Alert dialog to show.
+     */
+    public static AlertDialog getSingleButtonDialog(Context aContext, String aTitle, String aMsg, String aPositiveButtonTitle, DialogInterface.OnClickListener aOnClickListener) {
+        return getSingleButtonDialog(aContext, aTitle, aMsg, aPositiveButtonTitle, aOnClickListener, true);
+    }
+
+
+}

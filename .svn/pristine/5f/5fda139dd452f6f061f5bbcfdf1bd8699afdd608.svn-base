@@ -1,0 +1,44 @@
+
+package com.atishay.online.moneytransfer;
+
+import com.atishay.online.BaseResponse;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+public class FundServiceChargeResponse extends BaseResponse {
+
+    @SerializedName("ResponseCode")
+    @Expose
+    private String responseCode;
+    @SerializedName("UniqueTransID")
+    @Expose
+    private String uniqueTransID;
+    @SerializedName("PTID")
+    @Expose
+    private String pTID;
+
+    public String getResponseCode() {
+        return responseCode;
+    }
+
+    public void setResponseCode(String responseCode) {
+        this.responseCode = responseCode;
+    }
+
+    public String getUniqueTransID() {
+        return uniqueTransID;
+    }
+
+    public void setUniqueTransID(String uniqueTransID) {
+        this.uniqueTransID = uniqueTransID;
+    }
+
+    public String getPTID() {
+        return pTID;
+    }
+
+    public void setPTID(String pTID) {
+        this.pTID = pTID;
+    }
+
+}

@@ -1,0 +1,453 @@
+package com.atishay.online.moneytransfer;
+
+import android.Manifest;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Environment;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.atishay.online.AppBaseActivity;
+import com.atishay.online.R;
+import com.atishay.online.utils.Loader;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+/**
+ * Created by Vishal Patel on 18,January,2017.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public class SinglePDFPrintActivity extends AppBaseActivity {
+
+    private static final int REQUEST_PERMISSIONS = 100;
+    private static final int REQUEST_PERMISSIONSG = 106;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.login_edtUniqueID)
+    TextView loginEdtUniqueID;
+    @BindView(R.id.login_edtSenderName)
+    TextView loginEdtSenderName;
+    @BindView(R.id.login_edtSenderMobile)
+    TextView loginEdtSenderMobile;
+    @BindView(R.id.login_edtBeneName)
+    TextView loginEdtBeneName;
+    @BindView(R.id.login_edtBeneAC)
+    TextView loginEdtBeneAC;
+    @BindView(R.id.login_edtIFSC)
+    TextView loginEdtIFSC;
+    @BindView(R.id.login_edtBankName)
+    TextView loginEdtBankName;
+    @BindView(R.id.login_edtUTR)
+    TextView loginEdtUTR;
+    @BindView(R.id.login_edtAmount)
+    TextView loginEdtAmount;
+    @BindView(R.id.login_edtDate)
+    TextView loginEdtDate;
+    @BindView(R.id.login_edtStatus)
+    TextView loginEdtStatus;
+    @BindView(R.id.login_edt)
+    TextView loginEdt;
+    @BindView(R.id.loader)
+    Loader mLoader;
+    FundTransferHistoryResponse.TransactionHistory printArrayObject;
+    String FILE;
+    String Name;
+    String fileName;
+    GroupFundHistoryAdapter.GroupParentBean groupParentBean;
+    Font f2;
+    private File pdfFile;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_print);
+        ButterKnife.bind(this);
+
+        setToolbar(mToolbar);
+        groupParentBean = new GroupFundHistoryAdapter.GroupParentBean();
+        /**
+         * Custom Toolbar with amount view
+         */
+        ButterKnife.<TextView>findById(this, R.id.toolbar_txtAmount).setVisibility(View.GONE);
+        ButterKnife.<TextView>findById(this, R.id.toolbar_txtTitle).setText(R.string.money_title_str);
+        f2 = new Font();
+        f2.setSize(12);
+        printArrayObject = (FundTransferHistoryResponse.TransactionHistory) getIntent().getSerializableExtra("printObject");
+        loginEdtUniqueID.setText(Html.fromHtml(String.format("<b>" + getResources().getString(R.string.unique_transid) + " :</b> %s", printArrayObject.getUniqueTransID())));
+        if (TextUtils.isEmpty(printArrayObject.getSenderName())) {
+            loginEdtSenderName.setText(Html.fromHtml(String.format("<b>" + getResources().getString(R.string.sender_name) + " :</b> %s", "--")));
+        } else {
+            loginEdtSenderName.setText(Html.fromHtml(String.format("<b>" + getResources().getString(R.string.sender_name) + " :</b> %s", printArrayObject.getSenderName())));
+        }
+        loginEdtSenderMobile.setText(Html.fromHtml(String.format("<b>" + getResources().getString(R.string.sender_mobile) + " :</b> %s", printArrayObject.getSenderMobileNo())));
+        loginEdtBeneName.setText(Html.fromHtml(String.format("<b>" + getResources().getString(R.string.money_bene_nickname) + " :</b> %s", printArrayObject.getBeneficiaryName())));
+        loginEdtBeneAC.setText(Html.fromHtml(String.format("<b>" + getResources().getString(R.string.money_bene_bankaccountno) + " :</b> %s", printArrayObject.getBenBankAccountNo())));
+        loginEdtIFSC.setText(Html.fromHtml(String.format("<b>" + getResources().getString(R.string.money_ifsccode) + " :</b> %s", printArrayObject.getIFSCCode())));
+        loginEdtBankName.setText(Html.fromHtml(String.format("<b>" + getResources().getString(R.string.money_bankname) + " :</b> %s", printArrayObject.getBenBankName())));
+        loginEdtUTR.setText(Html.fromHtml(String.format("<b>" + getResources().getString(R.string.utr) + " :</b> %s", printArrayObject.getUTR())));
+        loginEdtAmount.setText(Html.fromHtml(String.format("<b>" + getResources().getString(R.string.print_amount) + " :</b> %s", String.format("%.2f", printArrayObject.getAmount()))));
+        loginEdtDate.setText(Html.fromHtml(String.format("<b>" + getResources().getString(R.string.date_time) + " :</b> %s", printArrayObject.getTransactionDate())));
+        loginEdt.setText(Html.fromHtml(getString(R.string.status)), TextView.BufferType.SPANNABLE);
+
+        if (printArrayObject.getRechargeStatus().equals("Successful")) {
+            loginEdtStatus.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.green));
+            f2.setColor(new BaseColor(0, 128, 0));
+        } else if (printArrayObject.getRechargeStatus().equals("Transaction Cancelled / Fail")) {
+            loginEdtStatus.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.red));
+            f2.setColor(BaseColor.RED);
+        } else if (printArrayObject.getRechargeStatus().equals("Failure")) {
+            loginEdtStatus.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.red));
+            f2.setColor(BaseColor.RED);
+        } else if (printArrayObject.getRechargeStatus().equals("Hold(T)")) {
+            loginEdtStatus.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.orange));
+            f2.setColor(new BaseColor(255, 165, 0));
+        } else if (printArrayObject.getRechargeStatus().equals("Transaction Cancelled and Refunded")) {
+            loginEdtStatus.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.red));
+            f2.setColor(BaseColor.RED);
+        } else if (printArrayObject.getRechargeStatus().equals("Processed")) {
+            loginEdtStatus.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.green));
+            f2.setColor(new BaseColor(0, 128, 0));
+        } else {
+            loginEdtStatus.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.black_overlay));
+            f2.setColor(BaseColor.BLACK);
+        }
+        loginEdtStatus.setText(printArrayObject.getRechargeStatus());
+    }
+
+    @OnClick(R.id.print)
+    public void onClick() {
+        externalStoragePermission();
+    }
+
+    public void externalStoragePermission() {
+        if (ContextCompat.checkSelfPermission(SinglePDFPrintActivity.this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale
+                    (SinglePDFPrintActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                Snackbar.make(findViewById(android.R.id.content),
+                        "Please Grant Permissions",
+                        Snackbar.LENGTH_INDEFINITE).setAction("ENABLE",
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                ActivityCompat.requestPermissions(SinglePDFPrintActivity.this,
+                                        new String[]{Manifest.permission
+                                                .WRITE_EXTERNAL_STORAGE},
+                                        REQUEST_PERMISSIONS);
+                            }
+                        }).show();
+            } else {
+                ActivityCompat.requestPermissions(SinglePDFPrintActivity.this,
+                        new String[]{Manifest.permission
+                                .WRITE_EXTERNAL_STORAGE},
+                        REQUEST_PERMISSIONS);
+            }
+        } else {
+            new CreatePDF().execute();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String permissions[],
+                                           @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_PERMISSIONS: {
+                if ((grantResults.length > 0) && (grantResults[0]) == PackageManager.PERMISSION_GRANTED) {
+                    new CreatePDF().execute();
+                } else {
+                    Snackbar.make(findViewById(android.R.id.content), "Enable Permissions from settings",
+                            Snackbar.LENGTH_INDEFINITE).setAction("ENABLE",
+                            new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent();
+                                    intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                    intent.addCategory(Intent.CATEGORY_DEFAULT);
+                                    intent.setData(Uri.parse("package:" + getPackageName()));
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                                    startActivity(intent);
+                                }
+                            }).show();
+                }
+                return;
+            }
+            case REQUEST_PERMISSIONSG:
+                if ((grantResults.length > 0) && (grantResults[0]) == PackageManager.PERMISSION_GRANTED) {
+
+                } else {
+                    Snackbar.make(findViewById(android.R.id.content), "Enable Permissions from settings",
+                            Snackbar.LENGTH_INDEFINITE).setAction("ENABLE",
+                            new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent();
+                                    intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                    intent.addCategory(Intent.CATEGORY_DEFAULT);
+                                    intent.setData(Uri.parse("package:" + getPackageName()));
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                                    startActivity(intent);
+                                }
+                            }).show();
+                }
+                return;
+        }
+    }
+
+    @Override
+    public void showLoader(String aMessage) {
+        if (aMessage != null) {
+            mLoader.setText(aMessage);
+        }
+        mLoader.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideLoader() {
+        mLoader.setVisibility(View.GONE);
+    }
+
+    public void createPDF() {
+        // Create New Blank Document
+        float pdfMargin = 34.0f;
+        float imageCell = 100f;
+        Document document = new Document(PageSize.A4, pdfMargin, pdfMargin, pdfMargin, pdfMargin);
+
+        // Create Directory in External Storage
+        String root = Environment.getExternalStorageDirectory().toString();
+        File myDir = new File(root + "/" + getResources().getString(R.string.app_name));
+        myDir.mkdirs();
+        try {
+            Calendar localCalendar = Calendar.getInstance();
+            fileName = new SimpleDateFormat("yyyyMMddhhmmss").format(localCalendar.getTime());
+            Name = getResources().getString(R.string.app_name) + fileName + ".pdf";
+            pdfFile = new File(myDir, Name);
+            PdfWriter docWriter = PdfWriter.getInstance(document, new FileOutputStream(pdfFile));
+            document.open();
+
+            //Table for Top Information
+            PdfPTable table = new PdfPTable(2);
+            table.getDefaultCell().setBorder(0);
+            table.setWidthPercentage(100);
+            table.setWidths(new float[]{imageCell, document.getPageSize().getWidth() - ((pdfMargin * 2) + imageCell)});
+            PdfPCell pdfPCell = new PdfPCell();
+            pdfPCell.setRowspan(2);
+            Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.pdflogo);
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            icon.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byte[] byteArray = stream.toByteArray();
+
+            Image companyLogo = Image.getInstance(byteArray);
+            companyLogo.scaleToFit(50, 50);
+            companyLogo.setBorder(0);
+            pdfPCell.setBorder(0);
+            pdfPCell.setVerticalAlignment(Element.ALIGN_CENTER);
+            pdfPCell.setPadding(8);
+            pdfPCell.addElement(companyLogo);
+            table.addCell(pdfPCell);
+
+            pdfPCell = new PdfPCell();
+            Font f5 = FontFactory.getFont(FontFactory.TIMES_ROMAN, 16);
+            f5.setStyle(Font.BOLD);
+            Phrase elements = new Phrase("Atishay Limited", f5);
+            pdfPCell.addElement(elements);
+            pdfPCell.setBorder(0);
+            table.addCell(pdfPCell);
+
+            pdfPCell = new PdfPCell();
+            elements = new Phrase("Corporate Office: 4B\u00AD05/06, Phoenix Paragon Plaza, Lal Bahadur Shastri" + "Marg, Kurla West, Mumbai, Maharashtra 400 070\n");
+            pdfPCell.addElement(elements);
+            pdfPCell.setBorder(0);
+            table.addCell(pdfPCell);
+
+            document.add(table);
+
+            //Table for Top Single Message
+            PdfPTable tableTopMsg = new PdfPTable(1);
+            tableTopMsg.getDefaultCell().setBorder(0);
+            tableTopMsg.setSpacingBefore(20f);
+            tableTopMsg.setWidths(new float[]{document.getPageSize().getWidth() - ((pdfMargin * 2))});
+            pdfPCell = new PdfPCell();
+            Phrase elementsTopMsg = new Phrase("MONEY TRANSFER RECEIPT");
+            pdfPCell.addElement(elementsTopMsg);
+            tableTopMsg.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
+            tableTopMsg.getDefaultCell().setVerticalAlignment(Element.ALIGN_MIDDLE);
+            tableTopMsg.setHorizontalAlignment(Element.ALIGN_CENTER);
+            tableTopMsg.addCell(elementsTopMsg);
+
+            document.add(tableTopMsg);
+
+            //Table for Details with field
+            PdfPTable tableDetails = new PdfPTable(3);
+            tableDetails.setWidths(new float[]{imageCell + 200f, 20f, document.getPageSize().getWidth() - ((pdfMargin * 2) + imageCell)});
+            tableDetails.getDefaultCell().setBorder(0);
+            tableDetails.setSpacingBefore(20f);
+            // set table width a percentage of the page width
+            tableDetails.setWidthPercentage(90);
+
+            Font f1 = new Font();
+            f1.setSize(12);
+            f1.setStyle(Font.BOLD);
+            f1.setColor(BaseColor.BLACK);
+
+            PdfPCell status = new PdfPCell(new Phrase("Status", f1));
+            status.setBorder(Rectangle.NO_BORDER);
+            tableDetails.addCell(status);
+            tableDetails.addCell(":");
+            tableDetails.addCell(new Phrase(printArrayObject.getRechargeStatus(), f2));
+
+            PdfPCell uniqueID = new PdfPCell(new Phrase(getString(R.string.unique_transid), f1));
+            uniqueID.setBorder(Rectangle.NO_BORDER);
+            tableDetails.addCell(uniqueID);
+            tableDetails.addCell(":");
+            tableDetails.addCell(printArrayObject.getUniqueTransID());
+
+            PdfPCell senderName = new PdfPCell(new Phrase(getString(R.string.sender_name), f1));
+            senderName.setBorder(Rectangle.NO_BORDER);
+            tableDetails.addCell(senderName);
+            tableDetails.addCell(":");
+            tableDetails.addCell(printArrayObject.getSenderName());
+
+            PdfPCell mobile = new PdfPCell(new Phrase(getString(R.string.sender_mobile), f1));
+            mobile.setBorder(Rectangle.NO_BORDER);
+            tableDetails.addCell(mobile);
+            tableDetails.addCell(":");
+            tableDetails.addCell(printArrayObject.getSenderMobileNo());
+
+            PdfPCell benName = new PdfPCell(new Phrase(getString(R.string.money_bene_nickname), f1));
+            benName.setBorder(Rectangle.NO_BORDER);
+            tableDetails.addCell(benName);
+            tableDetails.addCell(":");
+            tableDetails.addCell(printArrayObject.getBeneficiaryName());
+
+            PdfPCell acNo = new PdfPCell(new Phrase(getString(R.string.money_bene_accountno), f1));
+            acNo.setBorder(Rectangle.NO_BORDER);
+            tableDetails.addCell(acNo);
+            tableDetails.addCell(":");
+            tableDetails.addCell(printArrayObject.getBenBankAccountNo());
+
+            PdfPCell ifscCode = new PdfPCell(new Phrase(getString(R.string.money_ifsccode), f1));
+            ifscCode.setBorder(Rectangle.NO_BORDER);
+            tableDetails.addCell(ifscCode);
+            tableDetails.addCell(":");
+            tableDetails.addCell(printArrayObject.getIFSCCode());
+
+            PdfPCell bankName = new PdfPCell(new Phrase(getString(R.string.money_bankname), f1));
+            bankName.setBorder(Rectangle.NO_BORDER);
+            tableDetails.addCell(bankName);
+            tableDetails.addCell(":");
+            tableDetails.addCell(printArrayObject.getBenBankName());
+
+            PdfPCell Utr = new PdfPCell(new Phrase(getString(R.string.utr), f1));
+            Utr.setBorder(Rectangle.NO_BORDER);
+            tableDetails.addCell(Utr);
+            tableDetails.addCell(":");
+            tableDetails.addCell(printArrayObject.getUTR());
+
+            PdfPCell Amount = new PdfPCell(new Phrase(getString(R.string.print_amount), f1));
+            Amount.setBorder(Rectangle.NO_BORDER);
+            tableDetails.addCell(Amount);
+            tableDetails.addCell(":");
+            tableDetails.addCell(String.format("%.2f", printArrayObject.getAmount()));
+
+            PdfPCell dateTime = new PdfPCell(new Phrase(getString(R.string.date_time), f1));
+            dateTime.setBorder(Rectangle.NO_BORDER);
+            tableDetails.addCell(dateTime);
+            tableDetails.addCell(":");
+            tableDetails.addCell(printArrayObject.getTransactionDate());
+
+            document.add(tableDetails);
+            document.close();
+        } catch (Exception e) {
+            document.close();
+            e.printStackTrace();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(), "Pdf not create successfully please recreate again...", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+    private void openPDF(File url) {
+
+        Intent target = new Intent(Intent.ACTION_VIEW);
+        target.setDataAndType(Uri.fromFile(url), "application/pdf");
+        target.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+
+        Intent intent = Intent.createChooser(target, "Open File");
+        try {
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(getApplicationContext(), "No Pdf reader found please install first...", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public class CreatePDF extends AsyncTask<Integer, Integer, Void> {
+
+        @Override
+        protected Void doInBackground(Integer... params) {
+            createPDF();
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            showLoader("Please wait");
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            hideLoader();
+            if (!isFinishing()) {
+                openPDF(pdfFile);
+            }
+        }
+    }
+}

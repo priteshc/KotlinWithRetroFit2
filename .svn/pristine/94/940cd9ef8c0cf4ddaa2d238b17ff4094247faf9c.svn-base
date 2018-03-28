@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2016 GoldenMace IT Solutions
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/money_mainView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.atishay.online.benefiaciary.BeneficiaryActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/main_appLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar"/>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:id="@+id/main_nameView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/main_appLayout"
+        android:layout_marginTop="@dimen/spacing_control"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/spacing_standard"
+        android:paddingRight="@dimen/spacing_standard">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textColor="@android:color/black"
+                tools:text="@string/txt_name" />
+
+            <TextView
+                android:id="@+id/mobile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_control"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textColor="@android:color/black"
+                tools:text="@string/txt_mobile" />
+        </LinearLayout>
+
+
+        <ImageView
+            android:id="@+id/fund_ivHistory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:src="@drawable/ic_format_list_bulleted_accent_24dp"
+            android:tint="@color/colorAccent"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/main_mobileView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/main_nameView"
+        android:layout_marginTop="@dimen/spacing_control"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/spacing_standard"
+        android:paddingRight="@dimen/spacing_standard">
+
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/delete_msg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/main_mobileView"
+        android:layout_marginTop="@dimen/spacing_control"
+        android:paddingLeft="@dimen/spacing_standard"
+        android:paddingRight="@dimen/spacing_standard"
+        android:text="@string/beneficiary_delete_msg"
+        android:textColor="@color/colorAccent"
+        android:visibility="gone"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/delete_msg">
+
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/delete_msg"
+            android:layout_marginTop="@dimen/spacing_standard"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:context="com.atishay.online.benefiaciary.BeneficiaryActivity"
+            tools:showIn="@layout/activity_benefiaciary">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/beneficiary_rvList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/spacing_standard"
+                android:paddingRight="@dimen/spacing_standard">
+
+            </android.support.v7.widget.RecyclerView>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+        <com.goldenmace.framework.views.widgets.errorview.ErrorView
+            android:id="@+id/beneficiary_errorView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:ev_errorImage="@drawable/ic_content_paste_black_24dp"
+            app:ev_retryButtonBackground="@color/colorAccent"
+            app:ev_retryButtonTextColor="@color/windowBackground"/>
+    </FrameLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/beneficiary_fbAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/spacing_activity_container"
+        android:src="@drawable/ic_add_white_24dp"/>
+
+    <com.atishay.online.utils.Loader
+        android:id="@+id/loader"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+    </com.atishay.online.utils.Loader>
+
+</RelativeLayout>

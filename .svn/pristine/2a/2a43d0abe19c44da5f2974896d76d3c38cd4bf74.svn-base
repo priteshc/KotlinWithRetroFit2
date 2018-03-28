@@ -1,0 +1,32 @@
+
+package com.atishay.online.myaccountrecharge;
+
+import com.atishay.online.BaseResponse;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class AccountRechargeReportResponse extends BaseResponse {
+
+    @SerializedName("Response")
+    @Expose
+    private List<AccountRechargeReportBean> response = new ArrayList<AccountRechargeReportBean>();
+
+
+    /**
+     * @return The response
+     */
+    public List<AccountRechargeReportBean> getResponse() {
+        return response;
+    }
+
+    /**
+     * @param response The Response
+     */
+    public void setResponse(List<AccountRechargeReportBean> response) {
+        this.response = response;
+    }
+
+}

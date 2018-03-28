@@ -1,0 +1,34 @@
+// Generated code from Butter Knife. Do not modify!
+package com.atishay.online.addbenefiaciary;
+
+import android.widget.TextView;
+import butterknife.Unbinder;
+import butterknife.internal.Finder;
+import com.atishay.online.R;
+import java.lang.IllegalStateException;
+import java.lang.Object;
+import java.lang.Override;
+
+public class MasterIFSCAdapter$MasterIFSCHolder_ViewBinding<T extends MasterIFSCAdapter.MasterIFSCHolder> implements Unbinder {
+  protected T target;
+
+  public MasterIFSCAdapter$MasterIFSCHolder_ViewBinding(T target, Finder finder, Object source) {
+    this.target = target;
+
+    target.mMasterBankName = finder.findRequiredViewAsType(source, R.id.item_txtBankName, "field 'mMasterBankName'", TextView.class);
+    target.mMasterIFSCCode = finder.findRequiredViewAsType(source, R.id.item_txtIFSCCode, "field 'mMasterIFSCCode'", TextView.class);
+    target.mMasterBranchName = finder.findRequiredViewAsType(source, R.id.item_txtAddress, "field 'mMasterBranchName'", TextView.class);
+  }
+
+  @Override
+  public void unbind() {
+    T target = this.target;
+    if (target == null) throw new IllegalStateException("Bindings already cleared.");
+
+    target.mMasterBankName = null;
+    target.mMasterIFSCCode = null;
+    target.mMasterBranchName = null;
+
+    this.target = null;
+  }
+}

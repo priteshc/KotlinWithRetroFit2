@@ -1,0 +1,21 @@
+package com.atishay.online.history;
+
+/**
+ * Created by Atishay on 15-02-2018.
+ */
+
+public interface UtilityComplainView {
+
+
+
+    void showFErrorMeassage(String msg);
+
+    void showUtilitySuccessMsg(String msg);
+
+    void showUtilityfailedMsg(String msg);
+
+    void showprogress();
+
+    void hideprogress();
+
+}

@@ -1,0 +1,33 @@
+
+package com.atishay.online.moneytransfer;
+
+import com.atishay.online.BaseResponse;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+public class ServiceResponse extends BaseResponse {
+
+    @SerializedName("TransactionFee")
+    @Expose
+    private String transactionFee;
+    @SerializedName("TotalAmount")
+    @Expose
+    private String totalAmount;
+
+    public String getTransactionFee() {
+        return transactionFee;
+    }
+
+    public void setTransactionFee(String transactionFee) {
+        this.transactionFee = transactionFee;
+    }
+
+    public String getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(String totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+}

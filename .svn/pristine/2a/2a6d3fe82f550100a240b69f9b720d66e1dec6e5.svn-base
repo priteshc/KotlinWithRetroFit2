@@ -1,0 +1,12 @@
+package com.atishay.online.history;
+
+/**
+ * Created by hrdudhat on 11/22/2016.
+ */
+public interface HistoryUsecase {
+    void loadPrepaidHistory(String aUserName, String aPassword);
+
+    void loadPostpaidHistory(String aUserName, String aPassword);
+
+    void loadDTHHistory(String aUserName, String aPassword);
+}

@@ -1,0 +1,27 @@
+package com.atishay.online.moneytransfer;
+
+import com.goldenmace.framework.domain.UseCase;
+
+import java.util.Map;
+
+/**
+ * Created by Vishal Patel on 03,January,2017.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public interface FundTransferUsecase extends UseCase {
+
+    void doRemittanceTransaction(Map<String, String> aQueryMap);
+
+    void doFundTransaction(Map<String, String> aQueryMap);
+
+    void doFundTransferHistory(Map<String, String> aQueryMap);
+
+    void doQueryRemittanceTransaction(Map<String, String> aQueryMap);
+
+    void doRefundTransaction(Map<String, String> aQueryMap);
+
+    void doValidateRefundTransaction(Map<String, String> aQueryMap);
+}

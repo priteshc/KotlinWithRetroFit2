@@ -1,0 +1,23 @@
+
+package com.atishay.online.menu;
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+public class NotificationResponse {
+
+    @SerializedName("strOutMEssage")
+    @Expose
+    String mStatus;
+    @SerializedName("Response")
+    @Expose
+    String mMsg;
+
+    public String getStatus() {
+        return mStatus;
+    }
+
+    public String getMsg() {
+        return mMsg;
+    }
+}

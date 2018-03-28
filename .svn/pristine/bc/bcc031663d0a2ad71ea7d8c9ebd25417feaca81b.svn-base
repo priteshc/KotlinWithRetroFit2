@@ -1,0 +1,50 @@
+package com.atishay.online.myaccountrecharge;
+
+/**
+ * Created by Vishal Patel on 25,November,2016.
+ * Atishay Online
+ * GoldenMace IT Solutions
+ * vishal@goldenmace.com
+ */
+
+public class CommonAccountRechargeBean {
+    String mUsername;
+    String mPassword;
+    String mBankID;
+    String mTransactionType;
+    String mUTRNo;
+    String mAmount;
+
+    public CommonAccountRechargeBean(String aUsername, String aPassword, String aBankID, String aTransactionType, String aUTRNo, String aAmount) {
+        this.mUsername = aUsername;
+        this.mPassword = aPassword;
+        this.mBankID = aBankID;
+        this.mTransactionType = aTransactionType;
+        this.mUTRNo = aUTRNo;
+        this.mAmount = aAmount;
+    }
+
+    public String getUsername() {
+        return mUsername;
+    }
+
+    public String getPassword() {
+        return mPassword;
+    }
+
+    public String getBankID() {
+        return mBankID;
+    }
+
+    public String getTransactionType() {
+        return mTransactionType;
+    }
+
+    public String getUTRNo() {
+        return mUTRNo;
+    }
+
+    public String getAmount() {
+        return mAmount;
+    }
+}

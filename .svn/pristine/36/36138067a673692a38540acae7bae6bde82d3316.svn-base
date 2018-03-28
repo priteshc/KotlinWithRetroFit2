@@ -1,0 +1,53 @@
+
+package com.atishay.online.login;
+
+import com.atishay.online.BaseResponse;
+import com.google.gson.annotations.SerializedName;
+
+/**
+ * Created by E15 on 09,February,2017.
+ * GoldenMace IT Solutions
+ */
+public class LoginResponse extends BaseResponse {
+
+    @SerializedName("AtishayVendorID")
+    String mAtishayVendorID;
+    @SerializedName("Name")
+    String mName;
+    @SerializedName("ChannelPartner")
+    String mChannelPartner;
+    @SerializedName("TransactionPassword")
+    String mTransactionPassword;
+    @SerializedName("IsMoneyTransferActive")
+    boolean mTransActive;
+    @SerializedName("AgentCode")
+    String mAgentCode;
+
+    public String getAtishayVendorID() {
+        return mAtishayVendorID;
+    }
+
+    public String getName() {
+        return mName;
+    }
+
+    public void setName(String aName) {
+        mName = aName;
+    }
+
+    public String getChannelPartner() {
+        return mChannelPartner;
+    }
+
+    public String getTransactionPassword() {
+        return mTransactionPassword;
+    }
+
+    public boolean isTransActive() {
+        return mTransActive;
+    }
+
+    public String getAgentCode() {
+        return mAgentCode;
+    }
+}

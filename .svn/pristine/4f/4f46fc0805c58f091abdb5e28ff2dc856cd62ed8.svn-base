@@ -1,0 +1,24 @@
+
+package com.atishay.online.searchifsc;
+
+import com.atishay.online.BaseResponse;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
+
+public class BankListIFSCResponse extends BaseResponse {
+
+    @SerializedName("Response")
+    @Expose
+    private List<BankListBean> response = null;
+
+    public List<BankListBean> getResponse() {
+        return response;
+    }
+
+    public void setResponse(List<BankListBean> response) {
+        this.response = response;
+    }
+
+}
